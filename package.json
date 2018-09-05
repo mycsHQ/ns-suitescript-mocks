@@ -1,0 +1,34 @@
+{
+  "name": "netsuite-mockups",
+  "version": "0.1.2",
+  "description": "Netsute mockups",
+  "main": "index.js",
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/damiankrolikowskimycs/netsuite-mockups.git"
+  },
+  "keywords": [
+    "NetSuite",
+    "Mockup",
+    "JEST",
+    "JS",
+    "JavaScirpt"
+  ],
+  "author": "Damian Krolikowski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/damiankrolikowskimycs/netsuite-mockups/issues"
+  },
+  "homepage": "https://github.com/damiankrolikowskimycs/netsuite-mockups#readme",
+  "dependencies": {
+    "global-define": "^2.3.0",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.2"
+  }
+}
