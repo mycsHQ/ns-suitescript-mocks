@@ -1,2 +1,4 @@
 # netsuite-mockups
-Mockups for Netsuite ERP.
+Mocks for Netsuite ERP.
+
+// TODO: Add mandatory informataion to README
