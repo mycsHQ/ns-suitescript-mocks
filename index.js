@@ -18,16 +18,11 @@ module.exports = (config, pathGlobal) => {
     const searchFilter = require('./nsobjects/search-filter.jsx');
     const searchColumn = require('./nsobjects/search-column.jsx');
     const _ = require('lodash');
-   // const Handlebars = require('../src/nsscripts/Libs/handlebars-v4.0.10');
     const moment = require('moment');
     const file = require('./nsobjects/fileModule');
 
-    // Set to true to enable nlapiLogExecution to log to a console
     const showLogs = false;
     const log = require('./nsobjects/logModule.jsx');
-
-    // Workaround for the following issue:
-    // https://github.com/jsdom/jsdom/issues/1843
     window.alert = (msg) => {
         console.log(msg);
     };
@@ -95,9 +90,7 @@ module.exports = (config, pathGlobal) => {
     global.generateRHENUSlabel = a => file.create({ id: 'test.pdf', fileType: 'PDF', contents: a.toString() });
     global.generateMYCSlabel = a => file.create({ id: 'test.pdf', fileType: 'PDF', contents: a.toString() });
     global.generateDSTlabel = a => file.create({ id: 'test.pdf', fileType: 'PDF', contents: a.toString() });
-    //global.define = define;
     global._ = _;
-   // global.Handlebars = Handlebars;
     global.log = log;
     global.nlapiAddDays = (dateObject, days) => moment(dateObject)
         .add(days, 'days')

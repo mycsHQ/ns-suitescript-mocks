@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/mycsHQ/ns-suitescript-mocks#readme",
   "dependencies": {
-    "global-define": "^2.3.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2"
   }
