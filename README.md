@@ -3,6 +3,7 @@ Mocks for Netsuite ERP.
 
 // TODO: Add mandatory informataion to README
 
+[NPM-Url](https://www.npmjs.com/package/netsuite-suitescript-mocks)
 
 ## Installation
 
