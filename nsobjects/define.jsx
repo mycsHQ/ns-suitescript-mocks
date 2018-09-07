@@ -75,7 +75,7 @@ var defineFunction = (params, callback) => {
   for (const key in extendedModules) {
     if (extendedModules.hasOwnProperty(key)) {
       const element = extendedModules[key];
-      external[key] = (typeof element === 'string') ? require(join(__dirname, '../../..', element)) : element;
+      external[key] =  element;
       global.mapModules[key] = external[key];
     } 
   }
@@ -83,7 +83,7 @@ var defineFunction = (params, callback) => {
     if (typeof global.mapModules[depName] === 'function' && !['moment', 'formLibrary', 'lodash', 'xml2json', 'freightClass'].includes(depName)) {
       return global.mapModules[depName]();
     } else {
-      return global.mapModules[depName];
+      return  typeof global.mapModules[depName] === 'string' ?  require(join(__dirname, '../../..', global.mapModules[depName])) : global.mapModules[depName];
     }
   });
   if (callback) {
