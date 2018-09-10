@@ -28,6 +28,7 @@
   "homepage": "https://github.com/mycsHQ/ns-suitescript-mocks#readme",
   "dependencies": {
     "lodash": "^4.17.10",
-    "moment": "^2.22.2"
+    "moment": "^2.22.2",
+    "": ""
   }
 }

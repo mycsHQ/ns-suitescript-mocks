@@ -1,9 +1,14 @@
 'use strict';
 
 var def = require('./nsobjects/define');
+var nsMocksV1 = require('./nsobjects/nsmockup-1.0');
 
 
 module.exports = (config, pathGlobal) => {
+    Object.keys(nsMocksV1).forEach(function(key){
+        global[key] = nsMocksV1[key];
+    })
+
     console.log('### Initialise Jest - Build mocks for netsuite ###');
     let nlobjError = function (message) {
         Error.call(this, message);
@@ -112,6 +117,10 @@ module.exports = (config, pathGlobal) => {
             customData: 'sample_customData',
             isProduction: 'false'
         });
+
+    global.nlapiCreateError = (params) => {
+        return new Error(params);
+    }
     window.main_form = { submit: () => true };
     window.open = url => console.log('window.open => ' + url);
 
