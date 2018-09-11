@@ -1,4 +1,8 @@
-var toExport = {};
+const record = require('./record');
+const file = require('./fileModule');
+const _ = require('lodash');
+const moment = require('moment');
+let showLogs = false;
 /**
 * @projectDescription 	SuiteScript JavaScript library summary.
 *
@@ -31,7 +35,7 @@ var toExport = {};
  *
  * @since	2007.0
  */
-toExport.nlapiCopyRecord = function(type, id, initializeValues) { ; }
+exports.nlapiCopyRecord = function (type, id, initializeValues) { ; }
 
 /**
  * Load an existing record from the system.
@@ -49,7 +53,11 @@ toExport.nlapiCopyRecord = function(type, id, initializeValues) { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiLoadRecord = function(type, id, initializeValues) { ; }
+exports.nlapiLoadRecord = function (type, id, initializeValues) {
+    initializeValues = initializeValues || {} 
+    initializeValues.id = id;
+    return new record(type, initializeValues);
+}
 
 /**
  * Instantiate a new nlobjRecord object containing all the default field data for that record type.
@@ -64,7 +72,7 @@ toExport.nlapiLoadRecord = function(type, id, initializeValues) { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiCreateRecord = function(type, initializeValues) { ; }
+exports.nlapiCreateRecord = function (type, initializeValues) { return new record(type, initializeValues); }
 
 /**
  * Submit a record to the system for creation or update.
@@ -81,7 +89,7 @@ toExport.nlapiCreateRecord = function(type, initializeValues) { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiSubmitRecord = function(record, doSourcing, ignoreMandatoryFields) { ; }
+exports.nlapiSubmitRecord = function (record, doSourcing, ignoreMandatoryFields) { return record.getId(); }
 
 /**
  * Delete a record from the system.
@@ -98,7 +106,7 @@ toExport.nlapiSubmitRecord = function(record, doSourcing, ignoreMandatoryFields)
  *
  * @since	2007.0
  */
-toExport.nlapiDeleteRecord = function(type, id) { ; }
+exports.nlapiDeleteRecord = function (type, id) { return id; }
 
 /**
  * Perform a record search using an existing search or filters and columns.
@@ -122,7 +130,12 @@ toExport.nlapiDeleteRecord = function(type, id) { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiSearchRecord = function(type, id, filters, columns) { ; }
+exports.nlapiSearchRecord = function (type, id, filters, columns) {
+    return [record(type, (columns && Array.isArray(columns) ? columns : []).reduce((reducer, column) => {
+        reducer[column.name] = column.name;
+        return reducer;
+    }, {}))];
+}
 
 /**
  * Perform a global record search across the system.
@@ -134,7 +147,7 @@ toExport.nlapiSearchRecord = function(type, id, filters, columns) { ; }
  *
  * @since	2008.1
  */
-toExport.nlapiSearchGlobal = function(keywords) { ; }
+exports.nlapiSearchGlobal = function (keywords) { ; }
 
 /**
  * Perform a duplicate record search using Duplicate Detection criteria.
@@ -148,7 +161,7 @@ toExport.nlapiSearchGlobal = function(keywords) { ; }
  *
  * @since	2008.1
  */
-toExport.nlapiSearchDuplicate = function(type, fields, id) { ; }
+exports.nlapiSearchDuplicate = function (type, fields, id) { ; }
 
 /**
  * Create a new record using values from an existing record of a different type.
@@ -169,7 +182,7 @@ toExport.nlapiSearchDuplicate = function(type, fields, id) { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiTransformRecord = function(type, id, transformType, transformValues) { ; }
+exports.nlapiTransformRecord = function (type, id, transformType, transformValues) { ; }
 
 /**
  * void a transaction based on type and id .
@@ -182,7 +195,7 @@ toExport.nlapiTransformRecord = function(type, id, transformType, transformValue
  *
  * @since	2014.1
  */
-toExport.nlapiVoidTransaction = function (type, id) { }
+exports.nlapiVoidTransaction = function (type, id) { }
 
 /**
  * Fetch the value of one or more fields on a record. This API uses search to look up the fields and is much
@@ -197,7 +210,15 @@ toExport.nlapiVoidTransaction = function (type, id) { }
  *
  * @since	2008.1
  */
-toExport.nlapiLookupField = function(type,id,fields, text) { ; }
+exports.nlapiLookupField = function (type, id, fields, text) {
+    let result = '';
+    result += type || '';
+    result += id || 0;
+    result += fields || '';
+    result += text || '';
+    result += random(1, 1000);
+    return result;
+}
 
 /**
  * Submit the values of a field or set of fields for an existing record.
@@ -213,7 +234,9 @@ toExport.nlapiLookupField = function(type,id,fields, text) { ; }
  *
  * @since	2008.1
  */
-toExport.nlapiSubmitField = function(type,id,fields,values,doSourcing) { ; }
+exports.nlapiSubmitField = function (type, id, fields, values, doSourcing) {
+    return new record(type, { id, fields, values });
+}
 
 /**
  * Attach a single record to another with optional properties.
@@ -228,7 +251,7 @@ toExport.nlapiSubmitField = function(type,id,fields,values,doSourcing) { ; }
  *
  * @since	2008.2
  */
-toExport.nlapiAttachRecord = function(type1, id1, type2, id2, properties) { ; }
+exports.nlapiAttachRecord = function (type1, id1, type2, id2, properties) { ; }
 
 /**
  * Detach a single record from another with optional properties.
@@ -243,7 +266,7 @@ toExport.nlapiAttachRecord = function(type1, id1, type2, id2, properties) { ; }
  *
  * @since	2008.2
  */
-toExport.nlapiDetachRecord = function(type1, id1, type2, id2, properties) { ; }
+exports.nlapiDetachRecord = function (type1, id1, type2, id2, properties) { ; }
 
 
 /**
@@ -257,7 +280,7 @@ toExport.nlapiDetachRecord = function(type1, id1, type2, id2, properties) { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiResolveURL = function(type, subtype, id, pagemode) { ; }
+exports.nlapiResolveURL = function (type, subtype, id, pagemode) { return 'https://system.eu2.netsuite.com/app/site/hosting/scriptlet.nl?script=1&deploy=1'; }
 
 /**
  * Redirect the user to a page. Only valid in the UI on Suitelets and User Events. In Client scripts this will initialize the redirect URL used upon submit.
@@ -271,7 +294,7 @@ toExport.nlapiResolveURL = function(type, subtype, id, pagemode) { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiSetRedirectURL = function(type, subtype, id, pagemode, parameters) { ; }
+exports.nlapiSetRedirectURL = function (type, subtype, id, pagemode, parameters) { ; }
 
 /**
  * Request a URL to an external or internal resource.
@@ -294,7 +317,7 @@ toExport.nlapiSetRedirectURL = function(type, subtype, id, pagemode, parameters)
  *
  * @since	2007.0
  */
-toExport.nlapiRequestURL = function(url, postdata, headers, callback, method) { ; }
+exports.nlapiRequestURL = function (url, postdata, headers, callback, method) { ; }
 
 /**
  * Allows you to send credentials outside of NetSuite. This API securely accesses a handle to credentials that users specify in a NetSuite credential field.
@@ -318,7 +341,7 @@ toExport.nlapiRequestURL = function(url, postdata, headers, callback, method) { 
  *
  * @since	2012.1
  */
-toExport.nlapiRequestURLWithCredentials = function(credentials, url, postdata, headers, method) { ; }
+exports.nlapiRequestURLWithCredentials = function (credentials, url, postdata, headers, method) { ; }
 
 /**
  * Return context information about the current user/script.
@@ -327,7 +350,13 @@ toExport.nlapiRequestURLWithCredentials = function(credentials, url, postdata, h
  *
  * @since	2007.0
  */
-toExport.nlapiGetContext = function() { ; }
+exports.nlapiGetContext = function () {
+    return {
+        getScriptId: () => random(1, 100).toString(),
+        getEnvironment: () => 'PRODUCTION', // TODO: Take from Test configuration environment variable.
+        getRemainingUsage: () => random(0, 10000).toString()
+    }
+}
 
 /**
  * Return the internal ID for the currently logged in user. Returns -4 when called from online forms or "Available without Login" Suitelets.
@@ -336,7 +365,7 @@ toExport.nlapiGetContext = function() { ; }
  *
  * @since	2005.0
  */
-toExport.nlapiGetUser = function() { ; }
+exports.nlapiGetUser = function () { ; }
 
 /**
  * Return the internal ID for the current user's role. Returns 31 (Online Form User) when called from online forms or "Available without Login" Suitelets.
@@ -345,7 +374,7 @@ toExport.nlapiGetUser = function() { ; }
  *
  * @since	2005.0
  */
-toExport.nlapiGetRole = function() { ; }
+exports.nlapiGetRole = function () { ; }
 
 /**
  * Return the internal ID for the current user's department.
@@ -354,7 +383,7 @@ toExport.nlapiGetRole = function() { ; }
  *
  * @since	2005.0
  */
-toExport.nlapiGetDepartment = function() { ; }
+exports.nlapiGetDepartment = function () { ; }
 
 /**
  * Return the internal ID for the current user's location.
@@ -363,7 +392,7 @@ toExport.nlapiGetDepartment = function() { ; }
  *
  * @since	2005.0
  */
-toExport.nlapiGetLocation = function() { ; }
+exports.nlapiGetLocation = function () { ; }
 
 /**
  * Return the internal ID for the current user's subsidiary.
@@ -372,7 +401,7 @@ toExport.nlapiGetLocation = function() { ; }
  *
  * @since	2008.1
  */
-toExport.nlapiGetSubsidiary = function() { ; }
+exports.nlapiGetSubsidiary = function () { ; }
 
 /**
  * Return the recordtype corresponding to the current page or userevent script.
@@ -381,7 +410,7 @@ toExport.nlapiGetSubsidiary = function() { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiGetRecordType = function() { ; }
+exports.nlapiGetRecordType = function () { return random(1, 100).toString(); }
 
 /**
  * Return the internal ID corresponding to the current page or userevent script.
@@ -390,7 +419,7 @@ toExport.nlapiGetRecordType = function() { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiGetRecordId = function() { ; }
+exports.nlapiGetRecordId = function () { return random(1, 100); }
 
 /**
  * Send out an email and associate it with records in the system.
@@ -413,7 +442,11 @@ toExport.nlapiGetRecordId = function() { ; }
  *
  * @since	2007.0
  */
-toExport.nlapiSendEmail = function(from, to, subject, body, cc, bcc, records, files, notifySenderOnBounce, internalOnly, replyTo) { ; }
+exports.nlapiSendEmail = function (from, to, subject, body, cc, bcc, records, files, notifySenderOnBounce, internalOnly, replyTo) {
+    const obj = { from, to, subject, body, cc, bcc, records, files, notifySenderOnBounce, internalOnly, replyTo };
+    nlapiLogExecution('Debug', 'email:', JSON.stringify(obj, null, 2));
+
+}
 
 /**
  * Sends a single on-demand campaign email to a specified recipient and returns a campaign response ID to track the email.
@@ -426,7 +459,7 @@ toExport.nlapiSendEmail = function(from, to, subject, body, cc, bcc, records, fi
  *
  * @since	2010.1
  */
-toExport.nlapiSendCampaignEmail = function(campaigneventid, recipientid) { ; }
+exports.nlapiSendCampaignEmail = function (campaigneventid, recipientid) { ; }
 
 /**
  * Send out a fax and associate it with records in the system. This requires fax preferences to be configured.
@@ -443,7 +476,7 @@ toExport.nlapiSendCampaignEmail = function(campaigneventid, recipientid) { ; }
  *
  * @since	2008.2
  */
-toExport.nlapiSendFax = function(from, to, subject, body, records, files) { ; }
+exports.nlapiSendFax = function (from, to, subject, body, records, files) { ; }
 
 /**
  * Return field definition for a field.
@@ -453,7 +486,7 @@ toExport.nlapiSendFax = function(from, to, subject, body, records, files) { ; }
  *
  * @since	2009.1
  */
-toExport.nlapiGetField = function(fldnam) { ; }
+exports.nlapiGetField = function (fldnam) { ; }
 
 /**
  * Return field definition for a matrix field.
@@ -465,7 +498,7 @@ toExport.nlapiGetField = function(fldnam) { ; }
  *
  * @since	2009.2
  */
-toExport.nlapiGetMatrixField = function(type, fldnam, column) { ; }
+exports.nlapiGetMatrixField = function (type, fldnam, column) { ; }
 
 /**
  * Return field definition for a sublist field.
@@ -477,7 +510,7 @@ toExport.nlapiGetMatrixField = function(type, fldnam, column) { ; }
  *
  * @since	2009.1
  */
-toExport.nlapiGetLineItemField = function(type, fldnam, linenum) { ; }
+exports.nlapiGetLineItemField = function (type, fldnam, linenum) { ; }
 
 /**
  * Return an nlobjField containing sublist field metadata.
@@ -490,7 +523,7 @@ toExport.nlapiGetLineItemField = function(type, fldnam, linenum) { ; }
  *
  * @since	2009.2
  */
-toExport.nlapiGetLineItemMatrixField = function(type, fldnam, linenum, column) { ; }
+exports.nlapiGetLineItemMatrixField = function (type, fldnam, linenum, column) { ; }
 
 /**
  * Return the value of a field on the current record on a page.
@@ -500,7 +533,16 @@ toExport.nlapiGetLineItemMatrixField = function(type, fldnam, linenum, column) {
  *
  * @since	2005.0
  */
-toExport.nlapiGetFieldValue = function(fldnam) { ; }
+exports.nlapiGetFieldValue = function (fldnam) {
+    switch (fldnam) {
+        case 'custbody_mycs_pick_ticket_printed':
+            return 'T';
+        case 'subsidiary':
+            return random(1, 9);
+        default:
+            return fldnam;
+    }
+}
 
 /**
  * Set the value of a field on the current record on a page.
@@ -515,7 +557,7 @@ toExport.nlapiGetFieldValue = function(fldnam) { ; }
  *
  * @since	2005.0
  */
-toExport.nlapiSetFieldValue = function(fldnam,value,firefieldchanged,synchronous) { ; }
+exports.nlapiSetFieldValue = function (fldnam, value, firefieldchanged, synchronous) { return random(0, 50); }
 
 /**
  * Return the display value of a select field's current selection on the current record on a page.
@@ -525,7 +567,7 @@ toExport.nlapiSetFieldValue = function(fldnam,value,firefieldchanged,synchronous
  *
  * @since	2005.0
  */
-toExport.nlapiGetFieldText = function(fldnam) { ; }
+exports.nlapiGetFieldText = function (fldnam) { ; }
 
 /**
  * Set the value of a field on the current record on a page using it's label.
@@ -539,7 +581,7 @@ toExport.nlapiGetFieldText = function(fldnam) { ; }
  *
  * @since	2005.0
  */
-toExport.nlapiSetFieldText = function(fldnam,txt,firefieldchanged,synchronous)	{ ; }
+exports.nlapiSetFieldText = function (fldnam, txt, firefieldchanged, synchronous) { ; }
 
 /**
  * Return the values of a multiselect field on the current record on a page.
@@ -549,7 +591,7 @@ toExport.nlapiSetFieldText = function(fldnam,txt,firefieldchanged,synchronous)	{
  *
  * @since	2005.0
  */
-toExport.nlapiGetFieldValues = function(fldnam) { ; }
+exports.nlapiGetFieldValues = function (fldnam) { ; }
 
 /**
  * Set the values of a multiselect field on the current record on a page.
@@ -564,7 +606,7 @@ toExport.nlapiGetFieldValues = function(fldnam) { ; }
  *
  * @since	2005.0
  */
-toExport.nlapiSetFieldValues = function(fldnam,values,firefieldchanged,synchronous) { ; }
+exports.nlapiSetFieldValues = function (fldnam, values, firefieldchanged, synchronous) { ; }
 
 /**
  * Return the values (via display text) of a multiselect field on the current record.
@@ -574,7 +616,7 @@ toExport.nlapiSetFieldValues = function(fldnam,values,firefieldchanged,synchrono
  *
  * @since	2009.1
  */
-toExport.nlapiGetFieldTexts = function(fldnam) { ; }
+exports.nlapiGetFieldTexts = function (fldnam) { ; }
 
 /**
  * Set the values (via display text) of a multiselect field on the current record on a page.
@@ -589,7 +631,7 @@ toExport.nlapiGetFieldTexts = function(fldnam) { ; }
  *
  * @since	2009.1
  */
-toExport.nlapiSetFieldTexts = function(fldnam,texts,firefieldchanged,synchronous) { ; }
+exports.nlapiSetFieldTexts = function (fldnam, texts, firefieldchanged, synchronous) { ; }
 
 /**
  * Get the value of a matrix header field
@@ -601,7 +643,7 @@ toExport.nlapiSetFieldTexts = function(fldnam,texts,firefieldchanged,synchronous
  *
  * @since	2009.2
  */
-toExport.nlapiGetMatrixValue = function(type, fldnam, column) { ; }
+exports.nlapiGetMatrixValue = function (type, fldnam, column) { ; }
 
 /**
  * Set the value of a matrix header field
@@ -617,7 +659,7 @@ toExport.nlapiGetMatrixValue = function(type, fldnam, column) { ; }
  *
  * @since	2009.2
  */
-toExport.nlapiSetMatrixValue = function(type, fldnam, column, value, firefieldchanged, synchronous) { ; }
+exports.nlapiSetMatrixValue = function (type, fldnam, column, value, firefieldchanged, synchronous) { ; }
 
 /**
  * Get the current value of a sublist field on the current record on a page.
@@ -629,7 +671,7 @@ toExport.nlapiSetMatrixValue = function(type, fldnam, column, value, firefieldch
  *
  * @since	2009.2
  */
-toExport.nlapiGetCurrentLineItemMatrixValue = function(type, fldnam, column) { ; }
+exports.nlapiGetCurrentLineItemMatrixValue = function (type, fldnam, column) { ; }
 
 /**
  * Set the current value of a sublist field on the current record on a page.
@@ -646,7 +688,7 @@ toExport.nlapiGetCurrentLineItemMatrixValue = function(type, fldnam, column) { ;
  *
  * @since	2009.2
  */
-toExport.nlapiSetCurrentLineItemMatrixValue = function(type, fldnam, column, value, firefieldchanged, synchronous) { ; }
+exports.nlapiSetCurrentLineItemMatrixValue = function (type, fldnam, column, value, firefieldchanged, synchronous) { ; }
 
 /**
  * Return the value of a sublist matrix field on the current record on a page.
@@ -659,7 +701,7 @@ toExport.nlapiSetCurrentLineItemMatrixValue = function(type, fldnam, column, val
  *
  * @since	2009.2
  */
-toExport.nlapiGetLineItemMatrixValue = function(type, fldnam, linenum, column) { ; }
+exports.nlapiGetLineItemMatrixValue = function (type, fldnam, linenum, column) { ; }
 
 /**
  * Return the value of a sublist field on the current record on a page.
@@ -671,7 +713,7 @@ toExport.nlapiGetLineItemMatrixValue = function(type, fldnam, linenum, column) {
  *
  * @since 2005.0
  */
-toExport.nlapiGetLineItemValue = function(type,fldnam,linenum) { ; }
+exports.nlapiGetLineItemValue = function (type, fldnam, linenum) { ; }
 
 /**
  * Return the value of a sublist field on the current record on a page.
@@ -684,7 +726,7 @@ toExport.nlapiGetLineItemValue = function(type,fldnam,linenum) { ; }
  *
  * @since 2013.2
  */
-toExport.nlapiGetLineItemDateTimeValue = function(type,fldnam,linenum,timezone) { ; }
+exports.nlapiGetLineItemDateTimeValue = function (type, fldnam, linenum, timezone) { ; }
 
 /**
  * Set the value of a sublist field on the current record on a page.
@@ -697,7 +739,7 @@ toExport.nlapiGetLineItemDateTimeValue = function(type,fldnam,linenum,timezone) 
  *
  * @since 2005.0
  */
-toExport.nlapiSetLineItemValue = function(type,fldnam,linenum,value) { ; }
+exports.nlapiSetLineItemValue = function (type, fldnam, linenum, value) { ; }
 
 /**
  * Set the value of a sublist field on the current record on a page.
@@ -711,7 +753,7 @@ toExport.nlapiSetLineItemValue = function(type,fldnam,linenum,value) { ; }
  *
  * @since 2013.2
  */
-toExport.nlapiSetLineItemDateTimeValue = function(type,fldnam,linenum,value,timezone) { ; }
+exports.nlapiSetLineItemDateTimeValue = function (type, fldnam, linenum, value, timezone) { ; }
 
 /**
  * Return the label of a select field's current selection for a particular line.
@@ -723,7 +765,7 @@ toExport.nlapiSetLineItemDateTimeValue = function(type,fldnam,linenum,value,time
  *
  * @since 2005.0
  */
-toExport.nlapiGetLineItemText = function(type,fldnam,linenum) { ; }
+exports.nlapiGetLineItemText = function (type, fldnam, linenum) { ; }
 
 /**
  * Return the 1st line number that a sublist field value appears in
@@ -735,7 +777,7 @@ toExport.nlapiGetLineItemText = function(type,fldnam,linenum) { ; }
  *
  * @since 2009.2
  */
-toExport.nlapiFindLineItemValue = function(type, fldnam, val) { ; }
+exports.nlapiFindLineItemValue = function (type, fldnam, val) { ; }
 
 /**
  * Return the 1st line number that a matrix field value appears in
@@ -748,7 +790,7 @@ toExport.nlapiFindLineItemValue = function(type, fldnam, val) { ; }
  *
  * @since 2009.2
  */
-toExport.nlapiFindLineItemMatrixValue = function(type, fldnam, column, val) { ; }
+exports.nlapiFindLineItemMatrixValue = function (type, fldnam, column, val) { ; }
 
 /**
  * Return the number of columns for a matrix field
@@ -759,7 +801,7 @@ toExport.nlapiFindLineItemMatrixValue = function(type, fldnam, column, val) { ; 
  *
  * @since 2009.2
  */
-toExport.nlapiGetMatrixCount = function(type, fldnam) { ; }
+exports.nlapiGetMatrixCount = function (type, fldnam) { ; }
 
 /**
  * Return the number of sublists in a sublist on the current record on a page.
@@ -769,7 +811,7 @@ toExport.nlapiGetMatrixCount = function(type, fldnam) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiGetLineItemCount = function(type) { ; }
+exports.nlapiGetLineItemCount = function (type) { return random(0, 50); }
 
 /**
  * Insert and select a new line into the sublist on a page or userevent.
@@ -780,7 +822,7 @@ toExport.nlapiGetLineItemCount = function(type) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiInsertLineItem = function(type, line) { ; }
+exports.nlapiInsertLineItem = function (type, line) { ; }
 
 /**
  * Remove the currently selected line from the sublist on a page or userevent.
@@ -791,7 +833,7 @@ toExport.nlapiInsertLineItem = function(type, line) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiRemoveLineItem = function(type, line) { ; }
+exports.nlapiRemoveLineItem = function (type, line) { ; }
 
 /**
  * Set the value of a field on the currently selected line.
@@ -806,7 +848,7 @@ toExport.nlapiRemoveLineItem = function(type, line) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiSetCurrentLineItemValue = function(type,fldnam,value,firefieldchanged,synchronous) { ; }
+exports.nlapiSetCurrentLineItemValue = function (type, fldnam, value, firefieldchanged, synchronous) { ; }
 
 /**
  * Set the value of a field on the currently selected line.
@@ -820,7 +862,7 @@ toExport.nlapiSetCurrentLineItemValue = function(type,fldnam,value,firefieldchan
  *
  * @since 2013.2
  */
-toExport.nlapiSetCurrentLineItemDateTimeValue = function(type,fldnam,value,timezone) { ; }
+exports.nlapiSetCurrentLineItemDateTimeValue = function (type, fldnam, value, timezone) { ; }
 
 /**
  * Set the value of a field on the currently selected line using it's label.
@@ -835,7 +877,7 @@ toExport.nlapiSetCurrentLineItemDateTimeValue = function(type,fldnam,value,timez
  *
  * @since 2005.0
  */
-toExport.nlapiSetCurrentLineItemText = function(type,fldnam,txt,firefieldchanged,synchronous) { ; }
+exports.nlapiSetCurrentLineItemText = function (type, fldnam, txt, firefieldchanged, synchronous) { ; }
 
 /**
  * Return the value of a field on the currently selected line.
@@ -846,7 +888,7 @@ toExport.nlapiSetCurrentLineItemText = function(type,fldnam,txt,firefieldchanged
  *
  * @since 2005.0
  */
-toExport.nlapiGetCurrentLineItemValue = function(type,fldnam) { ; }
+exports.nlapiGetCurrentLineItemValue = function (type, fldnam) { return random(0, 50); }
 
 /**
  * Return the value of a field on the currently selected line.
@@ -858,7 +900,7 @@ toExport.nlapiGetCurrentLineItemValue = function(type,fldnam) { ; }
  *
  * @since 2013.2
  */
-toExport.nlapiGetCurrentLineItemDateTimeValue = function(type,fldnam, timezone) { ; }
+exports.nlapiGetCurrentLineItemDateTimeValue = function (type, fldnam, timezone) { ; }
 
 /**
  * Return the label of a select field's current selection on the currently selected line.
@@ -869,7 +911,7 @@ toExport.nlapiGetCurrentLineItemDateTimeValue = function(type,fldnam, timezone) 
  *
  * @since 2005.0
  */
-toExport.nlapiGetCurrentLineItemText = function(type,fldnam) { ; }
+exports.nlapiGetCurrentLineItemText = function (type, fldnam) { random(0, 50); }
 
 /**
  * Return the line number for the currently selected line.
@@ -879,7 +921,7 @@ toExport.nlapiGetCurrentLineItemText = function(type,fldnam) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiGetCurrentLineItemIndex = function(type) { ; }
+exports.nlapiGetCurrentLineItemIndex = function (type) { ; }
 
 /**
  * Select an existing line in a sublist.
@@ -890,7 +932,7 @@ toExport.nlapiGetCurrentLineItemIndex = function(type) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiSelectLineItem = function(type, linenum) { ; }
+exports.nlapiSelectLineItem = function (type, linenum) { ; }
 
 /**
  * Save changes made on the currently selected line to the sublist.
@@ -900,7 +942,7 @@ toExport.nlapiSelectLineItem = function(type, linenum) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiCommitLineItem = function(type) { ; }
+exports.nlapiCommitLineItem = function (type) { ; }
 
 /**
  * Cancel any changes made on the currently selected line.
@@ -911,7 +953,7 @@ toExport.nlapiCommitLineItem = function(type) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiCancelLineItem = function(type) { ; }
+exports.nlapiCancelLineItem = function (type) { ; }
 
 /**
  * Select a new line in a sublist.
@@ -922,7 +964,7 @@ toExport.nlapiCancelLineItem = function(type) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiSelectNewLineItem = function(type) { ; }
+exports.nlapiSelectNewLineItem = function (type) { ; }
 
 /**
  * Refresh the sublist table.
@@ -934,7 +976,7 @@ toExport.nlapiSelectNewLineItem = function(type) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiRefreshLineItems = function(type) { ; }
+exports.nlapiRefreshLineItems = function (type) { ; }
 
 /**
  * Adds a select option to a scripted select or multiselect field.
@@ -948,7 +990,7 @@ toExport.nlapiRefreshLineItems = function(type) { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiInsertSelectOption = function(fldnam, value, text, selected) { ; }
+exports.nlapiInsertSelectOption = function (fldnam, value, text, selected) { ; }
 
 /**
  * Removes a select option (or all if value is null) from a scripted select or multiselect field.
@@ -960,7 +1002,7 @@ toExport.nlapiInsertSelectOption = function(fldnam, value, text, selected) { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiRemoveSelectOption = function(fldnam, value) { ; }
+exports.nlapiRemoveSelectOption = function (fldnam, value) { ; }
 
 /**
  * Adds a select option to a scripted select or multiselect sublist field.
@@ -975,7 +1017,7 @@ toExport.nlapiRemoveSelectOption = function(fldnam, value) { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiInsertLineItemOption = function(type, fldnam, value, text, selected) { ; }
+exports.nlapiInsertLineItemOption = function (type, fldnam, value, text, selected) { ; }
 
 /**
  * Removes a select option (or all if value is null) from a scripted select or multiselect sublist field.
@@ -988,7 +1030,7 @@ toExport.nlapiInsertLineItemOption = function(type, fldnam, value, text, selecte
  *
  * @since 2008.2
  */
-toExport.nlapiRemoveLineItemOption = function(type, fldnam, value) { ; }
+exports.nlapiRemoveLineItemOption = function (type, fldnam, value) { ; }
 
 /**
  * Returns true if any changes have been made to a sublist.
@@ -999,7 +1041,7 @@ toExport.nlapiRemoveLineItemOption = function(type, fldnam, value) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiIsLineItemChanged = function(type) { ; }
+exports.nlapiIsLineItemChanged = function (type) { ; }
 
 /**
  * Return an record object containing the data being submitted to the system for the currenr record.
@@ -1009,7 +1051,7 @@ toExport.nlapiIsLineItemChanged = function(type) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiGetNewRecord = function() { ; }
+exports.nlapiGetNewRecord = function () { return new record('test', { tranid: random(1, 100).toString() }) }
 
 /**
  * Return an record object containing the current record's data prior to the write operation.
@@ -1019,7 +1061,7 @@ toExport.nlapiGetNewRecord = function() { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiGetOldRecord = function() { ; }
+exports.nlapiGetOldRecord = function () { ; }
 
 /**
  * Create an nlobjError object that can be used to abort script execution and configure error notification
@@ -1031,7 +1073,7 @@ toExport.nlapiGetOldRecord = function() { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiCreateError = function(code,details,suppressEmail) { ; }
+exports.nlapiCreateError = function (code, details, suppressEmail) { return new Error(code); }
 
 /**
  * Return a new entry form page.
@@ -1043,7 +1085,7 @@ toExport.nlapiCreateError = function(code,details,suppressEmail) { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiCreateForm = function(title, hideHeader) { ; }
+exports.nlapiCreateForm = function (title, hideHeader) { ; }
 
 /**
  * Return a new list page.
@@ -1055,7 +1097,7 @@ toExport.nlapiCreateForm = function(title, hideHeader) { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiCreateList = function(title, hideHeader) { ; }
+exports.nlapiCreateList = function (title, hideHeader) { ; }
 
 /**
  * Return a new assistant page.
@@ -1067,7 +1109,7 @@ toExport.nlapiCreateList = function(title, hideHeader) { ; }
  *
  * @since 2009.2
  */
-toExport.nlapiCreateAssistant = function(title, hideHeader) { ; }
+exports.nlapiCreateAssistant = function (title, hideHeader) { ; }
 
 /**
  * Load a file from the file cabinet (via its internal ID or path).
@@ -1079,7 +1121,7 @@ toExport.nlapiCreateAssistant = function(title, hideHeader) { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiLoadFile = function(id) { ; }
+exports.nlapiLoadFile = function (id) { return file.create({ id: `${id}.pdf`, fileType: 'PDF', contents: Math.ceil(Math.random() * 100).toString() }); }
 
 /**
  * Add/update a file in the file cabinet.
@@ -1091,7 +1133,7 @@ toExport.nlapiLoadFile = function(id) { ; }
  *
  * @since 2009.1
  */
-toExport.nlapiSubmitFile = function(file) { ; }
+exports.nlapiSubmitFile = function (file) { ; }
 
 /**
  * Delete a file from the file cabinet.
@@ -1103,7 +1145,7 @@ toExport.nlapiSubmitFile = function(file) { ; }
  *
  * @since 2009.1
  */
-toExport.nlapiDeleteFile = function(id) { ; }
+exports.nlapiDeleteFile = function (id) { ; }
 
 /**
  * Instantiate a file object (specifying the name, type, and contents which are base-64 encoded for binary types.)
@@ -1116,7 +1158,7 @@ toExport.nlapiDeleteFile = function(id) { ; }
  *
  * @since 2009.1
  */
-toExport.nlapiCreateFile = function(name, type, contents) { ; }
+exports.nlapiCreateFile = function (name, type, contents) { ; }
 
 /**
  * Perform a mail merge operation using any template and up to 2 records and returns an nlobjFile with the results.
@@ -1134,7 +1176,7 @@ toExport.nlapiCreateFile = function(name, type, contents) { ; }
  *
  * @since 2008.2
  */
-toExport.nlapiMergeRecord = function(id, baseType, baseId, altType, altId, fields) { ; }
+exports.nlapiMergeRecord = function (id, baseType, baseId, altType, altId, fields) { ; }
 
 /**
  * Print a record (transaction) gievn its type, id, and output format.
@@ -1149,7 +1191,7 @@ toExport.nlapiMergeRecord = function(id, baseType, baseId, altType, altId, field
  *
  * @since 2008.2
  */
-toExport.nlapiPrintRecord = function(type, id, format, properties) { ; }
+exports.nlapiPrintRecord = function (type, id, format, properties) { ; }
 
 /**
  * Generate a PDF from XML using the BFO report writer (see http://big.faceless.org/products/report/).
@@ -1161,7 +1203,7 @@ toExport.nlapiPrintRecord = function(type, id, format, properties) { ; }
  *
  * @since 2009.1
  */
-toExport.nlapiXMLToPDF = function(input) { ; }
+exports.nlapiXMLToPDF = function (input) { return file.create({ id: 'test.pdf', fileType: 'PDF', contents: input }); }
 
 /**
  * Create a template renderer used to generate various outputs based on a template.
@@ -1173,7 +1215,7 @@ toExport.nlapiXMLToPDF = function(input) { ; }
  * @return {nlobjTemplateRenderer}
  *
  */
-toExport.nlapiCreateTemplateRenderer = function() { ; }
+exports.nlapiCreateTemplateRenderer = function () { ; }
 
 /**
  * Create an email merger used to assemble subject and body text of an email from a given
@@ -1185,7 +1227,7 @@ toExport.nlapiCreateTemplateRenderer = function() { ; }
  *
  * @since 2015.1
  */
-toExport.nlapiCreateEmailMerger = function(id) { ; }
+exports.nlapiCreateEmailMerger = function (id) { ; }
 
 /**
  * Create an entry in the script execution log (note that execution log entries are automatically purged after 30 days).
@@ -1197,7 +1239,9 @@ toExport.nlapiCreateEmailMerger = function(id) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiLogExecution = function(type, title, details) { ; }
+exports.nlapiLogExecution = function (type, title, details) {
+    showLogs ? console.log(`Type:${JSON.stringify(type)} Title:${JSON.stringify(title)} Value: `, JSON.stringify(details)) : '';
+}
 
 /**
  * Queue a scheduled script for immediate execution and return the status QUEUED if successfull.
@@ -1211,7 +1255,7 @@ toExport.nlapiLogExecution = function(type, title, details) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiScheduleScript = function(script, deployment, parameters) { ; }
+exports.nlapiScheduleScript = function (script, deployment, parameters) { return 'QUEUED'; }
 
 /**
  * Return a URL with a generated OAuth token.
@@ -1223,7 +1267,7 @@ toExport.nlapiScheduleScript = function(script, deployment, parameters) { ; }
  *
  * @since 2009.2
  */
-toExport.nlapiOutboundSSO = function(ssoAppKey) { ; }
+exports.nlapiOutboundSSO = function (ssoAppKey) { ; }
 
 /**
  * Loads a configuration record
@@ -1235,7 +1279,7 @@ toExport.nlapiOutboundSSO = function(ssoAppKey) { ; }
  *
  * @since 2009.2
  */
-toExport.nlapiLoadConfiguration = function(type) { ; }
+exports.nlapiLoadConfiguration = function (type) { ; }
 
 /**
  * Commits all changes to a configuration record.
@@ -1247,7 +1291,7 @@ toExport.nlapiLoadConfiguration = function(type) { ; }
  *
  * @since 2009.2
  */
-toExport.nlapiSubmitConfiguration = function(setup) { ; }
+exports.nlapiSubmitConfiguration = function (setup) { ; }
 
 /**
  * Convert a String into a Date object.
@@ -1258,7 +1302,10 @@ toExport.nlapiSubmitConfiguration = function(setup) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiStringToDate = function(str, format) { ; }
+exports.nlapiStringToDate = function (str, format) { 
+    var mDate = moment(str);
+    return mDate.isValid() ? mDate.toDate() : new Date();
+}
 
 /**
  * Convert a Date object into a String
@@ -1269,7 +1316,7 @@ toExport.nlapiStringToDate = function(str, format) { ; }
  *
  * @since 2005.0
  */
-toExport.nlapiDateToString = function(d, formattype) { ; }
+exports.nlapiDateToString = function (d, formattype) { return d.toLocaleDateString() + ' ' + d.toLocaleTimeString; }
 
 /**
  * Add days to a Date object and returns a new Date
@@ -1280,7 +1327,11 @@ toExport.nlapiDateToString = function(d, formattype) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiAddDays = function(d, days) { ; }
+exports.nlapiAddDays = function (d, days) {
+    return moment(d)
+        .add(days, 'days')
+        .toDate();
+}
 
 /**
  * Add months to a Date object and returns a new Date.
@@ -1291,7 +1342,11 @@ toExport.nlapiAddDays = function(d, days) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiAddMonths = function(d, months) { ; }
+exports.nlapiAddMonths = function (d, months) {
+    return moment(d)
+    .add(months, 'months')
+    .toDate();
+}
 
 /**
  * Format a number for data entry into a currency field.
@@ -1301,7 +1356,7 @@ toExport.nlapiAddMonths = function(d, months) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiFormatCurrency = function(str) { ; }
+exports.nlapiFormatCurrency = function (str) { ; }
 
 /**
  * Encrypt a String using a SHA-1 hash function
@@ -1311,7 +1366,7 @@ toExport.nlapiFormatCurrency = function(str) { ; }
  *
  * @since 2009.2
  */
-toExport.nlapiEncrypt = function(s) { ; }
+exports.nlapiEncrypt = function (s) { ; }
 
 /**
  * Escape a String for use in an XML document.
@@ -1321,7 +1376,7 @@ toExport.nlapiEncrypt = function(s) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiEscapeXML = function(text) { ; }
+exports.nlapiEscapeXML = function (text) { encodeURI(text); }
 
 /**
  * Convert a String into an XML document. Note that in Server SuiteScript XML is supported natively by the JS runtime using the e4x standard (http://en.wikipedia.org/wiki/E4X)
@@ -1332,7 +1387,7 @@ toExport.nlapiEscapeXML = function(text) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiStringToXML = function(str) { ; }
+exports.nlapiStringToXML = function (str) { ; }
 
 /**
  * Convert an XML document into a String.  Note that in Server SuiteScript XML is supported natively by the JS runtime using the e4x standard (http://en.wikipedia.org/wiki/E4X)
@@ -1343,7 +1398,7 @@ toExport.nlapiStringToXML = function(str) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiXMLToString = function(xml) { ; }
+exports.nlapiXMLToString = function (xml) { ; }
 
 /**
  * Validate that a given XML document conforms to a given XML schema. XML Schema Definition (XSD) is the expected schema format.
@@ -1356,7 +1411,7 @@ toExport.nlapiXMLToString = function(xml) { ; }
  *
  * @since 2014.1
  */
-toExport.nlapiValidateXML = function(xmlDocument, schemaDocument, schemaFolderId) { ; }
+exports.nlapiValidateXML = function (xmlDocument, schemaDocument, schemaFolderId) { ; }
 
 /**
  * select a value from an XML node using XPath. Supports custom namespaces (nodes in default namespace can be referenced using "nlapi" as the prefix)
@@ -1367,7 +1422,7 @@ toExport.nlapiValidateXML = function(xmlDocument, schemaDocument, schemaFolderId
  *
  * @since 2008.2
  */
-toExport.nlapiSelectValue = function(node, xpath) { ; }
+exports.nlapiSelectValue = function (node, xpath) { ; }
 
 /**
  * Select an array of values from an XML node using XPath. Supports custom namespaces (nodes in default namespace can be referenced using "nlapi" as the prefix)
@@ -1378,7 +1433,7 @@ toExport.nlapiSelectValue = function(node, xpath) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiSelectValues = function(node, xpath) { ; }
+exports.nlapiSelectValues = function (node, xpath) { ; }
 
 /**
  * Select a node from an XML node using XPath. Supports custom namespaces (nodes in default namespace can be referenced using "nlapi" as the prefix)
@@ -1389,7 +1444,7 @@ toExport.nlapiSelectValues = function(node, xpath) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiSelectNode = function(node, xpath) { ; }
+exports.nlapiSelectNode = function (node, xpath) { ; }
 
 /**
  * Select an array of nodes from an XML node using XPath. Supports custom namespaces (nodes in default namespace can be referenced using "nlapi" as the prefix)
@@ -1400,7 +1455,7 @@ toExport.nlapiSelectNode = function(node, xpath) { ; }
  *
  * @since 2008.1
  */
-toExport.nlapiSelectNodes = function(node, xpath) { ; }
+exports.nlapiSelectNodes = function (node, xpath) { ; }
 
 /**
  * Calculate exchange rate between two currencies as of today or an optional effective date.
@@ -1413,7 +1468,7 @@ toExport.nlapiSelectNodes = function(node, xpath) { ; }
  *
  * @since 2009.1
  */
-toExport.nlapiExchangeRate = function(fromCurrency, toCurrency, date) { ; }
+exports.nlapiExchangeRate = function (fromCurrency, toCurrency, date) { ; }
 
 /**
  * Initiates a workflow on-demand and returns the workflow instance ID for the workflow-record combination.
@@ -1426,7 +1481,7 @@ toExport.nlapiExchangeRate = function(fromCurrency, toCurrency, date) { ; }
  *
  * @since 2010.1
  */
-toExport.nlapiInitiateWorkflow = function(recordtype, id, workflowid) { ; }
+exports.nlapiInitiateWorkflow = function (recordtype, id, workflowid) { return random(1, 100); }
 
 /**
  * Initiates a workflow on-demand and returns the workflow instance ID for the workflow-record combination.
@@ -1439,7 +1494,7 @@ toExport.nlapiInitiateWorkflow = function(recordtype, id, workflowid) { ; }
  *
  * @since 2014.2
  */
-toExport.nlapiInitiateWorkflowAsync = function(recordType, id, workflowId, parameters){;}
+exports.nlapiInitiateWorkflowAsync = function (recordType, id, workflowId, parameters) { ; }
 
 /**
  * Triggers a workflow on a record.
@@ -1454,7 +1509,7 @@ toExport.nlapiInitiateWorkflowAsync = function(recordType, id, workflowId, param
  *
  * @since 2010.1
  */
-toExport.nlapiTriggerWorkflow = function(recordtype, id, workflowid, actionid, stateid) { ; }
+exports.nlapiTriggerWorkflow = function (recordtype, id, workflowid, actionid, stateid) { return random(1, 100); }
 
 /**
  * Initializes a new record and returns an nlobjCSVImport object.
@@ -1464,10 +1519,10 @@ toExport.nlapiTriggerWorkflow = function(recordtype, id, workflowid, actionid, s
  *
  * @since 2012.2
  */
-toExport.nlapiCreateCSVImport = function() { ; }
+exports.nlapiCreateCSVImport = function () { ; }
 
 
-toExport.nlobjCSVImport = function() { ; }
+exports.nlobjCSVImport = function () { ; }
 /**
  * Sets the data to be imported in a linked file for a multi-file import job, by referencing a file in the file cabinet using nlapiLoadFile(id), or by inputting CSV data as raw string.
  *
@@ -1479,7 +1534,7 @@ toExport.nlobjCSVImport = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjCSVImport.prototype.setLinkedFile = function(sublist, file) { ; }
+exports.nlobjCSVImport.prototype.setLinkedFile = function (sublist, file) { ; }
 
 /**
  * Sets the name of the saved import map to be used for an import, by referencing the internal ID or script ID of the import map.
@@ -1492,7 +1547,7 @@ toExport.nlobjCSVImport.prototype.setLinkedFile = function(sublist, file) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjCSVImport.prototype.setMapping = function(savedImport) { ; }
+exports.nlobjCSVImport.prototype.setMapping = function (savedImport) { ; }
 
 /**
  * Sets the name of the saved import map to be used for an import, by referencing the internal ID or script ID of the import map.
@@ -1506,7 +1561,7 @@ toExport.nlobjCSVImport.prototype.setMapping = function(savedImport) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjCSVImport.prototype.setOption = function(option, value) { ; }
+exports.nlobjCSVImport.prototype.setOption = function (option, value) { ; }
 
 /**
  * Sets the data to be imported in the primary file for an import job, by referencing a file in the file cabinet using nlapiLoadFile, or by inputting CSV data as raw string.
@@ -1521,7 +1576,7 @@ toExport.nlobjCSVImport.prototype.setOption = function(option, value) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjCSVImport.prototype.setPrimaryFile = function(file) { ; }
+exports.nlobjCSVImport.prototype.setPrimaryFile = function (file) { ; }
 
 /**
  * Sets the data to be imported in the primary file for an import job, by referencing a file in the file cabinet using nlapiLoadFile, or by inputting CSV data as raw string.
@@ -1536,7 +1591,7 @@ toExport.nlobjCSVImport.prototype.setPrimaryFile = function(file) { ; }
  *
  * @since 2014.1
  */
-toExport.nlobjCSVImport.prototype.setQueue = function(queue) { ; }
+exports.nlobjCSVImport.prototype.setQueue = function (queue) { ; }
 
 /**
  * Creates an instance of a report definition object.
@@ -1545,7 +1600,7 @@ toExport.nlobjCSVImport.prototype.setQueue = function(queue) { ; }
  *
  * @since 2012.2
  */
-toExport.nlapiCreateReportDefinition = function() { ; }
+exports.nlapiCreateReportDefinition = function () { ; }
 
 /**
  * Creates an nlobjReportForm object to render the report definition.
@@ -1555,7 +1610,7 @@ toExport.nlapiCreateReportDefinition = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlapiCreateReportForm = function(title) { ; }
+exports.nlapiCreateReportForm = function (title) { ; }
 
 /**
  * Creates a new search.
@@ -1567,10 +1622,10 @@ toExport.nlapiCreateReportForm = function(title) { ; }
  *
  * @since 2012.1
  */
-toExport.nlapiCreateSearch = function(type, filters, columns) { ; }
+exports.nlapiCreateSearch = function (type, filters, columns) { ; }
 
 
-toExport.nlobjSearch = function( ){;}
+exports.nlobjSearch = function () { ; }
 /**
  * Adds a single return column to the search. Note that existing columns on the search are not changed.
  *
@@ -1582,7 +1637,7 @@ toExport.nlobjSearch = function( ){;}
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.addColumn = function(column) { ; }
+exports.nlobjSearch.prototype.addColumn = function (column) { ; }
 
 /**
  * Adds multiple return columns to the search. Note that existing columns on the search are not changed.
@@ -1595,7 +1650,7 @@ toExport.nlobjSearch.prototype.addColumn = function(column) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.addColumns = function(columns) { ; }
+exports.nlobjSearch.prototype.addColumns = function (columns) { ; }
 
 /**
  * Adds a single search filter. Note that existing filters on the search are not changed.
@@ -1608,7 +1663,7 @@ toExport.nlobjSearch.prototype.addColumns = function(columns) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.addFilter = function(filter) { ; }
+exports.nlobjSearch.prototype.addFilter = function (filter) { ; }
 
 /**
  * Adds a search filter list. Note that existing filters on the search are not changed.
@@ -1621,7 +1676,7 @@ toExport.nlobjSearch.prototype.addFilter = function(filter) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.addFilters = function(filters) { ; }
+exports.nlobjSearch.prototype.addFilters = function (filters) { ; }
 
 /**
  * Deletes a given saved search that was created through scripting or through the UI.
@@ -1633,7 +1688,7 @@ toExport.nlobjSearch.prototype.addFilters = function(filters) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.deleteSearch = function() { ; }
+exports.nlobjSearch.prototype.deleteSearch = function () { ; }
 
 /**
  * Gets the search return columns for the search.
@@ -1645,7 +1700,7 @@ toExport.nlobjSearch.prototype.deleteSearch = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.getColumns = function() { ; }
+exports.nlobjSearch.prototype.getColumns = function () { ; }
 
 /**
  * Gets the filter expression for the search.
@@ -1657,7 +1712,7 @@ toExport.nlobjSearch.prototype.getColumns = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.getFilterExpression = function() { ; }
+exports.nlobjSearch.prototype.getFilterExpression = function () { ; }
 
 /**
  * Gets the filters for the search.
@@ -1669,7 +1724,7 @@ toExport.nlobjSearch.prototype.getFilterExpression = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.getFilters = function() { ; }
+exports.nlobjSearch.prototype.getFilters = function () { ; }
 
 /**
  * Gets the internal ID of the search.
@@ -1681,7 +1736,7 @@ toExport.nlobjSearch.prototype.getFilters = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.getId = function() { ; }
+exports.nlobjSearch.prototype.getId = function () { ; }
 
 /**
  * Gets whether the nlobjSearch has been set as public search.
@@ -1693,7 +1748,7 @@ toExport.nlobjSearch.prototype.getId = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.getIsPublic = function() { ; }
+exports.nlobjSearch.prototype.getIsPublic = function () { ; }
 
 /**
  * Gets the script ID of the search.
@@ -1705,7 +1760,7 @@ toExport.nlobjSearch.prototype.getIsPublic = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.getScriptId = function() { ; }
+exports.nlobjSearch.prototype.getScriptId = function () { ; }
 
 /**
  * Returns the record type that the search was based on. This method is helpful when you have the internal ID of the search, but do not know the record type the search was based on.
@@ -1717,7 +1772,7 @@ toExport.nlobjSearch.prototype.getScriptId = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.getSearchType = function() { ; }
+exports.nlobjSearch.prototype.getSearchType = function () { ; }
 
 /**
  * Runs an ad-hoc search, returning the results. Be aware that calling this method does NOT save the search.
@@ -1729,7 +1784,7 @@ toExport.nlobjSearch.prototype.getSearchType = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.runSearch = function() { ; }
+exports.nlobjSearch.prototype.runSearch = function () { ; }
 
 /**
  * Saves the search created by nlapiCreateSearch(type, filters, columns).
@@ -1744,7 +1799,7 @@ toExport.nlobjSearch.prototype.runSearch = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.saveSearch = function(title, scriptId) { ; }
+exports.nlobjSearch.prototype.saveSearch = function (title, scriptId) { ; }
 
 /**
  * Sets the return columns for this search, overwriting any prior columns. If null is passed in it is treated as if it were an empty array and removes any existing columns on the search.
@@ -1758,7 +1813,7 @@ toExport.nlobjSearch.prototype.saveSearch = function(title, scriptId) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.setColumns = function(columns) { ; }
+exports.nlobjSearch.prototype.setColumns = function (columns) { ; }
 
 /**
  * Sets the search filter expression, overwriting any prior filters. If null is passed in, it is treated as if it was an empty array and removes any existing filters on this search.
@@ -1772,7 +1827,7 @@ toExport.nlobjSearch.prototype.setColumns = function(columns) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.setFilterExpression = function(filterExpression) { ; }
+exports.nlobjSearch.prototype.setFilterExpression = function (filterExpression) { ; }
 
 /**
  * Sets the filters for this search, overwriting any prior filters. If null is passed in it is treated as if it were an empty array and removes any existing filters on this search.
@@ -1786,7 +1841,7 @@ toExport.nlobjSearch.prototype.setFilterExpression = function(filterExpression) 
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.setFilters = function(filters) { ; }
+exports.nlobjSearch.prototype.setFilters = function (filters) { ; }
 
 /**
  * Sets whether the search is public or private. By default, all searches created through nlapiCreateSearch(type, filters, columns) are private.
@@ -1800,7 +1855,7 @@ toExport.nlobjSearch.prototype.setFilters = function(filters) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.setIsPublic = function(type) { ; }
+exports.nlobjSearch.prototype.setIsPublic = function (type) { ; }
 
 /**
  * Acts like nlapiSetRedirectURL(type, identifier, id, editmode, parameters) but redirects end users to a populated search definition page. You can use this method with any kind of search that is held in the nlobjSearch object.
@@ -1814,7 +1869,7 @@ toExport.nlobjSearch.prototype.setIsPublic = function(type) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.setRedirectURLToSearch = function() { ; }
+exports.nlobjSearch.prototype.setRedirectURLToSearch = function () { ; }
 
 /**
  * Acts like nlapiSetRedirectURL(type, identifier, id, editmode, parameters) but redirects end users to a search results page. You can use this method with any kind of search that is held in the nlobjSearch object.
@@ -1828,9 +1883,9 @@ toExport.nlobjSearch.prototype.setRedirectURLToSearch = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearch.prototype.setRedirectURLToSearchResults = function() { ; }
+exports.nlobjSearch.prototype.setRedirectURLToSearchResults = function () { ; }
 
-toExport.nlobjSearchResultSet = function(){;}
+exports.nlobjSearchResultSet = function () { ; }
 /**
  * Calls the developer-defined callback function for every result in this set.
  *
@@ -1842,7 +1897,7 @@ toExport.nlobjSearchResultSet = function(){;}
  *
  * @since 2012.1
  */
-toExport.nlobjSearchResultSet.prototype.forEachResult = function(callback) { ; }
+exports.nlobjSearchResultSet.prototype.forEachResult = function (callback) { ; }
 
 /**
  * Returns a list of nlobjSearchColumn objects for this result set. This list contains one nlobjSearchColumn object for each result column in the nlobjSearchResult objects returned by this search.
@@ -1854,7 +1909,7 @@ toExport.nlobjSearchResultSet.prototype.forEachResult = function(callback) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearchResultSet.prototype.getColumns = function() { ; }
+exports.nlobjSearchResultSet.prototype.getColumns = function () { ; }
 
 /**
  * Retrieve a slice of the search result. The start parameter is the inclusive index of the first result to return. The end parameter is the exclusive index of the last result to return.
@@ -1871,7 +1926,7 @@ toExport.nlobjSearchResultSet.prototype.getColumns = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearchResultSet.prototype.getResults = function(start, end) { ; }
+exports.nlobjSearchResultSet.prototype.getResults = function (start, end) { ; }
 
 /**
  * Sets the given field to disabled or enabled.
@@ -1883,7 +1938,7 @@ toExport.nlobjSearchResultSet.prototype.getResults = function(start, end) { ; }
  *
  * @since 2009.1
  */
-toExport.nlapiDisableField = function(fldnam, val) { ; }
+exports.nlapiDisableField = function (fldnam, val) { ; }
 
 /**
  * Sets the given line item field of a sublist to disabled or enabled.
@@ -1896,7 +1951,7 @@ toExport.nlapiDisableField = function(fldnam, val) { ; }
  *
  * @since 2009.1
  */
-toExport.nlapiDisableLineItemField = function(type, fldnam, val) { ; }
+exports.nlapiDisableLineItemField = function (type, fldnam, val) { ; }
 
 /**
  * Returns the values of a multiselect sublist field on the currently selected line.
@@ -1907,7 +1962,7 @@ toExport.nlapiDisableLineItemField = function(type, fldnam, val) { ; }
  *
  * @since 2012.1
  */
-toExport.nlapiGetCurrentLineItemValues = function(type, fldnam) { ; }
+exports.nlapiGetCurrentLineItemValues = function (type, fldnam) { ; }
 
 /**
  * This API returns the value of a datetime field. If timeZone is passed in, the datetime value is converted to that time zone and then returned.
@@ -1919,7 +1974,7 @@ toExport.nlapiGetCurrentLineItemValues = function(type, fldnam) { ; }
  *
  * @since 2013.2
  */
-toExport.nlapiGetDateTimeValue = function(fieldId, timeZone) { ; }
+exports.nlapiGetDateTimeValue = function (fieldId, timeZone) { ; }
 
 /**
  * Returns a job manager instance.
@@ -1929,7 +1984,7 @@ toExport.nlapiGetDateTimeValue = function(fieldId, timeZone) { ; }
  *
  * @since 2013.1
  */
-toExport.nlapiGetJobManager = function(jobType) { ; }
+exports.nlapiGetJobManager = function (jobType) { ; }
 
 /**
  * Returns the values of a multiselect sublist field on a selected line.
@@ -1941,7 +1996,7 @@ toExport.nlapiGetJobManager = function(jobType) { ; }
  *
  * @since 2012.1
  */
-toExport.nlapiGetLineItemValues = function(type, fldnam, linenum) { ; }
+exports.nlapiGetLineItemValues = function (type, fldnam, linenum) { ; }
 
 /**
  * Returns the NetSuite login credentials of currently logged-in user.
@@ -1952,7 +2007,7 @@ toExport.nlapiGetLineItemValues = function(type, fldnam, linenum) { ; }
  *
  * @since 2012.2
  */
-toExport.nlapiGetLogin = function() { ; }
+exports.nlapiGetLogin = function () { ; }
 
 /**
  * Loads an existing saved search.
@@ -1964,7 +2019,7 @@ toExport.nlapiGetLogin = function() { ; }
  *
  * @since 2012.1
  */
-toExport.nlapiLoadSearch = function(type, id) { ; }
+exports.nlapiLoadSearch = function (type, id) { ; }
 
 /**
  * This API is deprecated as of NetSuite Version 2008 Release 1.
@@ -1980,7 +2035,7 @@ toExport.nlapiLoadSearch = function(type, id) { ; }
  * @since 2007.0
  * @deprecated
  */
-toExport.nlapiMergeTemplate = function(id, baseType, baseId, altType, altId, fields) { ; }
+exports.nlapiMergeTemplate = function (id, baseType, baseId, altType, altId, fields) { ; }
 
 /**
  * Causes a FORM type nlobjPortlet to immediately reload.
@@ -1989,7 +2044,7 @@ toExport.nlapiMergeTemplate = function(id, baseType, baseId, altType, altId, fie
  *
  * @since 2011.1
  */
-toExport.nlapiRefreshPortlet = function() { ; }
+exports.nlapiRefreshPortlet = function () { ; }
 
 /**
  * Causes a custom form portlet to be resized.
@@ -1998,7 +2053,7 @@ toExport.nlapiRefreshPortlet = function() { ; }
  *
  * @since 2011.1
  */
-toExport.nlapiResizePortlet = function() { ; }
+exports.nlapiResizePortlet = function () { ; }
 
 /**
  * Set the value of a field on the currently selected line.
@@ -2013,7 +2068,7 @@ toExport.nlapiResizePortlet = function() { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiSetCurrentLineItemValues = function(type,fldnam,values,firefieldchanged,synchronous) { ; }
+exports.nlapiSetCurrentLineItemValues = function (type, fldnam, values, firefieldchanged, synchronous) { ; }
 
 /**
  * Set the values of a field on the currently selected line.
@@ -2026,7 +2081,7 @@ toExport.nlapiSetCurrentLineItemValues = function(type,fldnam,values,firefieldch
  *
  * @since 2011.2
  */
-toExport.nlapiSetDateTimeValue = function(fieldId, value, timezone) { ; }
+exports.nlapiSetDateTimeValue = function (fieldId, value, timezone) { ; }
 
 /**
  * Creates a recovery point saving the state of the script's execution.
@@ -2035,7 +2090,7 @@ toExport.nlapiSetDateTimeValue = function(fieldId, value, timezone) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiSetRecoveryPoint = function() { ; }
+exports.nlapiSetRecoveryPoint = function () { ; }
 
 /**
  * Submits a CSV import job to asynchronously import record data into NetSuite.
@@ -2045,7 +2100,7 @@ toExport.nlapiSetRecoveryPoint = function() { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiSubmitCSVImport = function(csvImport) { ; }
+exports.nlapiSubmitCSVImport = function (csvImport) { ; }
 
 /**
  * view a subrecord on body field on the current record on a page.
@@ -2055,7 +2110,7 @@ toExport.nlapiSubmitCSVImport = function(csvImport) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiViewSubrecord = function(fldname) { ; }
+exports.nlapiViewSubrecord = function (fldname) { ; }
 
 /**
  * Creates a recovery point and then reschedules the script.
@@ -2064,7 +2119,7 @@ toExport.nlapiViewSubrecord = function(fldname) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiYieldScript = function() { ; }
+exports.nlapiYieldScript = function () { ; }
 /**
  * Create a subrecord on a sublist field on the current record on a page.
  * @restriction supported in client and user event scripts only.
@@ -2074,7 +2129,7 @@ toExport.nlapiYieldScript = function() { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiCreateCurrentLineItemSubrecord = function(type,fldnam) { ; }
+exports.nlapiCreateCurrentLineItemSubrecord = function (type, fldnam) { ; }
 
 /**
  * edit a subrecord on a sublist field on the current record on a page.
@@ -2085,7 +2140,7 @@ toExport.nlapiCreateCurrentLineItemSubrecord = function(type,fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiEditCurrentLineItemSubrecord = function(type,fldnam) { ; }
+exports.nlapiEditCurrentLineItemSubrecord = function (type, fldnam) { ; }
 
 /**
  * remove a subrecord on a sublist field on the current record on a page.
@@ -2096,7 +2151,7 @@ toExport.nlapiEditCurrentLineItemSubrecord = function(type,fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiRemoveCurrentLineItemSubrecord = function(type,fldnam) { ; }
+exports.nlapiRemoveCurrentLineItemSubrecord = function (type, fldnam) { ; }
 
 /**
  * view a subrecord on a sublist field on the current record on a page.
@@ -2107,7 +2162,7 @@ toExport.nlapiRemoveCurrentLineItemSubrecord = function(type,fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiViewCurrentLineItemSubrecord = function(type,fldnam) { ; }
+exports.nlapiViewCurrentLineItemSubrecord = function (type, fldnam) { ; }
 
 /**
  * view a subrecord on a sublist field on the current record on a page.
@@ -2118,7 +2173,7 @@ toExport.nlapiViewCurrentLineItemSubrecord = function(type,fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiViewLineItemSubrecord = function(type,fldnam,linenum) { ; }
+exports.nlapiViewLineItemSubrecord = function (type, fldnam, linenum) { ; }
 
 /**
  * create a subrecord on body field on the current record on a page.
@@ -2128,7 +2183,7 @@ toExport.nlapiViewLineItemSubrecord = function(type,fldnam,linenum) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiCreateSubrecord = function(fldnam) { ; }
+exports.nlapiCreateSubrecord = function (fldnam) { ; }
 
 /**
  * edit a subrecord on body field on the current record on a page.
@@ -2138,7 +2193,7 @@ toExport.nlapiCreateSubrecord = function(fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiEditSubrecord = function(fldnam) { ; }
+exports.nlapiEditSubrecord = function (fldnam) { ; }
 
 /**
  * remove a subrecord on body field on the current record on a page.
@@ -2148,7 +2203,7 @@ toExport.nlapiEditSubrecord = function(fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiRemoveSubrecord = function(fldnam) { ; }
+exports.nlapiRemoveSubrecord = function (fldnam) { ; }
 /**
  * edit a subrecord on a sublist field on the current record on a page.
  * @restriction supported in client and user event scripts only.
@@ -2158,7 +2213,7 @@ toExport.nlapiRemoveSubrecord = function(fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiEditCurrentLineItemSubrecord = function(type,fldnam) { ; }
+exports.nlapiEditCurrentLineItemSubrecord = function (type, fldnam) { ; }
 
 /**
  * remove a subrecord on a sublist field on the current record on a page.
@@ -2169,7 +2224,7 @@ toExport.nlapiEditCurrentLineItemSubrecord = function(type,fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiRemoveCurrentLineItemSubrecord = function(type,fldnam) { ; }
+exports.nlapiRemoveCurrentLineItemSubrecord = function (type, fldnam) { ; }
 
 
 /**
@@ -2181,7 +2236,7 @@ toExport.nlapiRemoveCurrentLineItemSubrecord = function(type,fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiViewCurrentLineItemSubrecord = function(type,fldnam) { ; }
+exports.nlapiViewCurrentLineItemSubrecord = function (type, fldnam) { ; }
 
 
 /**
@@ -2193,7 +2248,7 @@ toExport.nlapiViewCurrentLineItemSubrecord = function(type,fldnam) { ; }
  *
  * @since 2011.2
  */
-toExport.nlapiViewLineItemSubrecord = function(type,fldnam,linenum) { ; }
+exports.nlapiViewLineItemSubrecord = function (type, fldnam, linenum) { ; }
 
 /**
  * create a subrecord on body field on the current record on a page.
@@ -2235,7 +2290,7 @@ function removeSubrecord(fldnam) { ; }
  */
 function viewSubrecord(fldnam) { ; }
 
-toExport.nlobjSubrecord = function(){;}
+exports.nlobjSubrecord = function () { ; }
 
 /**
  * Commit the subrecord after you finish modifying it.
@@ -2247,7 +2302,7 @@ toExport.nlobjSubrecord = function(){;}
  *
  * @since 2008.1
  */
-toExport.nlobjSubrecord.prototype.commit = function() { ; }
+exports.nlobjSubrecord.prototype.commit = function () { ; }
 
 /**
  * Cancel the any modification on subrecord.
@@ -2259,7 +2314,7 @@ toExport.nlobjSubrecord.prototype.commit = function() { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjSubrecord.prototype.cancel = function() { ; }
+exports.nlobjSubrecord.prototype.cancel = function () { ; }
 
 /**
  * Return a new instance of nlobjRecord used for accessing and manipulating record objects.
@@ -2270,7 +2325,7 @@ toExport.nlobjSubrecord.prototype.cancel = function() { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRecord = function() { ; }
+exports.nlobjRecord = function () { ; }
 
 /**
  * Return the internalId of the record or NULL for new records.
@@ -2282,7 +2337,7 @@ toExport.nlobjRecord = function() { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.getId = function() { ; }
+exports.nlobjRecord.prototype.getId = function () { ; }
 
 /**
  * Return the recordType corresponding to this record.
@@ -2294,7 +2349,7 @@ toExport.nlobjRecord.prototype.getId = function() { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.getRecordType = function( ) { ; }
+exports.nlobjRecord.prototype.getRecordType = function () { ; }
 
 /**
  * Return field metadata for field.
@@ -2307,7 +2362,7 @@ toExport.nlobjRecord.prototype.getRecordType = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjRecord.prototype.getField = function(fldnam) { ; }
+exports.nlobjRecord.prototype.getField = function (fldnam) { ; }
 
 /**
  * Return field metadata for field.
@@ -2322,7 +2377,7 @@ toExport.nlobjRecord.prototype.getField = function(fldnam) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getMatrixField = function(type, fldnam, column) { ; }
+exports.nlobjRecord.prototype.getMatrixField = function (type, fldnam, column) { ; }
 
 /**
  * Return metadata for sublist field.
@@ -2337,7 +2392,7 @@ toExport.nlobjRecord.prototype.getMatrixField = function(type, fldnam, column) {
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getLineItemField = function(type, fldnam, linenum) { ; }
+exports.nlobjRecord.prototype.getLineItemField = function (type, fldnam, linenum) { ; }
 
 /**
  * Return metadata for sublist field.
@@ -2353,7 +2408,7 @@ toExport.nlobjRecord.prototype.getLineItemField = function(type, fldnam, linenum
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getLineItemMatrixField = function(type, fldnam, linenum, column) { ; }
+exports.nlobjRecord.prototype.getLineItemMatrixField = function (type, fldnam, linenum, column) { ; }
 
 /**
  * Set the value of a field.
@@ -2367,7 +2422,7 @@ toExport.nlobjRecord.prototype.getLineItemMatrixField = function(type, fldnam, l
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.setFieldValue = function( name, value ) { ; }
+exports.nlobjRecord.prototype.setFieldValue = function (name, value) { ; }
 
 /**
  * Set the values of a multi-select field.
@@ -2380,7 +2435,7 @@ toExport.nlobjRecord.prototype.setFieldValue = function( name, value ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.setFieldValues = function( name, values ) { ; }
+exports.nlobjRecord.prototype.setFieldValues = function (name, values) { ; }
 
 /**
  * Return the value of a field.
@@ -2393,7 +2448,7 @@ toExport.nlobjRecord.prototype.setFieldValues = function( name, values ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.getFieldValue = function( name ) { ; }
+exports.nlobjRecord.prototype.getFieldValue = function (name) { ; }
 
 /**
  * Return the selected values of a multi-select field as an Array.
@@ -2406,7 +2461,7 @@ toExport.nlobjRecord.prototype.getFieldValue = function( name ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.getFieldValues = function( name ) { ; }
+exports.nlobjRecord.prototype.getFieldValues = function (name) { ; }
 
 /**
  * Set the value (via display value) of a select field.
@@ -2421,7 +2476,7 @@ toExport.nlobjRecord.prototype.getFieldValues = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRecord.prototype.setFieldText = function( name, text ) { ; }
+exports.nlobjRecord.prototype.setFieldText = function (name, text) { ; }
 
 /**
  * Set the values (via display values) of a multi-select field.
@@ -2436,7 +2491,7 @@ toExport.nlobjRecord.prototype.setFieldText = function( name, text ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRecord.prototype.setFieldTexts = function( name, texts ) { ; }
+exports.nlobjRecord.prototype.setFieldTexts = function (name, texts) { ; }
 
 /**
  * Return the display value for a select field.
@@ -2450,7 +2505,7 @@ toExport.nlobjRecord.prototype.setFieldTexts = function( name, texts ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRecord.prototype.getFieldText = function( name ) { ; }
+exports.nlobjRecord.prototype.getFieldText = function (name) { ; }
 
 /**
  * Return the selected display values of a multi-select field as an Array.
@@ -2464,7 +2519,7 @@ toExport.nlobjRecord.prototype.getFieldText = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRecord.prototype.getFieldTexts = function( name ) { ; }
+exports.nlobjRecord.prototype.getFieldTexts = function (name) { ; }
 
 /**
  * Get the value of a matrix header field.
@@ -2479,7 +2534,7 @@ toExport.nlobjRecord.prototype.getFieldTexts = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getMatrixValue = function( type, name, column ) { ; }
+exports.nlobjRecord.prototype.getMatrixValue = function (type, name, column) { ; }
 
 /**
  * Set the value of a matrix header field.
@@ -2495,7 +2550,7 @@ toExport.nlobjRecord.prototype.getMatrixValue = function( type, name, column ) {
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.setMatrixValue = function( type, name, column, value ) { ; }
+exports.nlobjRecord.prototype.setMatrixValue = function (type, name, column, value) { ; }
 
 /**
  * Return an Array of all field names on the record.
@@ -2507,7 +2562,7 @@ toExport.nlobjRecord.prototype.setMatrixValue = function( type, name, column, va
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.getAllFields = function( ) { ; }
+exports.nlobjRecord.prototype.getAllFields = function () { ; }
 
 /**
  * Return an Array of all field names on a record for a particular sublist.
@@ -2520,7 +2575,7 @@ toExport.nlobjRecord.prototype.getAllFields = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRecord.prototype.getAllLineItemFields = function( group ) { ; }
+exports.nlobjRecord.prototype.getAllLineItemFields = function (group) { ; }
 
 /**
  * Set the value of a sublist field.
@@ -2535,7 +2590,7 @@ toExport.nlobjRecord.prototype.getAllLineItemFields = function( group ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.setLineItemValue = function( group, name, line, value ) { ; }
+exports.nlobjRecord.prototype.setLineItemValue = function (group, name, line, value) { ; }
 
 /**
  * Set the value of a sublist field.
@@ -2551,7 +2606,7 @@ toExport.nlobjRecord.prototype.setLineItemValue = function( group, name, line, v
  *
  * @since 2013.2
  */
-toExport.nlobjRecord.prototype.setLineItemDateTimeValue = function( group, name, line, value, timezone ) { ; }
+exports.nlobjRecord.prototype.setLineItemDateTimeValue = function (group, name, line, value, timezone) { ; }
 
 /**
  * Return the value of a sublist field.
@@ -2565,7 +2620,7 @@ toExport.nlobjRecord.prototype.setLineItemDateTimeValue = function( group, name,
  *
  * @since 2008.1
  */
-toExport.nlobjRecord.prototype.getLineItemValue = function( group, name, line ) { ; }
+exports.nlobjRecord.prototype.getLineItemValue = function (group, name, line) { ; }
 
 /**
  * Return the value of a sublist field.
@@ -2580,7 +2635,7 @@ toExport.nlobjRecord.prototype.getLineItemValue = function( group, name, line ) 
  *
  * @since 2013.2
  */
-toExport.nlobjRecord.prototype.getLineItemDateTimeValue = function( group, name, line, timezone ) { ; }
+exports.nlobjRecord.prototype.getLineItemDateTimeValue = function (group, name, line, timezone) { ; }
 
 /**
  * Return the text value of a sublist field.
@@ -2595,7 +2650,7 @@ toExport.nlobjRecord.prototype.getLineItemDateTimeValue = function( group, name,
  *
  * @since 2008.2
  */
-toExport.nlobjRecord.prototype.getLineItemText = function( group, name, line ) { ; }
+exports.nlobjRecord.prototype.getLineItemText = function (group, name, line) { ; }
 
 /**
  * Set the current value of a sublist field.
@@ -2609,7 +2664,7 @@ toExport.nlobjRecord.prototype.getLineItemText = function( group, name, line ) {
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.setCurrentLineItemValue = function( group, name, value ) { ; }
+exports.nlobjRecord.prototype.setCurrentLineItemValue = function (group, name, value) { ; }
 
 /**
  * Set the current value of a sublist field.
@@ -2624,7 +2679,7 @@ toExport.nlobjRecord.prototype.setCurrentLineItemValue = function( group, name, 
  *
  * @since 2013.2
  */
-toExport.nlobjRecord.prototype.setCurrentLineItemDateTimeValue = function( group, name, value,timezone ) { ; }
+exports.nlobjRecord.prototype.setCurrentLineItemDateTimeValue = function (group, name, value, timezone) { ; }
 
 /**
  * Return the current value of a sublist field.
@@ -2638,7 +2693,7 @@ toExport.nlobjRecord.prototype.setCurrentLineItemDateTimeValue = function( group
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getCurrentLineItemValue = function( group, name ) { ; }
+exports.nlobjRecord.prototype.getCurrentLineItemValue = function (group, name) { ; }
 
 /**
  * Return the current value of a sublist field.
@@ -2653,7 +2708,7 @@ toExport.nlobjRecord.prototype.getCurrentLineItemValue = function( group, name )
  *
  * @since 2013.2
  */
-toExport.nlobjRecord.prototype.getCurrentLineItemDateTimeValue = function( group, name, timezone ) { ; }
+exports.nlobjRecord.prototype.getCurrentLineItemDateTimeValue = function (group, name, timezone) { ; }
 
 /**
  * Set the current value of a sublist matrix field.
@@ -2669,7 +2724,7 @@ toExport.nlobjRecord.prototype.getCurrentLineItemDateTimeValue = function( group
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.setCurrentLineItemMatrixValue = function( group, name, column, value ) { ; }
+exports.nlobjRecord.prototype.setCurrentLineItemMatrixValue = function (group, name, column, value) { ; }
 
 /**
  * Return the current value of a sublist matrix field.
@@ -2684,7 +2739,7 @@ toExport.nlobjRecord.prototype.setCurrentLineItemMatrixValue = function( group, 
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getCurrentLineItemMatrixValue = function( group, name, column ) { ; }
+exports.nlobjRecord.prototype.getCurrentLineItemMatrixValue = function (group, name, column) { ; }
 
 /**
  * Return the number of columns for a matrix field.
@@ -2698,7 +2753,7 @@ toExport.nlobjRecord.prototype.getCurrentLineItemMatrixValue = function( group, 
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getMatrixCount = function( group, name ) { ; }
+exports.nlobjRecord.prototype.getMatrixCount = function (group, name) { ; }
 
 /**
  * Return the number of lines in a sublist.
@@ -2710,7 +2765,7 @@ toExport.nlobjRecord.prototype.getMatrixCount = function( group, name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.getLineItemCount = function( group ) { ; }
+exports.nlobjRecord.prototype.getLineItemCount = function (group) { ; }
 
 /**
  * Return line number for 1st occurence of field value in a sublist column.
@@ -2725,7 +2780,7 @@ toExport.nlobjRecord.prototype.getLineItemCount = function( group ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.findLineItemValue = function( group, fldnam, value ) { ; }
+exports.nlobjRecord.prototype.findLineItemValue = function (group, fldnam, value) { ; }
 
 /**
  * Return line number for 1st occurence of field value in a sublist column.
@@ -2741,7 +2796,7 @@ toExport.nlobjRecord.prototype.findLineItemValue = function( group, fldnam, valu
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.findLineItemMatrixValue = function( group, fldnam, column, value ) { ; }
+exports.nlobjRecord.prototype.findLineItemMatrixValue = function (group, fldnam, column, value) { ; }
 
 /**
  * Insert a new line into a sublist.
@@ -2754,7 +2809,7 @@ toExport.nlobjRecord.prototype.findLineItemMatrixValue = function( group, fldnam
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.insertLineItem = function( group, line ) { ; }
+exports.nlobjRecord.prototype.insertLineItem = function (group, line) { ; }
 
 /**
  * Remove an existing line from a sublist.
@@ -2767,7 +2822,7 @@ toExport.nlobjRecord.prototype.insertLineItem = function( group, line ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.removeLineItem = function( group, line ) { ; }
+exports.nlobjRecord.prototype.removeLineItem = function (group, line) { ; }
 
 /**
  * Insert and select a new line in a sublist.
@@ -2780,7 +2835,7 @@ toExport.nlobjRecord.prototype.removeLineItem = function( group, line ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.selectNewLineItem = function( group ) { ; }
+exports.nlobjRecord.prototype.selectNewLineItem = function (group) { ; }
 
 /**
  * Select an existing line in a sublist.
@@ -2794,7 +2849,7 @@ toExport.nlobjRecord.prototype.selectNewLineItem = function( group ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.selectLineItem = function( group, line ) { ; }
+exports.nlobjRecord.prototype.selectLineItem = function (group, line) { ; }
 
 /**
  * Commit the current line in a sublist.
@@ -2807,7 +2862,7 @@ toExport.nlobjRecord.prototype.selectLineItem = function( group, line ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjRecord.prototype.commitLineItem = function( group ) { ; }
+exports.nlobjRecord.prototype.commitLineItem = function (group) { ; }
 
 /**
  * set the value of a field.
@@ -2822,7 +2877,7 @@ toExport.nlobjRecord.prototype.commitLineItem = function( group ) { ; }
  *
  * @since 20013.2
  */
-toExport.nlobjRecord.prototype.setDateTimeValue = function (name, value, timezone) { ; }
+exports.nlobjRecord.prototype.setDateTimeValue = function (name, value, timezone) { ; }
 
 /**
  * Return the value of a field on the current record on a page.
@@ -2836,7 +2891,7 @@ toExport.nlobjRecord.prototype.setDateTimeValue = function (name, value, timezon
  *
  * @since	2013.2
  */
-toExport.nlobjRecord.prototype.getDateTimeValue = function (fldnam, timezone) { ; }
+exports.nlobjRecord.prototype.getDateTimeValue = function (fldnam, timezone) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to create a subrecord from a sublist field on the parent record.
@@ -2850,7 +2905,7 @@ toExport.nlobjRecord.prototype.getDateTimeValue = function (fldnam, timezone) { 
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.createCurrentLineItemSubrecord = function (sublist, fldname) { ; }
+exports.nlobjRecord.prototype.createCurrentLineItemSubrecord = function (sublist, fldname) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to create a subrecord from a body field on the parent record.
@@ -2863,7 +2918,7 @@ toExport.nlobjRecord.prototype.createCurrentLineItemSubrecord = function (sublis
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.createSubrecord = function (fldname) { ; }
+exports.nlobjRecord.prototype.createSubrecord = function (fldname) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to edit a subrecord from a sublist field on the parent record.
@@ -2877,7 +2932,7 @@ toExport.nlobjRecord.prototype.createSubrecord = function (fldname) { ; }
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.editCurrentLineItemSubrecord = function (sublist, fldname) { ; }
+exports.nlobjRecord.prototype.editCurrentLineItemSubrecord = function (sublist, fldname) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to edit a subrecord from a body field on the parent record.
@@ -2890,7 +2945,7 @@ toExport.nlobjRecord.prototype.editCurrentLineItemSubrecord = function (sublist,
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.editSubrecord = function (fldname) { ; }
+exports.nlobjRecord.prototype.editSubrecord = function (fldname) { ; }
 
 /**
  * Returns the values of a multiselect sublist field on the currently selected line. One example of a multiselect sublist field is the Serial Numbers field on the Items sublist.
@@ -2905,7 +2960,7 @@ toExport.nlobjRecord.prototype.editSubrecord = function (fldname) { ; }
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.getCurrentLineItemValues = function (type, fldname) { ; }
+exports.nlobjRecord.prototype.getCurrentLineItemValues = function (type, fldname) { ; }
 
 /**
  * Use this API to get the value of a matrix field that appears on a specific line in a specific column. This API can be used only in the context of a matrix sublist.
@@ -2921,7 +2976,7 @@ toExport.nlobjRecord.prototype.getCurrentLineItemValues = function (type, fldnam
  *
  * @since	2009.2
  */
-toExport.nlobjRecord.prototype.getLineItemMatrixValue = function (group, fldnam, lineum, column) { ; }
+exports.nlobjRecord.prototype.getLineItemMatrixValue = function (group, fldnam, lineum, column) { ; }
 
 /**
  * Returns the values of a multiselect sublist field on a selected line. One example of a multiselect sublist field is the Serial Numbers field on the Items sublist.
@@ -2937,7 +2992,7 @@ toExport.nlobjRecord.prototype.getLineItemMatrixValue = function (group, fldnam,
  *
  * @since	2009.2
  */
-toExport.nlobjRecord.prototype.getLineItemValues = function (type, fldnam, lineum) { ; }
+exports.nlobjRecord.prototype.getLineItemValues = function (type, fldnam, lineum) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to remove a subrecord from a sublist field on the parent record.
@@ -2951,7 +3006,7 @@ toExport.nlobjRecord.prototype.getLineItemValues = function (type, fldnam, lineu
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.removeCurrentLineItemSubrecord = function (sublist, fldname) { ; }
+exports.nlobjRecord.prototype.removeCurrentLineItemSubrecord = function (sublist, fldname) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to remove a subrecord from a body field on the parent record.
@@ -2964,7 +3019,7 @@ toExport.nlobjRecord.prototype.removeCurrentLineItemSubrecord = function (sublis
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.removeSubrecord = function (fldname) { ; }
+exports.nlobjRecord.prototype.removeSubrecord = function (fldname) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to view a subrecord from a sublist field on the parent record.
@@ -2978,7 +3033,7 @@ toExport.nlobjRecord.prototype.removeSubrecord = function (fldname) { ; }
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.viewCurrentLineItemSubrecord = function (sublist, fldname) { ; }
+exports.nlobjRecord.prototype.viewCurrentLineItemSubrecord = function (sublist, fldname) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to view a subrecord from a sublist field on the parent record.
@@ -2993,7 +3048,7 @@ toExport.nlobjRecord.prototype.viewCurrentLineItemSubrecord = function (sublist,
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.viewLineItemSubrecord = function (sublist, fldname, linenum) { ; }
+exports.nlobjRecord.prototype.viewLineItemSubrecord = function (sublist, fldname, linenum) { ; }
 
 /**
  * Returns a nlobjSubrecord object. Use this API to view a subrecord from a body field on the parent record.
@@ -3006,7 +3061,7 @@ toExport.nlobjRecord.prototype.viewLineItemSubrecord = function (sublist, fldnam
  *
  * @since	2011.2
  */
-toExport.nlobjRecord.prototype.viewSubrecord = function (fldname) { ; }
+exports.nlobjRecord.prototype.viewSubrecord = function (fldname) { ; }
 /**
  * Return a new instance of nlobjConfiguration..
  *
@@ -3016,7 +3071,7 @@ toExport.nlobjRecord.prototype.viewSubrecord = function (fldname) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration = function( ) { ; }
+exports.nlobjConfiguration = function () { ; }
 
 /**
  * return the type corresponding to this setup record.
@@ -3028,7 +3083,7 @@ toExport.nlobjConfiguration = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.getType = function( ) { ; }
+exports.nlobjConfiguration.prototype.getType = function () { ; }
 
 /**
  * return field metadata for field.
@@ -3041,7 +3096,7 @@ toExport.nlobjConfiguration.prototype.getType = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.getField = function(fldnam) { ; }
+exports.nlobjConfiguration.prototype.getField = function (fldnam) { ; }
 
 /**
  * set the value of a field.
@@ -3055,7 +3110,7 @@ toExport.nlobjConfiguration.prototype.getField = function(fldnam) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.setFieldValue = function( name, value ) { ; }
+exports.nlobjConfiguration.prototype.setFieldValue = function (name, value) { ; }
 
 /**
  * Set the values of a multi-select field.
@@ -3070,7 +3125,7 @@ toExport.nlobjConfiguration.prototype.setFieldValue = function( name, value ) { 
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.setFieldValues = function( name, value ) { ; }
+exports.nlobjConfiguration.prototype.setFieldValues = function (name, value) { ; }
 
 /**
  * return the value of a field.
@@ -3083,7 +3138,7 @@ toExport.nlobjConfiguration.prototype.setFieldValues = function( name, value ) {
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.getFieldValue = function( name ) { ; }
+exports.nlobjConfiguration.prototype.getFieldValue = function (name) { ; }
 
 /**
  * return the selected values of a multi-select field as an Array.
@@ -3097,7 +3152,7 @@ toExport.nlobjConfiguration.prototype.getFieldValue = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.getFieldValues = function( name ) { ; }
+exports.nlobjConfiguration.prototype.getFieldValues = function (name) { ; }
 
 /**
  * set the value (via display value) of a field.
@@ -3112,7 +3167,7 @@ toExport.nlobjConfiguration.prototype.getFieldValues = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.setFieldText = function( name, text ) { ; }
+exports.nlobjConfiguration.prototype.setFieldText = function (name, text) { ; }
 
 /**
  * set the values (via display values) of a multi-select field.
@@ -3127,7 +3182,7 @@ toExport.nlobjConfiguration.prototype.setFieldText = function( name, text ) { ; 
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.setFieldTexts = function( name, texts ) { ; }
+exports.nlobjConfiguration.prototype.setFieldTexts = function (name, texts) { ; }
 
 /**
  * return the text value of a field.
@@ -3141,7 +3196,7 @@ toExport.nlobjConfiguration.prototype.setFieldTexts = function( name, texts ) { 
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.getFieldText = function( name ) { ; }
+exports.nlobjConfiguration.prototype.getFieldText = function (name) { ; }
 
 /**
  * return the selected text values of a multi-select field as an Array.
@@ -3153,7 +3208,7 @@ toExport.nlobjConfiguration.prototype.getFieldText = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.getFieldTexts = function( name ) { ; }
+exports.nlobjConfiguration.prototype.getFieldTexts = function (name) { ; }
 
 /**
  * return an Array of all field names on the record.
@@ -3164,7 +3219,7 @@ toExport.nlobjConfiguration.prototype.getFieldTexts = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjConfiguration.prototype.getAllFields = function( ) { ; }
+exports.nlobjConfiguration.prototype.getAllFields = function () { ; }
 
 /**
  * Return a new instance of nlobjFile used for accessing and manipulating files in the file cabinet.
@@ -3175,7 +3230,7 @@ toExport.nlobjConfiguration.prototype.getAllFields = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile = function( ) { ; }
+exports.nlobjFile = function () { ; }
 
 /**
  * Return the name of the file.
@@ -3186,7 +3241,7 @@ toExport.nlobjFile = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getName = function( ) { ; }
+exports.nlobjFile.prototype.getName = function () { ; }
 
 /**
  * Sets the name of a file.
@@ -3198,7 +3253,7 @@ toExport.nlobjFile.prototype.getName = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.setName = function( name ) { ; }
+exports.nlobjFile.prototype.setName = function (name) { ; }
 
 /**
  * return the internal ID of the folder that this file is in.
@@ -3209,7 +3264,7 @@ toExport.nlobjFile.prototype.setName = function( name ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getFolder = function( ) { ; }
+exports.nlobjFile.prototype.getFolder = function () { ; }
 
 /**
  * sets the internal ID of the folder that this file is in.
@@ -3221,7 +3276,7 @@ toExport.nlobjFile.prototype.getFolder = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.setFolder = function( folder ) { ; }
+exports.nlobjFile.prototype.setFolder = function (folder) { ; }
 
 /**
  * sets the character encoding for the file.
@@ -3233,7 +3288,7 @@ toExport.nlobjFile.prototype.setFolder = function( folder ) { ; }
  *
  * @since 2010.2
  */
-toExport.nlobjFile.prototype.setEncoding = function( encoding ) { ; }
+exports.nlobjFile.prototype.setEncoding = function (encoding) { ; }
 
 /**
  * return true if the file is "Available without Login".
@@ -3244,7 +3299,7 @@ toExport.nlobjFile.prototype.setEncoding = function( encoding ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.isOnline = function( ) { ; }
+exports.nlobjFile.prototype.isOnline = function () { ; }
 
 /**
  * sets the file's "Available without Login" status.
@@ -3256,7 +3311,7 @@ toExport.nlobjFile.prototype.isOnline = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.setIsOnline = function( online ) { ; }
+exports.nlobjFile.prototype.setIsOnline = function (online) { ; }
 
 /**
  * return true if the file is inactive.
@@ -3267,7 +3322,7 @@ toExport.nlobjFile.prototype.setIsOnline = function( online ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.isInactive = function( ) { ; }
+exports.nlobjFile.prototype.isInactive = function () { ; }
 
 /**
  * sets the file's inactive status.
@@ -3279,7 +3334,7 @@ toExport.nlobjFile.prototype.isInactive = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.setIsInactive = function( inactive ) { ; }
+exports.nlobjFile.prototype.setIsInactive = function (inactive) { ; }
 
 /**
  * return the file description.
@@ -3290,7 +3345,7 @@ toExport.nlobjFile.prototype.setIsInactive = function( inactive ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getDescription = function( ) { ; }
+exports.nlobjFile.prototype.getDescription = function () { ; }
 
 /**
  * sets the file's description.
@@ -3302,7 +3357,7 @@ toExport.nlobjFile.prototype.getDescription = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.setDescription = function( descr ) { ; }
+exports.nlobjFile.prototype.setDescription = function (descr) { ; }
 
 /**
  * Return the id of the file (if stored in the FC).
@@ -3313,7 +3368,7 @@ toExport.nlobjFile.prototype.setDescription = function( descr ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getId = function( ) { ; }
+exports.nlobjFile.prototype.getId = function () { ; }
 
 /**
  * Return the size of the file in bytes.
@@ -3324,7 +3379,7 @@ toExport.nlobjFile.prototype.getId = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getSize = function( ) { ; }
+exports.nlobjFile.prototype.getSize = function () { ; }
 
 /**
  * Return the URL of the file (if stored in the FC).
@@ -3335,7 +3390,7 @@ toExport.nlobjFile.prototype.getSize = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getURL = function( ) { ; }
+exports.nlobjFile.prototype.getURL = function () { ; }
 
 /**
  * Return the type of the file.
@@ -3346,7 +3401,7 @@ toExport.nlobjFile.prototype.getURL = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getType = function( ) { ; }
+exports.nlobjFile.prototype.getType = function () { ; }
 
 /**
  * Return the value (base64 encoded for binary types) of the file.
@@ -3357,7 +3412,7 @@ toExport.nlobjFile.prototype.getType = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjFile.prototype.getValue = function( ) { ; }
+exports.nlobjFile.prototype.getValue = function () { ; }
 
 /**
  * Return a new instance of nlobjSearchFilter filter objects used to define search criteria.
@@ -3373,7 +3428,7 @@ toExport.nlobjFile.prototype.getValue = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjSearchFilter = function( name, join, operator, value, value2 ) { ; }
+exports.nlobjSearchFilter = function (name, join, operator, value, value2) { return require('./search-filter')(name, join, operator, value, value2); }
 
 /**
  * Return the name of this search filter.
@@ -3384,7 +3439,7 @@ toExport.nlobjSearchFilter = function( name, join, operator, value, value2 ) { ;
  *
  * @since 2007.0
  */
-toExport.nlobjSearchFilter.prototype.getName = function( ) { ; }
+exports.nlobjSearchFilter.prototype.getName = function () { ; }
 
 /**
  * Return the join id for this search filter.
@@ -3395,7 +3450,7 @@ toExport.nlobjSearchFilter.prototype.getName = function( ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjSearchFilter.prototype.getJoin = function( ) { ; }
+exports.nlobjSearchFilter.prototype.getJoin = function () { ; }
 
 /**
  * Return the filter operator used.
@@ -3406,7 +3461,7 @@ toExport.nlobjSearchFilter.prototype.getJoin = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjSearchFilter.prototype.getOperator = function( ) { ; }
+exports.nlobjSearchFilter.prototype.getOperator = function () { ; }
 
 /**
  * Returns the formula used for this filter
@@ -3417,7 +3472,7 @@ toExport.nlobjSearchFilter.prototype.getOperator = function( ) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchFilter.prototype.getFormula = function( ) { ; }
+exports.nlobjSearchFilter.prototype.getFormula = function () { ; }
 
 /**
  * Returns the summary type used for this filter
@@ -3428,7 +3483,7 @@ toExport.nlobjSearchFilter.prototype.getFormula = function( ) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchFilter.prototype.getSummaryType = function( ) { ; }
+exports.nlobjSearchFilter.prototype.getSummaryType = function () { ; }
 
 /**
  * Sets the formula used for this filter. Name of the filter can either be formulatext, formulanumeric, formuladatetime, formulapercent, or formulacurrency.
@@ -3441,7 +3496,7 @@ toExport.nlobjSearchFilter.prototype.getSummaryType = function( ) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchFilter.prototype.setFormula = function(formula) { ; }
+exports.nlobjSearchFilter.prototype.setFormula = function (formula) { ; }
 
 /**
  * Sets the summary type used for this filter. Filter name must correspond to a search column if it is to be used as a summary filter.
@@ -3454,7 +3509,7 @@ toExport.nlobjSearchFilter.prototype.setFormula = function(formula) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchFilter.prototype.setSummaryType = function(type) { ; }
+exports.nlobjSearchFilter.prototype.setSummaryType = function (type) { ; }
 
 /**
  * Return a new instance of nlobjSearchColumn used for column objects used to define search return columns.
@@ -3468,7 +3523,7 @@ toExport.nlobjSearchFilter.prototype.setSummaryType = function(type) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjSearchColumn = function( name, join, summary ) { ; }
+exports.nlobjSearchColumn = function (name, join, summary) { return require('./search-column')(name, join, summary); }
 
 /**
  * return the name of this search column.
@@ -3478,7 +3533,7 @@ toExport.nlobjSearchColumn = function( name, join, summary ) { ; }
  * @memberOf nlobjSearchColumn
  * @since 2008.1
  */
-toExport.nlobjSearchColumn.prototype.getName = function( ) { ; }
+exports.nlobjSearchColumn.prototype.getName = function () { ; }
 
 /**
  * return the join id for this search column.
@@ -3488,7 +3543,7 @@ toExport.nlobjSearchColumn.prototype.getName = function( ) { ; }
  * @memberOf nlobjSearchColumn
  * @since 2008.1
  */
-toExport.nlobjSearchColumn.prototype.getJoin = function( ) { ; }
+exports.nlobjSearchColumn.prototype.getJoin = function () { ; }
 
 /**
  * return the label of this search column.
@@ -3499,7 +3554,7 @@ toExport.nlobjSearchColumn.prototype.getJoin = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjSearchColumn.prototype.getLabel = function( ) { ; }
+exports.nlobjSearchColumn.prototype.getLabel = function () { ; }
 
 /**
  * return the summary type (avg,group,sum,count) of this search column.
@@ -3509,7 +3564,7 @@ toExport.nlobjSearchColumn.prototype.getLabel = function( ) { ; }
  * @memberOf nlobjSearchColumn
  * @since 2008.1
  */
-toExport.nlobjSearchColumn.prototype.getSummary = function( ) { ; }
+exports.nlobjSearchColumn.prototype.getSummary = function () { ; }
 
 /**
  * return formula for this search column.
@@ -3520,7 +3575,7 @@ toExport.nlobjSearchColumn.prototype.getSummary = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjSearchColumn.prototype.getFormula = function( ) { ; }
+exports.nlobjSearchColumn.prototype.getFormula = function () { ; }
 
 /**
  * return nlobjSearchColumn sorted in either ascending or descending order.
@@ -3533,7 +3588,7 @@ toExport.nlobjSearchColumn.prototype.getFormula = function( ) { ; }
  *
  * @since 2010.1
  */
-toExport.nlobjSearchColumn.prototype.setSort = function( order ) { ; }
+exports.nlobjSearchColumn.prototype.setSort = function (order) { ; }
 
 /**
  * The function used in this search column as a string
@@ -3545,7 +3600,7 @@ toExport.nlobjSearchColumn.prototype.setSort = function( order ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjSearchColumn.prototype.get = function() { ; }
+exports.nlobjSearchColumn.prototype.get = function () { ; }
 
 /**
  * Returns the sort direction for this column
@@ -3557,7 +3612,7 @@ toExport.nlobjSearchColumn.prototype.get = function() { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchColumn.prototype.getSort = function() { ; }
+exports.nlobjSearchColumn.prototype.getSort = function () { ; }
 
 /**
  * Set the formula used for this column. Name of the column can either be formulatext, formulanumeric, formuladatetime, formulapercent, or formulacurrency.
@@ -3571,7 +3626,7 @@ toExport.nlobjSearchColumn.prototype.getSort = function() { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchColumn.prototype.setFormula = function(formula) { ; }
+exports.nlobjSearchColumn.prototype.setFormula = function (formula) { ; }
 
 /**
  * Sets the special function used for this column.
@@ -3585,7 +3640,7 @@ toExport.nlobjSearchColumn.prototype.setFormula = function(formula) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchColumn.prototype.set = function(functionid) { ; }
+exports.nlobjSearchColumn.prototype.set = function (functionid) { ; }
 
 /**
  * Set the label used for this column.
@@ -3599,7 +3654,7 @@ toExport.nlobjSearchColumn.prototype.set = function(functionid) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjSearchColumn.prototype.setLabel = function(label) { ; }
+exports.nlobjSearchColumn.prototype.setLabel = function (label) { ; }
 
 /**
  * Returns the search column for which the minimal or maximal value should be found when returning the nlobjSearchColumn value.
@@ -3614,7 +3669,7 @@ toExport.nlobjSearchColumn.prototype.setLabel = function(label) { ; }
  *
  * @since 2012.1
  */
-toExport.nlobjSearchColumn.prototype.setWhenOrderBy = function(name, join) { ; }
+exports.nlobjSearchColumn.prototype.setWhenOrderBy = function (name, join) { ; }
 
 /**
  * Return a new instance of nlobjSearchResult used for search result row object.
@@ -3623,7 +3678,7 @@ toExport.nlobjSearchColumn.prototype.setWhenOrderBy = function(name, join) { ; }
  * @return {nlobjSearchResult}
  * @constructor
  */
-toExport.nlobjSearchResult = function( ) { ; }
+exports.nlobjSearchResult = function () { ; }
 
 /**
  * return the internalId for the record returned in this row.
@@ -3631,7 +3686,7 @@ toExport.nlobjSearchResult = function( ) { ; }
  * @memberOf nlobjSearchResult
  * @return {int}
  */
-toExport.nlobjSearchResult.prototype.getId = function( ) { ; }
+exports.nlobjSearchResult.prototype.getId = function () { ; }
 
 /**
  * return the recordtype for the record returned in this row.
@@ -3639,7 +3694,7 @@ toExport.nlobjSearchResult.prototype.getId = function( ) { ; }
  * @memberOf nlobjSearchResult
  * @return {string}
  */
-toExport.nlobjSearchResult.prototype.getRecordType = function( ) { ; }
+exports.nlobjSearchResult.prototype.getRecordType = function () { ; }
 
 /**
  * return the value for this nlobjSearchColumn.
@@ -3651,7 +3706,7 @@ toExport.nlobjSearchResult.prototype.getRecordType = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjSearchResult.prototype.getValue = function( column ) { ; }
+exports.nlobjSearchResult.prototype.getValue = function (column) { ; }
 
 /**
  * return the value for a return column specified by name, join ID, and summary type.
@@ -3665,7 +3720,7 @@ toExport.nlobjSearchResult.prototype.getValue = function( column ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjSearchResult.prototype.getValue = function( name, join, summary ) { ; }
+exports.nlobjSearchResult.prototype.getValue = function (name, join, summary) { ; }
 
 /**
  * return the text value for this nlobjSearchColumn if it's a select field.
@@ -3677,7 +3732,7 @@ toExport.nlobjSearchResult.prototype.getValue = function( name, join, summary ) 
  *
  * @since 2009.1
  */
-toExport.nlobjSearchResult.prototype.getText = function( column ) { ; }
+exports.nlobjSearchResult.prototype.getText = function (column) { ; }
 
 /**
  * return the text value of this return column if it's a select field.
@@ -3691,7 +3746,7 @@ toExport.nlobjSearchResult.prototype.getText = function( column ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjSearchResult.prototype.getText = function( name, join, summary ) { ; }
+exports.nlobjSearchResult.prototype.getText = function (name, join, summary) { ; }
 
 /**
  * return an array of all nlobjSearchColumn objects returned in this search.
@@ -3702,7 +3757,7 @@ toExport.nlobjSearchResult.prototype.getText = function( name, join, summary ) {
  *
  * @since 2009.2
  */
-toExport.nlobjSearchResult.prototype.getAllColumns = function( ) { ; }
+exports.nlobjSearchResult.prototype.getAllColumns = function () { ; }
 
 /**
  * Return a new instance of nlobjContext used for user and script context information.
@@ -3711,7 +3766,7 @@ toExport.nlobjSearchResult.prototype.getAllColumns = function( ) { ; }
  * @return {nlobjContext}
  * @constructor
  */
-toExport.nlobjContext = function( ) { ; }
+exports.nlobjContext = function () { ; }
 /**
  * return the name of the current user.
  * @return {string}
@@ -3721,7 +3776,7 @@ toExport.nlobjContext = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getName = function( ) { ; }
+exports.nlobjContext.prototype.getName = function () { ; }
 
 /**
  * return the internalId of the current user.
@@ -3732,7 +3787,7 @@ toExport.nlobjContext.prototype.getName = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getUser = function( ) { ; }
+exports.nlobjContext.prototype.getUser = function () { ; }
 
 /**
  * return the internalId of the current user's role.
@@ -3743,7 +3798,7 @@ toExport.nlobjContext.prototype.getUser = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getRole = function( ) { ; }
+exports.nlobjContext.prototype.getRole = function () { ; }
 
 /**
  * return the script ID of the current user's role.
@@ -3754,7 +3809,7 @@ toExport.nlobjContext.prototype.getRole = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjContext.prototype.getRoleId = function( ) { ; }
+exports.nlobjContext.prototype.getRoleId = function () { ; }
 
 /**
  * return the internalId of the current user's center type.
@@ -3765,7 +3820,7 @@ toExport.nlobjContext.prototype.getRoleId = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjContext.prototype.getRoleCenter = function( ) { ; }
+exports.nlobjContext.prototype.getRoleCenter = function () { ; }
 
 /**
  * return the email address of the current user.
@@ -3776,7 +3831,7 @@ toExport.nlobjContext.prototype.getRoleCenter = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getEmail = function( ) { ; }
+exports.nlobjContext.prototype.getEmail = function () { ; }
 
 /**
  * return the account ID of the current user.
@@ -3787,7 +3842,7 @@ toExport.nlobjContext.prototype.getEmail = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getCompany = function( ) { ; }
+exports.nlobjContext.prototype.getCompany = function () { ; }
 
 /**
  * return the internalId of the current user's department.
@@ -3798,7 +3853,7 @@ toExport.nlobjContext.prototype.getCompany = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getDepartment = function( ) { ; }
+exports.nlobjContext.prototype.getDepartment = function () { ; }
 
 /**
  * return the internalId of the current user's location.
@@ -3809,7 +3864,7 @@ toExport.nlobjContext.prototype.getDepartment = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getLocation = function( ) { ; }
+exports.nlobjContext.prototype.getLocation = function () { ; }
 
 /**
  * return the internalId of the current user's subsidiary.
@@ -3820,7 +3875,7 @@ toExport.nlobjContext.prototype.getLocation = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getSubsidiary = function( ) { ; }
+exports.nlobjContext.prototype.getSubsidiary = function () { ; }
 
 /**
  * return the execution context for this script: webServices|csvImport|client|userInterface|scheduledScript|portlet|suitelet|debugger|custommassupdate
@@ -3831,7 +3886,7 @@ toExport.nlobjContext.prototype.getSubsidiary = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getExecutionContext = function( ) { ; }
+exports.nlobjContext.prototype.getExecutionContext = function () { ; }
 
 /**
  * return the amount of usage units remaining for this script.
@@ -3842,7 +3897,7 @@ toExport.nlobjContext.prototype.getExecutionContext = function( ) { ; }
  *
  * @since 2007.0
  */
-toExport.nlobjContext.prototype.getRemainingUsage = function( ) { ; }
+exports.nlobjContext.prototype.getRemainingUsage = function () { ; }
 
 /**
  * return true if feature is enabled, false otherwise
@@ -3854,7 +3909,7 @@ toExport.nlobjContext.prototype.getRemainingUsage = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getFeature = function( name ) { ; }
+exports.nlobjContext.prototype.getFeature = function (name) { ; }
 
 /**
  * return current user's permission level (0-4) for this permission
@@ -3866,7 +3921,7 @@ toExport.nlobjContext.prototype.getFeature = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getPermission = function( name ) { ; }
+exports.nlobjContext.prototype.getPermission = function (name) { ; }
 
 /**
  * return system or script preference selection for current user
@@ -3878,7 +3933,7 @@ toExport.nlobjContext.prototype.getPermission = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getPreference = function( name ) { ; }
+exports.nlobjContext.prototype.getPreference = function (name) { ; }
 
 /**
  * return value of session object set by script
@@ -3890,7 +3945,7 @@ toExport.nlobjContext.prototype.getPreference = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getSessionObject = function( name ) { ; }
+exports.nlobjContext.prototype.getSessionObject = function (name) { ; }
 
 /**
  * set the value of a session object using a key.
@@ -3903,7 +3958,7 @@ toExport.nlobjContext.prototype.getSessionObject = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.setSessionObject = function( name, value ) { ; }
+exports.nlobjContext.prototype.setSessionObject = function (name, value) { ; }
 
 /**
  * return the NetSuite version for the current account
@@ -3914,19 +3969,19 @@ toExport.nlobjContext.prototype.setSessionObject = function( name, value ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getVersion = function(  ) { ; }
+exports.nlobjContext.prototype.getVersion = function () { ; }
 
 /**
  * return the environment that the script is executing in: SANDBOX, PRODUCTION, BETA, INTERNAL
  * @since 2008.2
  */
-toExport.nlobjContext.prototype.getEnvironment = function(  ) { ; }
+exports.nlobjContext.prototype.getEnvironment = function () { ; }
 
 /**
  * return the logging level for the current script execution. Not supported in CLIENT scripts
  * @since 2008.2
  */
-toExport.nlobjContext.prototype.getLogLevel = function(  ) { ; }
+exports.nlobjContext.prototype.getLogLevel = function () { ; }
 
 /**
  * return the script ID for the current script
@@ -3937,7 +3992,7 @@ toExport.nlobjContext.prototype.getLogLevel = function(  ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getScriptId = function(  ) { ; }
+exports.nlobjContext.prototype.getScriptId = function () { ; }
 
 /**
  * return the deployment ID for the current script
@@ -3948,7 +4003,7 @@ toExport.nlobjContext.prototype.getScriptId = function(  ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getDeploymentId = function(  ) { ; }
+exports.nlobjContext.prototype.getDeploymentId = function () { ; }
 
 /**
  * return the % complete specified for the current scheduled script execution
@@ -3959,7 +4014,7 @@ toExport.nlobjContext.prototype.getDeploymentId = function(  ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.getPercentComplete = function(  ) { ; }
+exports.nlobjContext.prototype.getPercentComplete = function () { ; }
 
 /**
  * set the % complete for the current scheduled script execution
@@ -3971,7 +4026,7 @@ toExport.nlobjContext.prototype.getPercentComplete = function(  ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjContext.prototype.setPercentComplete = function( pct ) { ; }
+exports.nlobjContext.prototype.setPercentComplete = function (pct) { ; }
 
 /**
  * return a system/script setting. Types are SCRIPT, SESSION, FEATURE, PERMISSION
@@ -3981,7 +4036,7 @@ toExport.nlobjContext.prototype.setPercentComplete = function( pct ) { ; }
  * @since 2007.0
  * @deprecated
  */
-toExport.nlobjContext.prototype.getSetting = function( type, name ) { ; }
+exports.nlobjContext.prototype.getSetting = function (type, name) { ; }
 
 /**
  * set a system/script setting. Only supported type is SESSION
@@ -3992,7 +4047,7 @@ toExport.nlobjContext.prototype.getSetting = function( type, name ) { ; }
  * @since 2007.0
  * @deprecated
  */
-toExport.nlobjContext.prototype.setSetting = function( type, name, value ) { ; }
+exports.nlobjContext.prototype.setSetting = function (type, name, value) { ; }
 
 /**
  * return an Object containing name/value pairs of color groups to their corresponding RGB hex color based on the currenly logged in user's color them preferences.
@@ -4005,7 +4060,7 @@ toExport.nlobjContext.prototype.setSetting = function( type, name, value ) { ; }
  *
  * @since 2010.1
  */
-toExport.nlobjContext.prototype.getColorPreferences = function() { ; }
+exports.nlobjContext.prototype.getColorPreferences = function () { ; }
 
 /**
  * Returns the number of scheduled script queues in a given account.
@@ -4017,7 +4072,7 @@ toExport.nlobjContext.prototype.getColorPreferences = function() { ; }
  *
  * @since 2013.1
  */
-toExport.nlobjContext.prototype.getQueueCount = function() { ; }
+exports.nlobjContext.prototype.getQueueCount = function () { ; }
 
 /**
  * Returns the number of SuiteCloud processors in a given account.
@@ -4029,7 +4084,7 @@ toExport.nlobjContext.prototype.getQueueCount = function() { ; }
  *
  * @since 2018.1
  */
-toExport.nlobjContext.prototype.getProcessorCount = function() { ; }
+exports.nlobjContext.prototype.getProcessorCount = function () { ; }
 
 /**
  * Return a new instance of nlobjCredentialBuilder
@@ -4040,7 +4095,7 @@ toExport.nlobjContext.prototype.getProcessorCount = function() { ; }
  * @return {nlobjCredentialBuilder}
  * @constructor
  */
-toExport.nlobjCredentialBuilder = function(request, domain) { ; }
+exports.nlobjCredentialBuilder = function (request, domain) { ; }
 
 /**
  * Appends a passed in string to an nlobjCredentialBuilder object.
@@ -4053,7 +4108,7 @@ toExport.nlobjCredentialBuilder = function(request, domain) { ; }
  *
  * @since 2013.2
  */
-toExport.nlobjCredentialBuilder.prototype.append = function(string) { ; }
+exports.nlobjCredentialBuilder.prototype.append = function (string) { ; }
 
 /**
  * Encodes an nlobjCredentialBuilder object per the base64 scheme.
@@ -4065,7 +4120,7 @@ toExport.nlobjCredentialBuilder.prototype.append = function(string) { ; }
  *
  * @since 2013.2
  */
-toExport.nlobjCredentialBuilder.prototype.base64 = function() { ; }
+exports.nlobjCredentialBuilder.prototype.base64 = function () { ; }
 
 /**
  * Hashes an nlobjCredentialBuilder object with the MD5 hash function.
@@ -4077,7 +4132,7 @@ toExport.nlobjCredentialBuilder.prototype.base64 = function() { ; }
  *
  * @since 2013.2
  */
-toExport.nlobjCredentialBuilder.prototype.md5 = function() { ; }
+exports.nlobjCredentialBuilder.prototype.md5 = function () { ; }
 
 /**
  * Replaces all instances of string1 with string2.
@@ -4091,7 +4146,7 @@ toExport.nlobjCredentialBuilder.prototype.md5 = function() { ; }
  *
  * @since 2013.2
  */
-toExport.nlobjCredentialBuilder.prototype.replace = function() { ; }
+exports.nlobjCredentialBuilder.prototype.replace = function () { ; }
 
 /**
  * Hashes an nlobjCredentialBuilder object with the SHA-256 hash function.
@@ -4103,7 +4158,7 @@ toExport.nlobjCredentialBuilder.prototype.replace = function() { ; }
  *
  * @since 2013.2
  */
-toExport.nlobjCredentialBuilder.prototype.sha256 = function() { ; }
+exports.nlobjCredentialBuilder.prototype.sha256 = function () { ; }
 
 /**
  * Encodes an nlobjCredentialBuilder object per the UTF-8 scheme.
@@ -4115,7 +4170,7 @@ toExport.nlobjCredentialBuilder.prototype.sha256 = function() { ; }
  *
  * @since 2013.2
  */
-toExport.nlobjCredentialBuilder.prototype.utf8 = function() { ; }
+exports.nlobjCredentialBuilder.prototype.utf8 = function () { ; }
 
 /**
  * Return a new instance of nlobjError used system or user-defined error object.
@@ -4124,7 +4179,13 @@ toExport.nlobjCredentialBuilder.prototype.utf8 = function() { ; }
  * @return {nlobjError}
  * @constructor
  */
-toExport.nlobjError = function( ) { ; }
+exports.nlobjError = function (message) {
+    Error.call(this, message);
+    this.message = message;
+    this.name = this.constructor.name;
+    this.getCode = () => this.message;
+    this.getDetails = () => this.message;
+}
 
 /**
  * return the error db ID for this error (if it was an unhandled unexpected error).
@@ -4135,7 +4196,7 @@ toExport.nlobjError = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjError.prototype.getId = function( ) { ; }
+exports.nlobjError.prototype.getId = function () { ; }
 
 /**
  * return the error code for this system or user-defined error.
@@ -4146,7 +4207,7 @@ toExport.nlobjError.prototype.getId = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjError.prototype.getCode = function( ) { ; }
+exports.nlobjError.prototype.getCode = function () { ; }
 
 /**
  * return the error description for this error.
@@ -4157,7 +4218,7 @@ toExport.nlobjError.prototype.getCode = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjError.prototype.getDetails = function( ) { ; }
+exports.nlobjError.prototype.getDetails = function () { ; }
 
 /**
  * return a stacktrace containing the location of the error.
@@ -4168,7 +4229,7 @@ toExport.nlobjError.prototype.getDetails = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjError.prototype.getStackTrace = function( ) { ; }
+exports.nlobjError.prototype.getStackTrace = function () { ; }
 
 /**
  * return the userevent script name where this error was thrown.
@@ -4179,7 +4240,7 @@ toExport.nlobjError.prototype.getStackTrace = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjError.prototype.getUserEvent = function( ) { ; }
+exports.nlobjError.prototype.getUserEvent = function () { ; }
 
 /**
  * return the internalid of the record if this error was thrown in an aftersubmit script.
@@ -4190,7 +4251,7 @@ toExport.nlobjError.prototype.getUserEvent = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjError.prototype.getInternalId = function( ) { ; }
+exports.nlobjError.prototype.getInternalId = function () { ; }
 
 /**
  * Return a new instance of nlobjServerResponse..
@@ -4201,7 +4262,7 @@ toExport.nlobjError.prototype.getInternalId = function( ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse = function( ) { ; }
+exports.nlobjServerResponse = function () { ; }
 
 /**
  * return the Content-Type header in response
@@ -4212,7 +4273,7 @@ toExport.nlobjServerResponse = function( ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse.prototype.getContentType = function( ) { ; }
+exports.nlobjServerResponse.prototype.getContentType = function () { ; }
 
 /**
  * return the value of a header returned.
@@ -4224,7 +4285,7 @@ toExport.nlobjServerResponse.prototype.getContentType = function( ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse.prototype.getHeader = function(name) { ; }
+exports.nlobjServerResponse.prototype.getHeader = function (name) { ; }
 
 /**
  * return all the values of a header returned.
@@ -4236,7 +4297,7 @@ toExport.nlobjServerResponse.prototype.getHeader = function(name) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse.prototype.getHeaders = function(name) { ; }
+exports.nlobjServerResponse.prototype.getHeaders = function (name) { ; }
 
 /**
  * return an Array of all headers returned.
@@ -4247,7 +4308,7 @@ toExport.nlobjServerResponse.prototype.getHeaders = function(name) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse.prototype.getAllHeaders = function( ) { ; }
+exports.nlobjServerResponse.prototype.getAllHeaders = function () { ; }
 
 /**
  * return the response code returned.
@@ -4258,7 +4319,7 @@ toExport.nlobjServerResponse.prototype.getAllHeaders = function( ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse.prototype.getCode = function( ) { ; }
+exports.nlobjServerResponse.prototype.getCode = function () { ; }
 
 /**
  * return the response body returned.
@@ -4269,7 +4330,7 @@ toExport.nlobjServerResponse.prototype.getCode = function( ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse.prototype.getBody = function( ) { ; }
+exports.nlobjServerResponse.prototype.getBody = function () { ; }
 
 /**
  * return the nlobjError thrown via a client call to nlapiRequestURL.
@@ -4280,9 +4341,9 @@ toExport.nlobjServerResponse.prototype.getBody = function( ) { ; }
  *
  * @since 2008.1
  */
-toExport.nlobjServerResponse.prototype.getError = function( ) { ; }
+exports.nlobjServerResponse.prototype.getError = function () { ; }
 
-toExport.nlobjTemplateRenderer = function(){;}
+exports.nlobjTemplateRenderer = function () { ; }
 /**
  * Binds nlobjRecord object to variable name used in template.
  * @param  {string} variable variable name that represents record
@@ -4294,7 +4355,7 @@ toExport.nlobjTemplateRenderer = function(){;}
  *
  * @since 2013.1
  */
-toExport.nlobjTemplateRenderer.prototype.addRecord = function( variable, record ) { ; }
+exports.nlobjTemplateRenderer.prototype.addRecord = function (variable, record) { ; }
 
 /**
  * Binds nlobjSearchResult object to variable name used in template.
@@ -4307,7 +4368,7 @@ toExport.nlobjTemplateRenderer.prototype.addRecord = function( variable, record 
  *
  * @since 2013.1
  */
-toExport.nlobjTemplateRenderer.prototype.addSearchResults = function( variable, searchResult ) { ; }
+exports.nlobjTemplateRenderer.prototype.addSearchResults = function (variable, searchResult) { ; }
 
 /**
  * Passes in raw string of template to be transformed by FreeMarker.
@@ -4318,7 +4379,7 @@ toExport.nlobjTemplateRenderer.prototype.addSearchResults = function( variable, 
  * @memberOf nlobjTemplateRenderer
  *
  */
-toExport.nlobjTemplateRenderer.prototype.setTemplate = function( template ) { ; }
+exports.nlobjTemplateRenderer.prototype.setTemplate = function (template) { ; }
 
 /**
  * render the output of the template engine into the response
@@ -4328,7 +4389,7 @@ toExport.nlobjTemplateRenderer.prototype.setTemplate = function( template ) { ; 
  * @method
  * @memberOf nlobjTemplateRenderer
  */
-toExport.nlobjTemplateRenderer.prototype.renderToResponse = function(nlobjResponse) { ; }
+exports.nlobjTemplateRenderer.prototype.renderToResponse = function (nlobjResponse) { ; }
 
 /**
  * Returns template content interpreted by FreeMarker as XML string that can be passed to nlapiXMLToPDF(xmlstring) to produce PDF output.
@@ -4339,19 +4400,19 @@ toExport.nlobjTemplateRenderer.prototype.renderToResponse = function(nlobjRespon
  *
  * @since 2013.1
  */
-toExport.nlobjTemplateRenderer.prototype.renderToString = function() { ; }
+exports.nlobjTemplateRenderer.prototype.renderToString = function () { ; }
 
-toExport.nlobjEmailMerger = function(){;}
- /**
- * associate an entity to the merger
- * @param  {string} entityType type of the entity (customer/contact/partner/vendor/employee)
- * @param  {int} entityId ID of the entity to be associated with the merger
- * @return {void}
- *
- * @method
- * @memberOf nlobjEmailMerger
- */
-toExport.nlobjEmailMerger.prototype.setEntity = function( entityType, entityId ) { ; }
+exports.nlobjEmailMerger = function () { ; }
+/**
+* associate an entity to the merger
+* @param  {string} entityType type of the entity (customer/contact/partner/vendor/employee)
+* @param  {int} entityId ID of the entity to be associated with the merger
+* @return {void}
+*
+* @method
+* @memberOf nlobjEmailMerger
+*/
+exports.nlobjEmailMerger.prototype.setEntity = function (entityType, entityId) { ; }
 
 /**
  * associate a second entity (recipient) to the merger
@@ -4362,7 +4423,7 @@ toExport.nlobjEmailMerger.prototype.setEntity = function( entityType, entityId )
  * @method
  * @memberOf nlobjEmailMerger
  */
-toExport.nlobjEmailMerger.prototype.setRecipient = function( recipientType, recipientId ) { ; }
+exports.nlobjEmailMerger.prototype.setRecipient = function (recipientType, recipientId) { ; }
 
 /**
  * associate a support case to the merger
@@ -4372,7 +4433,7 @@ toExport.nlobjEmailMerger.prototype.setRecipient = function( recipientType, reci
  * @method
  * @memberOf nlobjEmailMerger
  */
-toExport.nlobjEmailMerger.prototype.setSupportCase = function( caseId ) { ; }
+exports.nlobjEmailMerger.prototype.setSupportCase = function (caseId) { ; }
 
 /**
  * associate a transaction to the merger
@@ -4382,7 +4443,7 @@ toExport.nlobjEmailMerger.prototype.setSupportCase = function( caseId ) { ; }
  * @method
  * @memberOf nlobjEmailMerger
  */
-toExport.nlobjEmailMerger.prototype.setTransaction = function( transactionId ) { ; }
+exports.nlobjEmailMerger.prototype.setTransaction = function (transactionId) { ; }
 
 /**
  * associate a custom record to the merger
@@ -4393,7 +4454,7 @@ toExport.nlobjEmailMerger.prototype.setTransaction = function( transactionId ) {
  * @method
  * @memberOf nlobjEmailMerger
  */
-toExport.nlobjEmailMerger.prototype.setCustomRecord = function( recordType, recordId ) { ; }
+exports.nlobjEmailMerger.prototype.setCustomRecord = function (recordType, recordId) { ; }
 
 /**
  * perform the merge and return an object containing email subject and body
@@ -4403,7 +4464,7 @@ toExport.nlobjEmailMerger.prototype.setCustomRecord = function( recordType, reco
  * @method
  * @memberOf nlobjEmailMerger
  */
-toExport.nlobjEmailMerger.prototype.merge = function( ) { ; }
+exports.nlobjEmailMerger.prototype.merge = function () { ; }
 
 /**
  * Return a new instance of nlobjResponse used for scripting web responses in Suitelets
@@ -4412,7 +4473,7 @@ toExport.nlobjEmailMerger.prototype.merge = function( ) { ; }
  * @return {nlobjResponse}
  * @constructor
  */
-toExport.nlobjResponse = function( ) { ; }
+exports.nlobjResponse = function () { ; }
 
 /**
  * add a value for a response header.
@@ -4425,7 +4486,7 @@ toExport.nlobjResponse = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.addHeader = function( name, value ) { ; }
+exports.nlobjResponse.prototype.addHeader = function (name, value) { ; }
 
 /**
  * set the value of a response header.
@@ -4438,7 +4499,7 @@ toExport.nlobjResponse.prototype.addHeader = function( name, value ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.setHeader = function( name, value ) { ; }
+exports.nlobjResponse.prototype.setHeader = function (name, value) { ; }
 
 /**
  * return the value of a response header.
@@ -4450,7 +4511,7 @@ toExport.nlobjResponse.prototype.setHeader = function( name, value ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.getHeader = function( ) { ; }
+exports.nlobjResponse.prototype.getHeader = function () { ; }
 
 /**
  * return an Array of all response header values for a header
@@ -4462,7 +4523,7 @@ toExport.nlobjResponse.prototype.getHeader = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.getHeaders = function( name ) { ; }
+exports.nlobjResponse.prototype.getHeaders = function (name) { ; }
 
 /**
  * return an Array of all response headers
@@ -4473,7 +4534,7 @@ toExport.nlobjResponse.prototype.getHeaders = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.getAllHeaders = function( ) { ; }
+exports.nlobjResponse.prototype.getAllHeaders = function () { ; }
 
 /**
  * sets the content type for the response (and an optional filename for binary output).
@@ -4487,7 +4548,7 @@ toExport.nlobjResponse.prototype.getAllHeaders = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.setContentType = function( type, filename, disposition ) { ; }
+exports.nlobjResponse.prototype.setContentType = function (type, filename, disposition) { ; }
 
 /**
  * sets the redirect URL for the response. all URLs must be internal unless the Suitelet is being executed in an "Available without Login" context
@@ -4504,7 +4565,7 @@ toExport.nlobjResponse.prototype.setContentType = function( type, filename, disp
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.sendRedirect = function( type, subtype, id, pagemode, parameters ) { ; }
+exports.nlobjResponse.prototype.sendRedirect = function (type, subtype, id, pagemode, parameters) { ; }
 
 /**
  * write information (text/xml/html) to the response.
@@ -4516,7 +4577,7 @@ toExport.nlobjResponse.prototype.sendRedirect = function( type, subtype, id, pag
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.write = function( output ) { ; }
+exports.nlobjResponse.prototype.write = function (output) { ; }
 
 /**
  * write line information (text/xml/html) to the response.
@@ -4528,7 +4589,7 @@ toExport.nlobjResponse.prototype.write = function( output ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.writeLine = function( output ) { ; }
+exports.nlobjResponse.prototype.writeLine = function (output) { ; }
 
 /**
  * write a UI object page.
@@ -4540,7 +4601,7 @@ toExport.nlobjResponse.prototype.writeLine = function( output ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjResponse.prototype.writePage = function( pageobject ) { ; }
+exports.nlobjResponse.prototype.writePage = function (pageobject) { ; }
 
 /**
  * sets the character encoding for the response.
@@ -4551,7 +4612,7 @@ toExport.nlobjResponse.prototype.writePage = function( pageobject ) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjResponse.prototype.setEncoding = function( encoding ) { ; }
+exports.nlobjResponse.prototype.setEncoding = function (encoding) { ; }
 
 /**
  * Returns the body returned by the server. Only available in the return value of a call to nlapiRequestURL(url, postdata, headers, callback, httpMethod).
@@ -4561,7 +4622,7 @@ toExport.nlobjResponse.prototype.setEncoding = function( encoding ) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjResponse.prototype.getBody = function() { ; }
+exports.nlobjResponse.prototype.getBody = function () { ; }
 
 /**
  * Returns the response code returned by the server. Only available in the return value of a call to nlapiRequestURL(url, postdata, headers, callback, httpMethod).
@@ -4571,7 +4632,7 @@ toExport.nlobjResponse.prototype.getBody = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjResponse.prototype.getCode = function() { ; }
+exports.nlobjResponse.prototype.getCode = function () { ; }
 
 /**
  * Returns the nlobjError thrown during request. Only available in the return value of call to nlapiRequestURL in Client SuiteScript.
@@ -4581,7 +4642,7 @@ toExport.nlobjResponse.prototype.getCode = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjResponse.prototype.getError = function() { ; }
+exports.nlobjResponse.prototype.getError = function () { ; }
 
 /**
  * Generates, and renders, a PDF directly to a response. Use renderPDF to generate PDFs without first importing a file to the file cabinet. This method is useful if your script does not have NetSuite file cabinet permissions.
@@ -4592,7 +4653,7 @@ toExport.nlobjResponse.prototype.getError = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjResponse.prototype.renderPDF = function(xmlString) { ; }
+exports.nlobjResponse.prototype.renderPDF = function (xmlString) { ; }
 
 /**
  * Sets CDN caching for a shorter period of time or a longer period of time.
@@ -4603,7 +4664,7 @@ toExport.nlobjResponse.prototype.renderPDF = function(xmlString) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjResponse.prototype.setCDNCacheable = function(type) { ; }
+exports.nlobjResponse.prototype.setCDNCacheable = function (type) { ; }
 
 
 
@@ -4614,7 +4675,7 @@ toExport.nlobjResponse.prototype.setCDNCacheable = function(type) { ; }
  * @return {nlobjRequest}
  * @constructor
  */
-toExport.nlobjRequest = function( ) { ; }
+exports.nlobjRequest = function () { ; }
 
 /**
  * return the value of a request parameter.
@@ -4626,7 +4687,7 @@ toExport.nlobjRequest = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRequest.prototype.getParameter = function( name ) { ; }
+exports.nlobjRequest.prototype.getParameter = function (name) { ; }
 
 /**
  * return the values of a request parameter as an Array.
@@ -4638,7 +4699,7 @@ toExport.nlobjRequest.prototype.getParameter = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRequest.prototype.getParameterValues = function( name ) { ; }
+exports.nlobjRequest.prototype.getParameterValues = function (name) { ; }
 
 /**
  * return an Object containing all the request parameters and their values.
@@ -4648,7 +4709,7 @@ toExport.nlobjRequest.prototype.getParameterValues = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRequest.prototype.getAllParameters = function( ) { ; }
+exports.nlobjRequest.prototype.getAllParameters = function () { ; }
 
 /**
  * return the value of a sublist value.
@@ -4662,7 +4723,7 @@ toExport.nlobjRequest.prototype.getAllParameters = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRequest.prototype.getLineItemValue = function( group, name, line ) { ; }
+exports.nlobjRequest.prototype.getLineItemValue = function (group, name, line) { ; }
 
 /**
  * return the number of lines in a sublist.
@@ -4674,7 +4735,7 @@ toExport.nlobjRequest.prototype.getLineItemValue = function( group, name, line )
  *
  * @since 2008.2
  */
-toExport.nlobjRequest.prototype.getLineItemCount = function( group ) { ; }
+exports.nlobjRequest.prototype.getLineItemCount = function (group) { ; }
 
 /**
  * return the value of a request header.
@@ -4686,7 +4747,7 @@ toExport.nlobjRequest.prototype.getLineItemCount = function( group ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRequest.prototype.getHeader = function( name ) { ; }
+exports.nlobjRequest.prototype.getHeader = function (name) { ; }
 
 /**
  * return an Object containing all the request headers and their values.
@@ -4697,7 +4758,7 @@ toExport.nlobjRequest.prototype.getHeader = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjRequest.prototype.getAllHeaders = function( ) { ; }
+exports.nlobjRequest.prototype.getAllHeaders = function () { ; }
 
 /**
  * return the value of an uploaded file.
@@ -4709,7 +4770,7 @@ toExport.nlobjRequest.prototype.getAllHeaders = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjRequest.prototype.getFile = function(id) { ; }
+exports.nlobjRequest.prototype.getFile = function (id) { ; }
 
 /**
  * return an Object containing field names to file objects for all uploaded files.
@@ -4720,7 +4781,7 @@ toExport.nlobjRequest.prototype.getFile = function(id) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjRequest.prototype.getAllFiles = function( ) { ; }
+exports.nlobjRequest.prototype.getAllFiles = function () { ; }
 
 /**
  * return the body of the POST request
@@ -4730,7 +4791,7 @@ toExport.nlobjRequest.prototype.getAllFiles = function( ) { ; }
  * @memberOf nlobjRequest
  * @since 2008.1
  */
-toExport.nlobjRequest.prototype.getBody = function( ) { ; }
+exports.nlobjRequest.prototype.getBody = function () { ; }
 
 /**
  * return the URL of the request
@@ -4740,7 +4801,7 @@ toExport.nlobjRequest.prototype.getBody = function( ) { ; }
  * @memberOf nlobjRequest
  * @since 2008.1
  */
-toExport.nlobjRequest.prototype.getURL = function( ) { ; }
+exports.nlobjRequest.prototype.getURL = function () { ; }
 
 /**
  * return the METHOD of the request
@@ -4750,7 +4811,7 @@ toExport.nlobjRequest.prototype.getURL = function( ) { ; }
  * @memberOf nlobjRequest
  * @since 2008.1
  */
-toExport.nlobjRequest.prototype.getMethod = function( ) { ; }
+exports.nlobjRequest.prototype.getMethod = function () { ; }
 
 /**
  * return an Object containing field names to file objects for all uploaded files.
@@ -4761,7 +4822,7 @@ toExport.nlobjRequest.prototype.getMethod = function( ) { ; }
  *
  * @since 2009.1
  */
-toExport.nlobjRequest.prototype.getAllFiles = function( ) { ; }
+exports.nlobjRequest.prototype.getAllFiles = function () { ; }
 
 /**
  * Return a new instance of nlobjPortlet used for scriptable dashboard portlet.
@@ -4770,7 +4831,7 @@ toExport.nlobjRequest.prototype.getAllFiles = function( ) { ; }
  * @return {nlobjPortlet}
  * @constructor
  */
-toExport.nlobjPortlet = function( ) { ; }
+exports.nlobjPortlet = function () { ; }
 
 /**
  * set the portlet title.
@@ -4778,7 +4839,7 @@ toExport.nlobjPortlet = function( ) { ; }
  * @param {string} title
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.setTitle = function( title ) { ; }
+exports.nlobjPortlet.prototype.setTitle = function (title) { ; }
 
 /**
  * set the entire contents of the HTML portlet (will be placed inside a <TD>...</TD>).
@@ -4786,7 +4847,7 @@ toExport.nlobjPortlet.prototype.setTitle = function( title ) { ; }
  * @param {string} html
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.setHtml = function( html ) { ; }
+exports.nlobjPortlet.prototype.setHtml = function (html) { ; }
 
 /**
  * add a column (nlobjColumn) to this LIST portlet and return it.
@@ -4797,7 +4858,7 @@ toExport.nlobjPortlet.prototype.setHtml = function( html ) { ; }
  * @param {string} [align] column alignment
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.addColumn = function( name, type, label, align ) { ; }
+exports.nlobjPortlet.prototype.addColumn = function (name, type, label, align) { ; }
 
 /**
  * add an Edit column (nlobjColumn) to the left of the column specified (supported on LIST portlets only).
@@ -4809,7 +4870,7 @@ toExport.nlobjPortlet.prototype.addColumn = function( name, type, label, align )
  *
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.addEditColumn = function( column, showView, showHref ) { ; }
+exports.nlobjPortlet.prototype.addEditColumn = function (column, showView, showHref) { ; }
 
 /**
  * add a row (nlobjSearchResult or Array of name-value pairs) to this LIST portlet.
@@ -4817,7 +4878,7 @@ toExport.nlobjPortlet.prototype.addEditColumn = function( column, showView, show
  * @param {string[]|nlobjSearchResult} row
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.addRow = function( row ) { ; }
+exports.nlobjPortlet.prototype.addRow = function (row) { ; }
 
 /**
  * add multiple rows (Array of nlobjSearchResults or name-value pair Arrays) to this LIST portlet.
@@ -4825,7 +4886,7 @@ toExport.nlobjPortlet.prototype.addRow = function( row ) { ; }
  * @param {string[][]|nlobjSearchResult[]} rows
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.addRows = function( rows ) { ; }
+exports.nlobjPortlet.prototype.addRows = function (rows) { ; }
 
 /**
  * add a field (nlobjField) to this FORM portlet and return it.
@@ -4838,7 +4899,7 @@ toExport.nlobjPortlet.prototype.addRows = function( rows ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.addField = function( name,type,label,source ) { ; }
+exports.nlobjPortlet.prototype.addField = function (name, type, label, source) { ; }
 
 /**
  * add a FORM submit button to this FORM portlet.
@@ -4848,7 +4909,7 @@ toExport.nlobjPortlet.prototype.addField = function( name,type,label,source ) { 
  * @param {string} [target] The target attribute of the portlet's FORM element
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.setSubmitButton = function( url, label, target ) { ; }
+exports.nlobjPortlet.prototype.setSubmitButton = function (url, label, target) { ; }
 
 /**
  * add a line (containing text or simple HTML) with optional indenting and URL to this LINKS portlet.
@@ -4858,7 +4919,7 @@ toExport.nlobjPortlet.prototype.setSubmitButton = function( url, label, target )
  * @param {int} 	indent # of indents to insert before text
  * @since 2008.2
  */
-toExport.nlobjPortlet.prototype.addLine = function( text, url, indent ) { ; }
+exports.nlobjPortlet.prototype.addLine = function (text, url, indent) { ; }
 
 /**
  * Sets the regular interval when a FORM portlet automatically refreshes itself.
@@ -4870,7 +4931,7 @@ toExport.nlobjPortlet.prototype.addLine = function( text, url, indent ) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjPortlet.prototype.setRefreshInterval = function( n ) { ; }
+exports.nlobjPortlet.prototype.setRefreshInterval = function (n) { ; }
 
 /**
  * Sets the client-side script for a FORM portlet. Setting another script implicitly removes the previous script.
@@ -4880,7 +4941,7 @@ toExport.nlobjPortlet.prototype.setRefreshInterval = function( n ) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjPortlet.prototype.setScript = function( scruptid ) { ; }
+exports.nlobjPortlet.prototype.setScript = function (scruptid) { ; }
 
 /**
  * Return a new instance of nlobjList used for scriptable list page.
@@ -4889,7 +4950,7 @@ toExport.nlobjPortlet.prototype.setScript = function( scruptid ) { ; }
  * @return {nlobjList}
  * @constructor
  */
-toExport.nlobjList = function( ) { ; }
+exports.nlobjList = function () { ; }
 
 /**
  * set the page title.
@@ -4897,7 +4958,7 @@ toExport.nlobjList = function( ) { ; }
  * @param {string} title
  * @since 2008.2
  */
-toExport.nlobjList.prototype.setTitle = function( title ) { ; }
+exports.nlobjList.prototype.setTitle = function (title) { ; }
 
 /**
  * set the global style for this list: grid|report|plain|normal.
@@ -4905,7 +4966,7 @@ toExport.nlobjList.prototype.setTitle = function( title ) { ; }
  * @param {string} style overall style used to render list
  * @since 2008.2
  */
-toExport.nlobjList.prototype.setStyle = function( style ) { ; }
+exports.nlobjList.prototype.setStyle = function (style) { ; }
 
 /**
  * set the Client SuiteScript used for this page.
@@ -4913,7 +4974,7 @@ toExport.nlobjList.prototype.setStyle = function( style ) { ; }
  * @param {string, int} script script ID or internal ID for global client script used to enable Client SuiteScript on page
  * @since 2008.2
  */
-toExport.nlobjList.prototype.setScript = function( script ) { ; }
+exports.nlobjList.prototype.setScript = function (script) { ; }
 
 /**
  * add a column (nlobjColumn) to this list and return it.
@@ -4926,7 +4987,7 @@ toExport.nlobjList.prototype.setScript = function( script ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjList.prototype.addColumn = function( name, type, label, align ) { ; }
+exports.nlobjList.prototype.addColumn = function (name, type, label, align) { ; }
 
 /**
  * add an Edit column (nlobjColumn) to the left of the column specified.
@@ -4938,7 +4999,7 @@ toExport.nlobjList.prototype.addColumn = function( name, type, label, align ) { 
  *
  * @since 2008.2
  */
-toExport.nlobjList.prototype.addEditColumn = function( column, showView, showHref ) { ; }
+exports.nlobjList.prototype.addEditColumn = function (column, showView, showHref) { ; }
 
 /**
  * add a row (Array of name-value pairs or nlobjSearchResult) to this portlet.
@@ -4946,7 +5007,7 @@ toExport.nlobjList.prototype.addEditColumn = function( column, showView, showHre
  * @param {string[], nlobjSearchResult} row data used to add a single row
  * @since 2008.2
  */
-toExport.nlobjList.prototype.addRow = function( row ) { ; }
+exports.nlobjList.prototype.addRow = function (row) { ; }
 
 /**
  * add multiple rows (Array of nlobjSearchResults or name-value pair Arrays) to this portlet.
@@ -4954,7 +5015,7 @@ toExport.nlobjList.prototype.addRow = function( row ) { ; }
  * @param {string[][], nlobjSearchResult[]} rows data used to add multiple rows
  * @since 2008.2
  */
-toExport.nlobjList.prototype.addRows = function( rows ) { ; }
+exports.nlobjList.prototype.addRows = function (rows) { ; }
 
 /**
  * add a button (nlobjButton) to the footer of this page.
@@ -4964,7 +5025,7 @@ toExport.nlobjList.prototype.addRows = function( rows ) { ; }
  * @param {string} script button script (function name)
  * @since 2008.2
  */
-toExport.nlobjList.prototype.addButton = function( name, label, script ) { ; }
+exports.nlobjList.prototype.addButton = function (name, label, script) { ; }
 
 /**
  * add a navigation cross-link to the page.
@@ -4974,7 +5035,7 @@ toExport.nlobjList.prototype.addButton = function( name, label, script ) { ; }
  * @param {string} url URL for page link
  * @since 2008.2
  */
-toExport.nlobjList.prototype.addPageLink = function( type, title, url ) { ; }
+exports.nlobjList.prototype.addPageLink = function (type, title, url) { ; }
 
 /**
  * Return a new instance of nlobjForm used for scriptable form page.
@@ -4983,7 +5044,7 @@ toExport.nlobjList.prototype.addPageLink = function( type, title, url ) { ; }
  * @return {nlobjForm}
  * @constructor
  */
-toExport.nlobjForm = function( ) { ; }
+exports.nlobjForm = function () { ; }
 
 /**
  * set the page title.
@@ -4991,7 +5052,7 @@ toExport.nlobjForm = function( ) { ; }
  * @param {string} title
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.setTitle = function( title ) { ; }
+exports.nlobjForm.prototype.setTitle = function (title) { ; }
 
 /**
  * set the Client Script definition used for this page.
@@ -4999,7 +5060,7 @@ toExport.nlobjForm.prototype.setTitle = function( title ) { ; }
  * @param {string, int} script script ID or internal ID for global client script used to enable Client SuiteScript on page
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.setScript = function( script ) { ; }
+exports.nlobjForm.prototype.setScript = function (script) { ; }
 
 /**
  * set the values for all the fields on this form.
@@ -5007,7 +5068,7 @@ toExport.nlobjForm.prototype.setScript = function( script ) { ; }
  * @param {Object} values Object containing field name/value pairs
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.setFieldValues = function( values ) { ; }
+exports.nlobjForm.prototype.setFieldValues = function (values) { ; }
 
 /**
  * add a navigation cross-link to the page.
@@ -5017,7 +5078,7 @@ toExport.nlobjForm.prototype.setFieldValues = function( values ) { ; }
  * @param {string} url URL for page link
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addPageLink = function( type, title, url ) { ; }
+exports.nlobjForm.prototype.addPageLink = function (type, title, url) { ; }
 
 /**
  * add a button to this form.
@@ -5029,7 +5090,7 @@ toExport.nlobjForm.prototype.addPageLink = function( type, title, url ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addButton = function( name, label, script ) { ; }
+exports.nlobjForm.prototype.addButton = function (name, label, script) { ; }
 
 /**
  * get a button from this form by name.
@@ -5041,7 +5102,7 @@ toExport.nlobjForm.prototype.addButton = function( name, label, script ) { ; }
  *
  * @since 2009.2                                                                           add
  */
-toExport.nlobjForm.prototype.getButton = function( name ) { ; }
+exports.nlobjForm.prototype.getButton = function (name) { ; }
 
 /**
  * add a reset button to this form.
@@ -5051,7 +5112,7 @@ toExport.nlobjForm.prototype.getButton = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addResetButton = function( label ) { ; }
+exports.nlobjForm.prototype.addResetButton = function (label) { ; }
 
 /**
  * add a submit button to this form.
@@ -5061,7 +5122,7 @@ toExport.nlobjForm.prototype.addResetButton = function( label ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addSubmitButton = function( label ) { ; }
+exports.nlobjForm.prototype.addSubmitButton = function (label) { ; }
 
 /**
  * add a tab (nlobjTab) to this form and return it.
@@ -5072,7 +5133,7 @@ toExport.nlobjForm.prototype.addSubmitButton = function( label ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addTab = function( name, label ) { ; }
+exports.nlobjForm.prototype.addTab = function (name, label) { ; }
 
 /**
  * add a field (nlobjField) to this form and return it.
@@ -5086,7 +5147,7 @@ toExport.nlobjForm.prototype.addTab = function( name, label ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addField = function( name,type,label,sourceOrRadio,tab ) { ; }
+exports.nlobjForm.prototype.addField = function (name, type, label, sourceOrRadio, tab) { ; }
 
 /**
  * Adds a field that lets you store credentials in NetSuite to be used when invoking services provided by third parties.
@@ -5102,7 +5163,7 @@ toExport.nlobjForm.prototype.addField = function( name,type,label,sourceOrRadio,
  *
  * @since 2012.1
  */
-toExport.nlobjForm.prototype.addCredentialField = function( id,label,website,scriptId,value,entityMatch,tab ) { ; }
+exports.nlobjForm.prototype.addCredentialField = function (id, label, website, scriptId, value, entityMatch, tab) { ; }
 
 /**
  * add a subtab (nlobjTab) to this form and return it.
@@ -5114,7 +5175,7 @@ toExport.nlobjForm.prototype.addCredentialField = function( id,label,website,scr
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addSubTab = function( name,label,tab ) { ; }
+exports.nlobjForm.prototype.addSubTab = function (name, label, tab) { ; }
 
 /**
  * add a sublist (nlobjSubList) to this form and return it.
@@ -5127,7 +5188,7 @@ toExport.nlobjForm.prototype.addSubTab = function( name,label,tab ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.addSubList = function( name,type,label,tab ) { ; }
+exports.nlobjForm.prototype.addSubList = function (name, type, label, tab) { ; }
 
 /**
  * insert a tab (nlobjTab) before another tab (name).
@@ -5138,7 +5199,7 @@ toExport.nlobjForm.prototype.addSubList = function( name,type,label,tab ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.insertTab = function( tab, nexttab ) { ; }
+exports.nlobjForm.prototype.insertTab = function (tab, nexttab) { ; }
 
 /**
  * insert a field (nlobjField) before another field (name).
@@ -5149,7 +5210,7 @@ toExport.nlobjForm.prototype.insertTab = function( tab, nexttab ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.insertField = function( field, nextfld ) { ; }
+exports.nlobjForm.prototype.insertField = function (field, nextfld) { ; }
 
 /**
  * insert a subtab (nlobjTab) before another subtab or sublist (name).
@@ -5160,7 +5221,7 @@ toExport.nlobjForm.prototype.insertField = function( field, nextfld ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.insertSubTab = function( subtab, nextsubtab ) { ; }
+exports.nlobjForm.prototype.insertSubTab = function (subtab, nextsubtab) { ; }
 
 /**
  * insert a sublist (nlobjSubList) before another subtab or sublist (name).
@@ -5171,7 +5232,7 @@ toExport.nlobjForm.prototype.insertSubTab = function( subtab, nextsubtab ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.insertSubList = function( sublist, nextsublist ) { ; }
+exports.nlobjForm.prototype.insertSubList = function (sublist, nextsublist) { ; }
 
 /**
  * return a tab (nlobjTab) on this form.
@@ -5181,7 +5242,7 @@ toExport.nlobjForm.prototype.insertSubList = function( sublist, nextsublist ) { 
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.getTab = function( name ) { ; }
+exports.nlobjForm.prototype.getTab = function (name) { ; }
 
 /**
  * return a field (nlobjField) on this form.
@@ -5192,7 +5253,7 @@ toExport.nlobjForm.prototype.getTab = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.getField = function( name, radio ) { ; }
+exports.nlobjForm.prototype.getField = function (name, radio) { ; }
 
 /**
  * return a subtab (nlobjTab) on this form.
@@ -5202,7 +5263,7 @@ toExport.nlobjForm.prototype.getField = function( name, radio ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.getSubTab = function( name ) { ; }
+exports.nlobjForm.prototype.getSubTab = function (name) { ; }
 
 /**
  * return a sublist (nlobjSubList) on this form.
@@ -5212,7 +5273,7 @@ toExport.nlobjForm.prototype.getSubTab = function( name ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjForm.prototype.getSubList = function( name ) { ; }
+exports.nlobjForm.prototype.getSubList = function (name) { ; }
 
 /**
  * add a field group to the form.
@@ -5226,7 +5287,7 @@ toExport.nlobjForm.prototype.getSubList = function( name ) { ; }
  *
  * @since 2011.1
  */
-toExport.nlobjForm.prototype.addFieldGroup = function( name, label, tab ) { ; }
+exports.nlobjForm.prototype.addFieldGroup = function (name, label, tab) { ; }
 
 /**
  * get a list of all tabs.
@@ -5237,7 +5298,7 @@ toExport.nlobjForm.prototype.addFieldGroup = function( name, label, tab ) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjForm.prototype.getTabs = function( ) { ; }
+exports.nlobjForm.prototype.getTabs = function () { ; }
 
 /**
  * Removes an nlobjButton object. This method can be used on custom buttons and certain built-in NetSuite buttons.
@@ -5249,7 +5310,7 @@ toExport.nlobjForm.prototype.getTabs = function( ) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjForm.prototype.removeButton = function(name) { ; }
+exports.nlobjForm.prototype.removeButton = function (name) { ; }
 /**
  * Return a new instance of nlobjAssistant.
  *
@@ -5261,7 +5322,7 @@ toExport.nlobjForm.prototype.removeButton = function(name) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant = function( ) { ; }
+exports.nlobjAssistant = function () { ; }
 /**
  * set the page title.
  * @param {string} title
@@ -5272,7 +5333,7 @@ toExport.nlobjAssistant = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setTitle = function( title ) { ; }
+exports.nlobjAssistant.prototype.setTitle = function (title) { ; }
 
 /**
  * set the script ID for Client Script used for this form.
@@ -5284,7 +5345,7 @@ toExport.nlobjAssistant.prototype.setTitle = function( title ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setScript = function( script ) { ; }
+exports.nlobjAssistant.prototype.setScript = function (script) { ; }
 
 /**
  * set the splash screen used for this page.
@@ -5298,7 +5359,7 @@ toExport.nlobjAssistant.prototype.setScript = function( script ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setSplash = function( title, text1, text2 ) { ; }
+exports.nlobjAssistant.prototype.setSplash = function (title, text1, text2) { ; }
 
 /**
  * show/hide shortcut link. Always hidden on external pages
@@ -5310,7 +5371,7 @@ toExport.nlobjAssistant.prototype.setSplash = function( title, text1, text2 ) { 
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setShortcut = function(show) { ; }
+exports.nlobjAssistant.prototype.setShortcut = function (show) { ; }
 
 /**
  * set the values for all the fields on this page.
@@ -5322,7 +5383,7 @@ toExport.nlobjAssistant.prototype.setShortcut = function(show) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setFieldValues = function( values ) { ; }
+exports.nlobjAssistant.prototype.setFieldValues = function (values) { ; }
 
 /**
  * if ordered, steps are show on left and must be completed sequentially, otherwise steps are shown on top and can be done in any order
@@ -5335,7 +5396,7 @@ toExport.nlobjAssistant.prototype.setFieldValues = function( values ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setOrdered = function(ordered) { ; }
+exports.nlobjAssistant.prototype.setOrdered = function (ordered) { ; }
 
 /**
  * if numbered, step numbers are displayed next to the step's label in the navigation area
@@ -5347,7 +5408,7 @@ toExport.nlobjAssistant.prototype.setOrdered = function(ordered) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setNumbered = function(numbered) { ; }
+exports.nlobjAssistant.prototype.setNumbered = function (numbered) { ; }
 
 /**
  * return true if all the steps have been completed.
@@ -5358,7 +5419,7 @@ toExport.nlobjAssistant.prototype.setNumbered = function(numbered) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.isFinished = function( ) { ; }
+exports.nlobjAssistant.prototype.isFinished = function () { ; }
 
 /**
  * mark assistant page as completed and optionally set the rich text to display on completed page.
@@ -5370,7 +5431,7 @@ toExport.nlobjAssistant.prototype.isFinished = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setFinished = function( html ) { ; }
+exports.nlobjAssistant.prototype.setFinished = function (html) { ; }
 
 /**
  * return true if the assistant has an error message to display for the current step.
@@ -5381,7 +5442,7 @@ toExport.nlobjAssistant.prototype.setFinished = function( html ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.hasError = function( ) { ; }
+exports.nlobjAssistant.prototype.hasError = function () { ; }
 
 /**
  * set the error message for the currrent step.
@@ -5393,7 +5454,7 @@ toExport.nlobjAssistant.prototype.hasError = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setError = function( html ) { ; }
+exports.nlobjAssistant.prototype.setError = function (html) { ; }
 
 /**
  * mark a step as current. It will be highlighted accordingly when the page is displayed
@@ -5405,7 +5466,7 @@ toExport.nlobjAssistant.prototype.setError = function( html ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.setCurrentStep = function( step ) { ; }
+exports.nlobjAssistant.prototype.setCurrentStep = function (step) { ; }
 
 /**
  * add a step to the assistant.
@@ -5418,7 +5479,7 @@ toExport.nlobjAssistant.prototype.setCurrentStep = function( step ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.addStep = function( name, label ) { ; }
+exports.nlobjAssistant.prototype.addStep = function (name, label) { ; }
 
 /**
  * add a field to this page and return it.
@@ -5434,7 +5495,7 @@ toExport.nlobjAssistant.prototype.addStep = function( name, label ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.addField = function( name,type,label,source, group ) { ; }
+exports.nlobjAssistant.prototype.addField = function (name, type, label, source, group) { ; }
 
 /**
  * add a sublist to this page and return it. For now only sublists of type inlineeditor are supported
@@ -5448,7 +5509,7 @@ toExport.nlobjAssistant.prototype.addField = function( name,type,label,source, g
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.addSubList = function( name,type,label ) { ; }
+exports.nlobjAssistant.prototype.addSubList = function (name, type, label) { ; }
 
 /**
  * add a field group to the page.
@@ -5461,7 +5522,7 @@ toExport.nlobjAssistant.prototype.addSubList = function( name,type,label ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.addFieldGroup = function( name, label ) { ; }
+exports.nlobjAssistant.prototype.addFieldGroup = function (name, label) { ; }
 
 /**
  * return an assistant step on this page.
@@ -5473,7 +5534,7 @@ toExport.nlobjAssistant.prototype.addFieldGroup = function( name, label ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getStep = function( name ) { ; }
+exports.nlobjAssistant.prototype.getStep = function (name) { ; }
 
 /**
  * return a field on this page.
@@ -5485,7 +5546,7 @@ toExport.nlobjAssistant.prototype.getStep = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getField = function( name ) { ; }
+exports.nlobjAssistant.prototype.getField = function (name) { ; }
 
 /**
  * return a sublist on this page.
@@ -5497,7 +5558,7 @@ toExport.nlobjAssistant.prototype.getField = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getSubList = function( name ) { ; }
+exports.nlobjAssistant.prototype.getSubList = function (name) { ; }
 
 /**
  * return a field group on this page.
@@ -5509,7 +5570,7 @@ toExport.nlobjAssistant.prototype.getSubList = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getFieldGroup = function( name ) { ; }
+exports.nlobjAssistant.prototype.getFieldGroup = function (name) { ; }
 
 /**
  * return an array of all the assistant steps for this assistant.
@@ -5520,7 +5581,7 @@ toExport.nlobjAssistant.prototype.getFieldGroup = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getAllSteps = function( ) { ; }
+exports.nlobjAssistant.prototype.getAllSteps = function () { ; }
 
 /**
  * return an array of the names of all fields on this page.
@@ -5531,7 +5592,7 @@ toExport.nlobjAssistant.prototype.getAllSteps = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getAllFields = function( ) { ; }
+exports.nlobjAssistant.prototype.getAllFields = function () { ; }
 
 /**
  *  return an array of the names of all sublists on this page .
@@ -5542,7 +5603,7 @@ toExport.nlobjAssistant.prototype.getAllFields = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getAllSubLists = function( ) { ; }
+exports.nlobjAssistant.prototype.getAllSubLists = function () { ; }
 
 /**
  * return an array of the names of all field groups on this page.
@@ -5553,7 +5614,7 @@ toExport.nlobjAssistant.prototype.getAllSubLists = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getAllFieldGroups = function( ) { ; }
+exports.nlobjAssistant.prototype.getAllFieldGroups = function () { ; }
 
 /**
  * return the last submitted action by the user: next|back|cancel|finish|jump
@@ -5564,7 +5625,7 @@ toExport.nlobjAssistant.prototype.getAllFieldGroups = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getLastAction = function() { ; }
+exports.nlobjAssistant.prototype.getLastAction = function () { ; }
 
 /**
  * return step from which the last submitted action came from
@@ -5575,7 +5636,7 @@ toExport.nlobjAssistant.prototype.getLastAction = function() { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getLastStep = function() { ; }
+exports.nlobjAssistant.prototype.getLastStep = function () { ; }
 
 /**
  * return the next logical step corresponding to the user's last submitted action. You should only call this after
@@ -5589,7 +5650,7 @@ toExport.nlobjAssistant.prototype.getLastStep = function() { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getNextStep = function() { ; }
+exports.nlobjAssistant.prototype.getNextStep = function () { ; }
 
 /**
  * return current step set via nlobjAssistant.setCurrentStep(step)
@@ -5600,7 +5661,7 @@ toExport.nlobjAssistant.prototype.getNextStep = function() { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getCurrentStep = function() { ; }
+exports.nlobjAssistant.prototype.getCurrentStep = function () { ; }
 
 /**
  * return the total number of steps in the assistant
@@ -5611,7 +5672,7 @@ toExport.nlobjAssistant.prototype.getCurrentStep = function() { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.getStepCount = function() { ; }
+exports.nlobjAssistant.prototype.getStepCount = function () { ; }
 
 /**
  * redirect the user following a user submit operation. Use this to automatically redirect the user to the next logical step.
@@ -5623,7 +5684,7 @@ toExport.nlobjAssistant.prototype.getStepCount = function() { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistant.prototype.sendRedirect = function(response) { ; }
+exports.nlobjAssistant.prototype.sendRedirect = function (response) { ; }
 
 /**
  * Return a new instance of nlobjField used for scriptable form/sublist field.
@@ -5633,7 +5694,7 @@ toExport.nlobjAssistant.prototype.sendRedirect = function(response) { ; }
  * @return {nlobjField}
  * @constructor
  */
-toExport.nlobjField = function( ) { ; }
+exports.nlobjField = function () { ; }
 
 /**
  *  return field name.
@@ -5644,7 +5705,7 @@ toExport.nlobjField = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjField.prototype.getName = function( ) { ; }
+exports.nlobjField.prototype.getName = function () { ; }
 
 /**
  * return field label.
@@ -5655,7 +5716,7 @@ toExport.nlobjField.prototype.getName = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjField.prototype.getLabel = function( ) { ; }
+exports.nlobjField.prototype.getLabel = function () { ; }
 
 /**
  * return field type.
@@ -5666,7 +5727,7 @@ toExport.nlobjField.prototype.getLabel = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjField.prototype.getType = function( ) { ; }
+exports.nlobjField.prototype.getType = function () { ; }
 
 /**
  * set the label for this field.
@@ -5677,7 +5738,7 @@ toExport.nlobjField.prototype.getType = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setLabel = function( label ) { ; }
+exports.nlobjField.prototype.setLabel = function (label) { ; }
 
 /**
  * set the alias used to set the value for this field. Defaults to field name.
@@ -5688,7 +5749,7 @@ toExport.nlobjField.prototype.setLabel = function( label ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setAlias = function( alias ) { ; }
+exports.nlobjField.prototype.setAlias = function (alias) { ; }
 
 /**
  * set the default value for this field.
@@ -5699,7 +5760,7 @@ toExport.nlobjField.prototype.setAlias = function( alias ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setDefaultValue = function( value ) { ; }
+exports.nlobjField.prototype.setDefaultValue = function (value) { ; }
 
 /**
  * make this field mandatory.
@@ -5710,7 +5771,7 @@ toExport.nlobjField.prototype.setDefaultValue = function( value ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setMandatory = function( mandatory ) { ; }
+exports.nlobjField.prototype.setMandatory = function (mandatory) { ; }
 
 /**
  * set the maxlength for this field (only valid for certain field types).
@@ -5721,7 +5782,7 @@ toExport.nlobjField.prototype.setMandatory = function( mandatory ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setMaxLength = function( maxlength ) { ; }
+exports.nlobjField.prototype.setMaxLength = function (maxlength) { ; }
 
 /**
  * set the display type for this field.
@@ -5732,7 +5793,7 @@ toExport.nlobjField.prototype.setMaxLength = function( maxlength ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setDisplayType = function( type ) { ; }
+exports.nlobjField.prototype.setDisplayType = function (type) { ; }
 
 /**
  * set the break type (startcol|startrow|none) for this field. startrow is only used for fields with a layout type of outside
@@ -5746,7 +5807,7 @@ toExport.nlobjField.prototype.setDisplayType = function( type ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjField.prototype.setBreakType = function( breaktype ) { ; }
+exports.nlobjField.prototype.setBreakType = function (breaktype) { ; }
 
 
 /**
@@ -5759,7 +5820,7 @@ toExport.nlobjField.prototype.setBreakType = function( breaktype ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setLayoutType = function( type, breaktype ) { ; }
+exports.nlobjField.prototype.setLayoutType = function (type, breaktype) { ; }
 
 /**
  * set the text that gets displayed in lieu of the field value for URL fields.
@@ -5769,7 +5830,7 @@ toExport.nlobjField.prototype.setLayoutType = function( type, breaktype ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setLinkText = function( text ) { ; }
+exports.nlobjField.prototype.setLinkText = function (text) { ; }
 
 /**
  * set the width and height for this field.
@@ -5781,7 +5842,7 @@ toExport.nlobjField.prototype.setLinkText = function( text ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setDisplaySize = function( width, height ) { ; }
+exports.nlobjField.prototype.setDisplaySize = function (width, height) { ; }
 
 /**
  * set the amount of emppty vertical space (rows) between this field and the previous field.
@@ -5792,7 +5853,7 @@ toExport.nlobjField.prototype.setDisplaySize = function( width, height ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjField.prototype.setPadding = function( padding ) { ; }
+exports.nlobjField.prototype.setPadding = function (padding) { ; }
 
 /**
  * set help text for this field. If inline is set on assistant pages, help is displayed inline below field
@@ -5807,7 +5868,7 @@ toExport.nlobjField.prototype.setPadding = function( padding ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjField.prototype.setHelpText = function( help, inline ) { ; }
+exports.nlobjField.prototype.setHelpText = function (help, inline) { ; }
 
 /**
  * add a select option to this field (valid for select/multiselect fields).
@@ -5818,7 +5879,7 @@ toExport.nlobjField.prototype.setHelpText = function( help, inline ) { ; }
  * @param {boolean} [selected] if true then this select option will be selected by default
  * @since 2008.2
  */
-toExport.nlobjField.prototype.addSelectOption = function( value, text, selected ) { ; }
+exports.nlobjField.prototype.addSelectOption = function (value, text, selected) { ; }
 
 /**
  *
@@ -5828,7 +5889,7 @@ toExport.nlobjField.prototype.addSelectOption = function( value, text, selected 
  * @param {string} [filteroperator] Supported operators are contains | is | startswith. If not specified, defaults to the contains operator.
  * @since 2009.2
  */
-toExport.nlobjField.prototype.getSelectOptions = function(filter, filteroperator) { ; }
+exports.nlobjField.prototype.getSelectOptions = function (filter, filteroperator) { ; }
 
 /**
  * Return a new instance of nlobjSubList used for scriptable sublist (sublist).
@@ -5838,7 +5899,7 @@ toExport.nlobjField.prototype.getSelectOptions = function(filter, filteroperator
  * @return {nlobjSubList}
  * @constructor
  */
-toExport.nlobjSubList = function( ) { ; }
+exports.nlobjSubList = function () { ; }
 
 /**
  * set the label for this sublist.
@@ -5847,7 +5908,7 @@ toExport.nlobjSubList = function( ) { ; }
  * @param {string} label
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.setLabel = function( label ) { ; }
+exports.nlobjSubList.prototype.setLabel = function (label) { ; }
 
 /**
  * set helper text for this sublist.
@@ -5856,7 +5917,7 @@ toExport.nlobjSubList.prototype.setLabel = function( label ) { ; }
  * @param {string} help
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.setHelpText = function( help ) { ; }
+exports.nlobjSubList.prototype.setHelpText = function (help) { ; }
 
 /**
  * set the displaytype for this sublist: hidden|normal.
@@ -5865,7 +5926,7 @@ toExport.nlobjSubList.prototype.setHelpText = function( help ) { ; }
  * @param {string} type
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.setDisplayType = function( type ) { ; }
+exports.nlobjSubList.prototype.setDisplayType = function (type) { ; }
 
 /**
  * set the value of a cell in this sublist.
@@ -5879,7 +5940,7 @@ toExport.nlobjSubList.prototype.setDisplayType = function( type ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.setLineItemValue = function( field, line, value ) { ; }
+exports.nlobjSubList.prototype.setLineItemValue = function (field, line, value) { ; }
 
 /**
  * set values for multiple lines (Array of nlobjSearchResults or name-value pair Arrays) in this sublist.
@@ -5888,7 +5949,7 @@ toExport.nlobjSubList.prototype.setLineItemValue = function( field, line, value 
  * @param {string[][], nlobjSearchResult[]} values
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.setLineItemValues = function( values ) { ; }
+exports.nlobjSubList.prototype.setLineItemValues = function (values) { ; }
 
 /**
  * Return the number of lines in a sublist.
@@ -5899,7 +5960,7 @@ toExport.nlobjSubList.prototype.setLineItemValues = function( values ) { ; }
  * @memberOf nlobjSubList
  * @since 2010.1
  */
-toExport.nlobjSubList.prototype.getLineItemCount = function( group ) { ; }
+exports.nlobjSubList.prototype.getLineItemCount = function (group) { ; }
 
 /**
  * add a field (column) to this sublist.
@@ -5915,7 +5976,7 @@ toExport.nlobjSubList.prototype.getLineItemCount = function( group ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.addField = function( name,type,label,source ) { ; }
+exports.nlobjSubList.prototype.addField = function (name, type, label, source) { ; }
 
 /**
  * designate a field on sublist that must be unique across all lines (only supported on sublists of type inlineeditor, editor).
@@ -5927,7 +5988,7 @@ toExport.nlobjSubList.prototype.addField = function( name,type,label,source ) { 
  *
  * @since 2009.2
  */
-toExport.nlobjSubList.prototype.setUniqueField = function( fldnam ) { ; }
+exports.nlobjSubList.prototype.setUniqueField = function (fldnam) { ; }
 
 /**
  * add a button to this sublist.
@@ -5942,7 +6003,7 @@ toExport.nlobjSubList.prototype.setUniqueField = function( fldnam ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.addButton = function( name, label, script ) { ; }
+exports.nlobjSubList.prototype.addButton = function (name, label, script) { ; }
 
 /**
  * add "Refresh" button to sublists of type "staticlist" to support manual refreshing of the sublist (without entire page reloads) if it's contents are very volatile
@@ -5953,7 +6014,7 @@ toExport.nlobjSubList.prototype.addButton = function( name, label, script ) { ; 
  *
  * @since 2009.2
  */
-toExport.nlobjSubList.prototype.addRefreshButton = function( ) { ; }
+exports.nlobjSubList.prototype.addRefreshButton = function () { ; }
 
 /**
  * add "Mark All" and "Unmark All" buttons to this sublist of type "list".
@@ -5963,7 +6024,7 @@ toExport.nlobjSubList.prototype.addRefreshButton = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjSubList.prototype.addMarkAllButtons = function( ) { ; }
+exports.nlobjSubList.prototype.addMarkAllButtons = function () { ; }
 
 /**
  * Returns string value of a sublist field. Note that you cannot set default line item values when the line is not in edit mode.
@@ -5978,7 +6039,7 @@ toExport.nlobjSubList.prototype.addMarkAllButtons = function( ) { ; }
  *
  * @since 2010.1
  */
-toExport.nlobjSubList.prototype.getLineItemValue = function(type, fldnam, linenum) { ; }
+exports.nlobjSubList.prototype.getLineItemValue = function (type, fldnam, linenum) { ; }
 
 /**
  * Designates a particular column as the totalling column, which is used to calculate and display a running total for the sublist
@@ -5991,7 +6052,7 @@ toExport.nlobjSubList.prototype.getLineItemValue = function(type, fldnam, linenu
  *
  * @since 2010.1
  */
-toExport.nlobjSubList.prototype.getLineItemValue = function(type, fldnam, linenum) { ; }
+exports.nlobjSubList.prototype.getLineItemValue = function (type, fldnam, linenum) { ; }
 
 /**
  * Return a new instance of nlobjColumn used for scriptable list column.
@@ -6000,7 +6061,7 @@ toExport.nlobjSubList.prototype.getLineItemValue = function(type, fldnam, linenu
  * @return {nlobjColumn}
  * @constructor
  */
-toExport.nlobjColumn = function( ) { ; }
+exports.nlobjColumn = function () { ; }
 
 /**
  * set the header name for this column.
@@ -6012,7 +6073,7 @@ toExport.nlobjColumn = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjColumn.prototype.setLabel = function( label ) { ; }
+exports.nlobjColumn.prototype.setLabel = function (label) { ; }
 
 /**
  * set the base URL (optionally defined per row) for this column.
@@ -6025,7 +6086,7 @@ toExport.nlobjColumn.prototype.setLabel = function( label ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjColumn.prototype.setURL = function( value, perRow ) { ; }
+exports.nlobjColumn.prototype.setURL = function (value, perRow) { ; }
 
 /**
  * add a URL parameter (optionally defined per row) to this column's URL.
@@ -6039,7 +6100,7 @@ toExport.nlobjColumn.prototype.setURL = function( value, perRow ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjColumn.prototype.addParamToURL = function( param, value, perRow ) { ; }
+exports.nlobjColumn.prototype.addParamToURL = function (param, value, perRow) { ; }
 
 /**
  * Return a new instance of nlobjTab used for scriptable tab or subtab.
@@ -6048,7 +6109,7 @@ toExport.nlobjColumn.prototype.addParamToURL = function( param, value, perRow ) 
  * @return {nlobjTab}
  * @constructor
  */
-toExport.nlobjTab = function( ) { ; }
+exports.nlobjTab = function () { ; }
 
 /**
  * set the label for this tab or subtab.
@@ -6058,7 +6119,7 @@ toExport.nlobjTab = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjTab.prototype.setLabel = function( label ) { ; }
+exports.nlobjTab.prototype.setLabel = function (label) { ; }
 
 /**
  * set helper text for this tab or subtab.
@@ -6068,7 +6129,7 @@ toExport.nlobjTab.prototype.setLabel = function( label ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjTab.prototype.setHelpText = function( help ) { ; }
+exports.nlobjTab.prototype.setHelpText = function (help) { ; }
 
 /**
  * Return a new instance of nlobjAssistantStep.
@@ -6079,7 +6140,7 @@ toExport.nlobjTab.prototype.setHelpText = function( help ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep = function( ) { ; }
+exports.nlobjAssistantStep = function () { ; }
 
 /**
  * set the label for this assistant step.
@@ -6091,7 +6152,7 @@ toExport.nlobjAssistantStep = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.setLabel = function( label ) { ; }
+exports.nlobjAssistantStep.prototype.setLabel = function (label) { ; }
 
 /**
  * set helper text for this assistant step.
@@ -6103,7 +6164,7 @@ toExport.nlobjAssistantStep.prototype.setLabel = function( label ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.setHelpText = function( help ) { ; }
+exports.nlobjAssistantStep.prototype.setHelpText = function (help) { ; }
 
 /**
  * return the index of this step in the assistant page (1-based)
@@ -6114,7 +6175,7 @@ toExport.nlobjAssistantStep.prototype.setHelpText = function( help ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getStepNumber = function( ) { ; }
+exports.nlobjAssistantStep.prototype.getStepNumber = function () { ; }
 
 /**
  * return the value of a field entered by the user during this step.
@@ -6126,7 +6187,7 @@ toExport.nlobjAssistantStep.prototype.getStepNumber = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getFieldValue = function( name ) { ; }
+exports.nlobjAssistantStep.prototype.getFieldValue = function (name) { ; }
 
 /**
  * return the selected values of a multi-select field as an Array entered by the user during this step.
@@ -6138,7 +6199,7 @@ toExport.nlobjAssistantStep.prototype.getFieldValue = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getFieldValues = function( name ) { ; }
+exports.nlobjAssistantStep.prototype.getFieldValues = function (name) { ; }
 
 /**
  * return the number of lines previously entered by the user in this step (or -1 if the sublist does not exist).
@@ -6150,7 +6211,7 @@ toExport.nlobjAssistantStep.prototype.getFieldValues = function( name ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getLineItemCount = function( group ) { ; }
+exports.nlobjAssistantStep.prototype.getLineItemCount = function (group) { ; }
 
 /**
  * return the value of a sublist field entered by the user during this step.
@@ -6164,7 +6225,7 @@ toExport.nlobjAssistantStep.prototype.getLineItemCount = function( group ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getLineItemValue = function(group, name, line) { ; }
+exports.nlobjAssistantStep.prototype.getLineItemValue = function (group, name, line) { ; }
 
 /**
  * return an array of the names of all fields entered by the user during this step.
@@ -6175,7 +6236,7 @@ toExport.nlobjAssistantStep.prototype.getLineItemValue = function(group, name, l
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getAllFields = function( ) { ; }
+exports.nlobjAssistantStep.prototype.getAllFields = function () { ; }
 
 /**
  * return an array of the names of all sublists entered by the user during this step.
@@ -6186,7 +6247,7 @@ toExport.nlobjAssistantStep.prototype.getAllFields = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getAllLineItems = function( ) { ; }
+exports.nlobjAssistantStep.prototype.getAllLineItems = function () { ; }
 
 /**
  * return an array of the names of all sublist fields entered by the user during this step
@@ -6198,7 +6259,7 @@ toExport.nlobjAssistantStep.prototype.getAllLineItems = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjAssistantStep.prototype.getAllLineItemFields = function( group ) { ; }
+exports.nlobjAssistantStep.prototype.getAllLineItemFields = function (group) { ; }
 
 /**
  * Return a new instance of nlobjFieldGroup (currently only supported on nlobjAssistant pages)
@@ -6209,7 +6270,7 @@ toExport.nlobjAssistantStep.prototype.getAllLineItemFields = function( group ) {
  *
  * @since 2009.2
  */
-toExport.nlobjFieldGroup = function( ) { ; }
+exports.nlobjFieldGroup = function () { ; }
 
 /**
  * set the label for this field group.
@@ -6221,7 +6282,7 @@ toExport.nlobjFieldGroup = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjFieldGroup.prototype.setLabel = function( label ) { ; }
+exports.nlobjFieldGroup.prototype.setLabel = function (label) { ; }
 
 /**
  * set collapsibility property for this field group.
@@ -6235,7 +6296,7 @@ toExport.nlobjFieldGroup.prototype.setLabel = function( label ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjFieldGroup.prototype.setCollapsible = function( collapsible, defaultcollapsed ) { ; }
+exports.nlobjFieldGroup.prototype.setCollapsible = function (collapsible, defaultcollapsed) { ; }
 
 /**
  * set singleColumn property for this field group.
@@ -6248,7 +6309,7 @@ toExport.nlobjFieldGroup.prototype.setCollapsible = function( collapsible, defau
  *
  * @since 2011.1
  */
-toExport.nlobjFieldGroup.prototype.setSingleColumn = function( singleColumn ) { ; }
+exports.nlobjFieldGroup.prototype.setSingleColumn = function (singleColumn) { ; }
 
 /**
  * set showBorder property for this field group.
@@ -6261,7 +6322,7 @@ toExport.nlobjFieldGroup.prototype.setSingleColumn = function( singleColumn ) { 
  *
  * @since 2011.1
  */
-toExport.nlobjFieldGroup.prototype.setShowBorder = function( showBorder ) { ; }
+exports.nlobjFieldGroup.prototype.setShowBorder = function (showBorder) { ; }
 
 /**
  * Return a new instance of nlobjButton.
@@ -6272,7 +6333,7 @@ toExport.nlobjFieldGroup.prototype.setShowBorder = function( showBorder ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjButton = function( ) { ; }
+exports.nlobjButton = function () { ; }
 
 /**
  * set the label for this button.
@@ -6284,7 +6345,7 @@ toExport.nlobjButton = function( ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjButton.prototype.setLabel = function( label ) { ; }
+exports.nlobjButton.prototype.setLabel = function (label) { ; }
 
 /**
  * disable or enable button.
@@ -6296,7 +6357,7 @@ toExport.nlobjButton.prototype.setLabel = function( label ) { ; }
  *
  * @since 2008.2
  */
-toExport.nlobjButton.prototype.setDisabled = function( disabled ) { ; }
+exports.nlobjButton.prototype.setDisabled = function (disabled) { ; }
 
 /**
  * Sets the button as hidden in the UI. This API is supported on custom buttons and on some standard NetSuite buttons
@@ -6308,7 +6369,7 @@ toExport.nlobjButton.prototype.setDisabled = function( disabled ) { ; }
  *
  * @since 2010.2
  */
-toExport.nlobjButton.prototype.setVisible= function(visible) { ; }
+exports.nlobjButton.prototype.setVisible = function (visible) { ; }
 
 /**
  * Return a new instance of nlobjSelectOption.
@@ -6319,7 +6380,7 @@ toExport.nlobjButton.prototype.setVisible= function(visible) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjSelectOption = function( ) { ; }
+exports.nlobjSelectOption = function () { ; }
 
 /**
  * return internal ID for select option
@@ -6330,7 +6391,7 @@ toExport.nlobjSelectOption = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjSelectOption.prototype.getId = function( ) { ; }
+exports.nlobjSelectOption.prototype.getId = function () { ; }
 
 /**
  * return display value for select option.
@@ -6341,9 +6402,9 @@ toExport.nlobjSelectOption.prototype.getId = function( ) { ; }
  *
  * @since 2009.2
  */
-toExport.nlobjSelectOption.prototype.getText = function( ) { ; }
+exports.nlobjSelectOption.prototype.getText = function () { ; }
 
-toExport.nlobjLogin = function(){;}
+exports.nlobjLogin = function () { ; }
 /**
  * @param {string} newEmail new Email
  * @param {boolean} justThisAccount indicates whether to apply email change only to roles within this account or apply email change to its all NetSuite accounts and roles
@@ -6352,7 +6413,7 @@ toExport.nlobjLogin = function(){;}
  * @since 2012.2
  */
 
-toExport.nlobjLogin.prototype.changeEmail = function (currentPassword, newEmail, justThisAccount)  { ; }
+exports.nlobjLogin.prototype.changeEmail = function (currentPassword, newEmail, justThisAccount) { ; }
 
 /**
  * @param {string} newPassword new Password.
@@ -6360,15 +6421,15 @@ toExport.nlobjLogin.prototype.changeEmail = function (currentPassword, newEmail,
  *
  * @since 2012.2
  */
-toExport.nlobjLogin.prototype.changePassword = function (currentPassword, newPassword) { ; }
+exports.nlobjLogin.prototype.changePassword = function (currentPassword, newPassword) { ; }
 
-toExport.nlobjJobManager = function(){;}
+exports.nlobjJobManager = function () { ; }
 /**
  * @return {nlobjJobRequest}
  *
  * @since 2013.1
  */
-toExport.nlobjJobManager.prototype.createJobRequest = function ()  { ; }
+exports.nlobjJobManager.prototype.createJobRequest = function () { ; }
 
 /**
  * @param {nlobjJobRequest} Job request
@@ -6376,16 +6437,16 @@ toExport.nlobjJobManager.prototype.createJobRequest = function ()  { ; }
  *
  * @since 2013.1
  */
-toExport.nlobjJobManager.prototype.submit = function (request)  { ; }
+exports.nlobjJobManager.prototype.submit = function (request) { ; }
 
 /**
  * @return {nlobjFuture}
  *
  * @since 2013.1
  */
-toExport.nlobjJobManager.prototype.getFuture = function ()  { ; }
+exports.nlobjJobManager.prototype.getFuture = function () { ; }
 
-toExport.nlobjMergeResult = function(){;}
+exports.nlobjMergeResult = function () { ; }
 /*
  * Use this method to get the body of the email distribution in string format.
  *
@@ -6393,7 +6454,7 @@ toExport.nlobjMergeResult = function(){;}
  *
  * @since 2015.1
  */
-toExport.nlobjMergeResult.prototype.getBody = function () { ; }
+exports.nlobjMergeResult.prototype.getBody = function () { ; }
 
 /*
  * Use this method to get the subject of the email distribution in string format.
@@ -6402,9 +6463,9 @@ toExport.nlobjMergeResult.prototype.getBody = function () { ; }
  *
  * @since 2015.1
  */
-toExport.nlobjMergeResult.prototype.getSubject = function () { ; }
+exports.nlobjMergeResult.prototype.getSubject = function () { ; }
 
-toExport.nlobjPivotColumn = function(){};
+exports.nlobjPivotColumn = function () { };
 /*
  * Get the column alias.
  *
@@ -6412,7 +6473,7 @@ toExport.nlobjPivotColumn = function(){};
  *
  * @since 2012.2
  */
-toExport.nlobjPivotColumn.prototype.getAlias = function () { ; }
+exports.nlobjPivotColumn.prototype.getAlias = function () { ; }
 
 /*
  * Get dependency for specified alias
@@ -6422,7 +6483,7 @@ toExport.nlobjPivotColumn.prototype.getAlias = function () { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotColumn.prototype.getDependency = function (alias) { ; }
+exports.nlobjPivotColumn.prototype.getDependency = function (alias) { ; }
 
 /*
  * Get the parent column
@@ -6431,7 +6492,7 @@ toExport.nlobjPivotColumn.prototype.getDependency = function (alias) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotColumn.prototype.getParent = function (alias) { ; }
+exports.nlobjPivotColumn.prototype.getParent = function (alias) { ; }
 
 /*
  * Get the column label.
@@ -6440,7 +6501,7 @@ toExport.nlobjPivotColumn.prototype.getParent = function (alias) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotColumn.prototype.getLabel = function () { ; }
+exports.nlobjPivotColumn.prototype.getLabel = function () { ; }
 
 /*
  * Get the summary line.
@@ -6449,9 +6510,9 @@ toExport.nlobjPivotColumn.prototype.getLabel = function () { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotColumn.prototype.getSummaryLine = function () { ; }
+exports.nlobjPivotColumn.prototype.getSummaryLine = function () { ; }
 
-toExport.nlobjPivotTable = function(){;}
+exports.nlobjPivotTable = function () { ; }
 /*
  * Get the column hierarchy.
  *
@@ -6459,7 +6520,7 @@ toExport.nlobjPivotTable = function(){;}
  *
  * @since 2012.2
  */
-toExport.nlobjPivotTable.prototype.getColumnHierarchy = function() { ; }
+exports.nlobjPivotTable.prototype.getColumnHierarchy = function () { ; }
 
 /*
  * Get the row hierarchy.
@@ -6468,9 +6529,9 @@ toExport.nlobjPivotTable.prototype.getColumnHierarchy = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotTable.prototype.getRowHierarchy = function() { ; }
+exports.nlobjPivotTable.prototype.getRowHierarchy = function () { ; }
 
-toExport.nlobjPivotRow = function(){;}
+exports.nlobjPivotRow = function () { ; }
 /*
  * Get the row alias.
  *
@@ -6478,7 +6539,7 @@ toExport.nlobjPivotRow = function(){;}
  *
  * @since 2012.2
  */
-toExport.nlobjPivotRow.prototype.getAlias = function() { ; }
+exports.nlobjPivotRow.prototype.getAlias = function () { ; }
 
 /*
  * Get the children rows if there are any.
@@ -6487,7 +6548,7 @@ toExport.nlobjPivotRow.prototype.getAlias = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotRow.prototype.getChildren = function() { ; }
+exports.nlobjPivotRow.prototype.getChildren = function () { ; }
 
 /*
  * Get the opening line.
@@ -6496,7 +6557,7 @@ toExport.nlobjPivotRow.prototype.getChildren = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotRow.prototype.getOpeningLine = function() { ; }
+exports.nlobjPivotRow.prototype.getOpeningLine = function () { ; }
 
 /*
  * Get the parent row
@@ -6505,7 +6566,7 @@ toExport.nlobjPivotRow.prototype.getOpeningLine = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotRow.prototype.getParent = function() { ; }
+exports.nlobjPivotRow.prototype.getParent = function () { ; }
 
 /*
  * Get the summary line from the report.
@@ -6514,9 +6575,9 @@ toExport.nlobjPivotRow.prototype.getParent = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotRow.prototype.getSummaryLine = function() { ; }
+exports.nlobjPivotRow.prototype.getSummaryLine = function () { ; }
 
-toExport.nlobjPivotTableHandle = function () {
+exports.nlobjPivotTableHandle = function () {
     ;
 }
 /*
@@ -6526,7 +6587,7 @@ toExport.nlobjPivotTableHandle = function () {
  *
  * @since 2012.2
  */
-toExport.nlobjPivotTableHandle.prototype.getPivotTable = function() { ; }
+exports.nlobjPivotTableHandle.prototype.getPivotTable = function () { ; }
 
 /*
  * Returns the completion status flag of the report definition execution.
@@ -6535,9 +6596,9 @@ toExport.nlobjPivotTableHandle.prototype.getPivotTable = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjPivotTableHandle.prototype.isReady = function() { ; }
+exports.nlobjPivotTableHandle.prototype.isReady = function () { ; }
 
-toExport.nlobjReportColumn = function(){;}
+exports.nlobjReportColumn = function () { ; }
 /*
  * Get the formula for this column
  *
@@ -6545,7 +6606,7 @@ toExport.nlobjReportColumn = function(){;}
  *
  * @since 2012.2
  */
-toExport.nlobjReportColumn.prototype.getFormula = function() { ; }
+exports.nlobjReportColumn.prototype.getFormula = function () { ; }
 
 /*
  * Get the parent reference of this column.
@@ -6554,7 +6615,7 @@ toExport.nlobjReportColumn.prototype.getFormula = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjReportColumn.prototype.getParent = function() { ; }
+exports.nlobjReportColumn.prototype.getParent = function () { ; }
 
 /*
  * Returns the measure flag
@@ -6563,9 +6624,9 @@ toExport.nlobjReportColumn.prototype.getParent = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjReportColumn.prototype.isMeasure = function() { ; }
+exports.nlobjReportColumn.prototype.isMeasure = function () { ; }
 
-toExport.nlobjReportDefinition = function(){;}
+exports.nlobjReportDefinition = function () { ; }
 /*
  * Add a column to the report definition.
  * @param {string} alias The column alias.
@@ -6579,7 +6640,7 @@ toExport.nlobjReportDefinition = function(){;}
  *
  * @since 2012.2
  */
-toExport.nlobjReportDefinition.prototype.addColumn = function(alias, isMeasure, label, parent, format, formula) { ; }
+exports.nlobjReportDefinition.prototype.addColumn = function (alias, isMeasure, label, parent, format, formula) { ; }
 
 /*
  * Add a column hierarchy to the report definition.
@@ -6593,7 +6654,7 @@ toExport.nlobjReportDefinition.prototype.addColumn = function(alias, isMeasure, 
  *
  * @since 2012.2
  */
-toExport.nlobjReportDefinition.prototype.addColumnHierarchy = function(alias, label, parent, format) { ; }
+exports.nlobjReportDefinition.prototype.addColumnHierarchy = function (alias, label, parent, format) { ; }
 
 /*
  * Add a row hierarchy to the report definition.
@@ -6606,7 +6667,7 @@ toExport.nlobjReportDefinition.prototype.addColumnHierarchy = function(alias, la
  *
  * @since 2012.2
  */
-toExport.nlobjReportDefinition.prototype.addRowHierarchy = function(alias, label, parent) { ; }
+exports.nlobjReportDefinition.prototype.addRowHierarchy = function (alias, label, parent) { ; }
 
 /*
  * Attaches a search as a data source to the report definition.
@@ -6621,7 +6682,7 @@ toExport.nlobjReportDefinition.prototype.addRowHierarchy = function(alias, label
  *
  * @since 2012.2
  */
-toExport.nlobjReportDefinition.prototype.addSearchDatasource = function(searchType, id, filters, columns, map) { ; }
+exports.nlobjReportDefinition.prototype.addSearchDatasource = function (searchType, id, filters, columns, map) { ; }
 
 /*
  * Creates the form for rendering from the report definition.
@@ -6632,7 +6693,7 @@ toExport.nlobjReportDefinition.prototype.addSearchDatasource = function(searchTy
  *
  * @since 2012.2
  */
-toExport.nlobjReportDefinition.prototype.executeReport = function(form) { ; }
+exports.nlobjReportDefinition.prototype.executeReport = function (form) { ; }
 
 /*
  * Sets the title of the report definition.
@@ -6643,9 +6704,9 @@ toExport.nlobjReportDefinition.prototype.executeReport = function(form) { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjReportDefinition.prototype.setTitle = function(title) { ; }
+exports.nlobjReportDefinition.prototype.setTitle = function (title) { ; }
 
-toExport.nlobjReportColumnHierarchy = function(){}
+exports.nlobjReportColumnHierarchy = function () { }
 /*
  * Get the children reference of this column hierarchy.
  *
@@ -6653,7 +6714,7 @@ toExport.nlobjReportColumnHierarchy = function(){}
  *
  * @since 2012.2
  */
-toExport.nlobjReportColumnHierarchy.prototype.getChildren = function() { ; }
+exports.nlobjReportColumnHierarchy.prototype.getChildren = function () { ; }
 
 /*
  * Get the parent reference of this column hierarchy.
@@ -6662,9 +6723,9 @@ toExport.nlobjReportColumnHierarchy.prototype.getChildren = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjReportColumnHierarchy.prototype.getParent = function() { ; }
+exports.nlobjReportColumnHierarchy.prototype.getParent = function () { ; }
 
-toExport.nlobjReportRowHierarchy = function(){}
+exports.nlobjReportRowHierarchy = function () { }
 /*
  * Get the children reference of this row hierarchy.
  *
@@ -6672,7 +6733,7 @@ toExport.nlobjReportRowHierarchy = function(){}
  *
  * @since 2012.2
  */
-toExport.nlobjReportRowHierarchy.prototype.getChildren = function() { ; }
+exports.nlobjReportRowHierarchy.prototype.getChildren = function () { ; }
 
 /*
  * Get the parent reference of this row hierarchy.
@@ -6681,44 +6742,44 @@ toExport.nlobjReportRowHierarchy.prototype.getChildren = function() { ; }
  *
  * @since 2012.2
  */
-toExport.nlobjReportRowHierarchy.prototype.getParent = function() { ; }
+exports.nlobjReportRowHierarchy.prototype.getParent = function () { ; }
 
-toExport.nlobjDuplicateJobRequest = function(){;}
+exports.nlobjDuplicateJobRequest = function () { ; }
 /**
  * Constant for Merge Duplicate recrods Entity Types
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.ENTITY_CUSTOMER = 'CUSTOMER';
-toExport.nlobjDuplicateJobRequest.prototype.ENTITY_CONTACT = 'CONTACT';
-toExport.nlobjDuplicateJobRequest.prototype.ENTITY_LEAD = 'LEAD';
-toExport.nlobjDuplicateJobRequest.prototype.ENTITY_PROSPECT = 'PROSPECT';
-toExport.nlobjDuplicateJobRequest.prototype.ENTITY_PARTNER = 'PARTNER';
-toExport.nlobjDuplicateJobRequest.prototype.ENTITY_VENDOR = 'VENDOR';
+exports.nlobjDuplicateJobRequest.prototype.ENTITY_CUSTOMER = 'CUSTOMER';
+exports.nlobjDuplicateJobRequest.prototype.ENTITY_CONTACT = 'CONTACT';
+exports.nlobjDuplicateJobRequest.prototype.ENTITY_LEAD = 'LEAD';
+exports.nlobjDuplicateJobRequest.prototype.ENTITY_PROSPECT = 'PROSPECT';
+exports.nlobjDuplicateJobRequest.prototype.ENTITY_PARTNER = 'PARTNER';
+exports.nlobjDuplicateJobRequest.prototype.ENTITY_VENDOR = 'VENDOR';
 
 /**
  * Constant for Merge Duplicate recrods Merge MASTERSELECTIONMODE
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_CREATED_EARLIEST = 'CREATED_EARLIEST';
-toExport.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_MOST_RECENT_ACTIVITY = 'MOST_RECENT_ACTIVITY';
-toExport.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_MOST_POPULATED_FIELDS = 'MOST_POPULATED_FIELDS';
-toExport.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_SELECT_BY_ID = 'SELECT_BY_ID';
+exports.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_CREATED_EARLIEST = 'CREATED_EARLIEST';
+exports.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_MOST_RECENT_ACTIVITY = 'MOST_RECENT_ACTIVITY';
+exports.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_MOST_POPULATED_FIELDS = 'MOST_POPULATED_FIELDS';
+exports.nlobjDuplicateJobRequest.prototype.MASTERSELECTIONMODE_SELECT_BY_ID = 'SELECT_BY_ID';
 
 /**
  * Constant for Merge Duplicate recrods Merge operation
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.OPERATION_MERGE = 'MERGE';
-toExport.nlobjDuplicateJobRequest.prototype.OPERATION_DELETE = 'DELETE';
-toExport.nlobjDuplicateJobRequest.prototype.OPERATION_MAKE_MASTER_PARENT = 'MAKE_MASTER_PARENT';
-toExport.nlobjDuplicateJobRequest.prototype.OPERATION_MARK_AS_NOT_DUPES = 'MARK_AS_NOT_DUPES';
+exports.nlobjDuplicateJobRequest.prototype.OPERATION_MERGE = 'MERGE';
+exports.nlobjDuplicateJobRequest.prototype.OPERATION_DELETE = 'DELETE';
+exports.nlobjDuplicateJobRequest.prototype.OPERATION_MAKE_MASTER_PARENT = 'MAKE_MASTER_PARENT';
+exports.nlobjDuplicateJobRequest.prototype.OPERATION_MARK_AS_NOT_DUPES = 'MARK_AS_NOT_DUPES';
 /**
  * @param {String} Entity Type
  * @return {void}
  *
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.setEntityType = function( entityType ) { ; }
+exports.nlobjDuplicateJobRequest.prototype.setEntityType = function (entityType) { ; }
 
 /**
  * @param {String} Master record ID
@@ -6726,7 +6787,7 @@ toExport.nlobjDuplicateJobRequest.prototype.setEntityType = function( entityType
  *
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.setMasterId = function( masterID ) { ; }
+exports.nlobjDuplicateJobRequest.prototype.setMasterId = function (masterID) { ; }
 
 /**
  * @param {String} Criteria
@@ -6734,7 +6795,7 @@ toExport.nlobjDuplicateJobRequest.prototype.setMasterId = function( masterID ) {
  *
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.setMasterSelectionMode = function( masterSelectionMode ) { ; }
+exports.nlobjDuplicateJobRequest.prototype.setMasterSelectionMode = function (masterSelectionMode) { ; }
 
 /**
  * @param {String} Array of duplicate records IDs
@@ -6742,7 +6803,7 @@ toExport.nlobjDuplicateJobRequest.prototype.setMasterSelectionMode = function( m
  *
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.setRecords = function( dupeRecords ) { ; }
+exports.nlobjDuplicateJobRequest.prototype.setRecords = function (dupeRecords) { ; }
 
 /**
  * @param {String} Operation
@@ -6750,29 +6811,29 @@ toExport.nlobjDuplicateJobRequest.prototype.setRecords = function( dupeRecords )
  *
  * @since 2013.1
  */
-toExport.nlobjDuplicateJobRequest.prototype.setOperation = function( operation ) { ; }
+exports.nlobjDuplicateJobRequest.prototype.setOperation = function (operation) { ; }
 
-toExport.nlobjFuture = function(){}
+exports.nlobjFuture = function () { }
 /**
  * @return {boolean} status
  *
  * @since 2013.1
  */
-toExport.nlobjFuture.prototype.isDone = function( ) { ; }
+exports.nlobjFuture.prototype.isDone = function () { ; }
 
 /**
  * @return {String} Job ID
  *
  * @since 2013.1
  */
-toExport.nlobjFuture.prototype.getId = function( ) { ; }
+exports.nlobjFuture.prototype.getId = function () { ; }
 
 /**
  * @return {boolean} is cancelled or not
  *
  * @since 2013.1
  */
-toExport.nlobjFuture.prototype.isCancelled = function( ) { ; }
+exports.nlobjFuture.prototype.isCancelled = function () { ; }
 
 /**
  * Returns string id of nlobjFuture object
@@ -6780,7 +6841,7 @@ toExport.nlobjFuture.prototype.isCancelled = function( ) { ; }
  *
  * @since 2013.1
  */
-toExport.nlobjFuture.prototype.getId = function( ) { ; }
+exports.nlobjFuture.prototype.getId = function () { ; }
 
 /**
  * Cancels nlobjFuture task
@@ -6788,9 +6849,9 @@ toExport.nlobjFuture.prototype.getId = function( ) { ; }
  *
  * @since 2013.1
  */
-toExport.nlobjFuture.prototype.cancel = function( ) { ; }
+exports.nlobjFuture.prototype.cancel = function () { ; }
 
-toExport.nlobjCache = function(){};
+exports.nlobjCache = function () { };
 /**
  * @param {string} key
  * @param {string} value
@@ -6799,7 +6860,7 @@ toExport.nlobjCache = function(){};
  *
  * @since 2013.2
  */
-toExport.nlobjCache.prototype.put = function (key, value, ttl) {;}
+exports.nlobjCache.prototype.put = function (key, value, ttl) { ; }
 
 
 /**
@@ -6808,7 +6869,7 @@ toExport.nlobjCache.prototype.put = function (key, value, ttl) {;}
  *
  * @since 2013.2
  */
-toExport.nlobjCache.prototype.get = function (key) {;}
+exports.nlobjCache.prototype.get = function (key) { ; }
 
 
 /**
@@ -6817,6 +6878,5 @@ toExport.nlobjCache.prototype.get = function (key) {;}
  *
  * @since 2013.2
  */
-toExport.nlobjCache.prototype.remove = function (key) {;}
+exports.nlobjCache.prototype.remove = function (key) { ; }
 
-module.exports = toExport;

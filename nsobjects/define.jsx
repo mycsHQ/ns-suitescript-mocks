@@ -5,6 +5,7 @@ const record = require('./recordModule.jsx');
 const search = require('./searchModule.jsx');
 const email = require('./emailModule.jsx');
 const moment = require('moment');
+const lodash = require('lodash');
 const message = require('./messageModule.jsx');
 const format = require('./formatModule.jsx');
 const url = require('./urlModule.jsx');
@@ -50,19 +51,12 @@ global.mapModules = {
   'N/task': task,
   'N/request': request,
   'N/http': http,
-  'lodash': require('lodash'),
-  'rawRecord': rawRecord
+  'lodash': lodash,
+  'rawRecord': rawRecord,
+  'moment': moment
 };
 
-function updateModules(extendedModules){
-  for (const key in extendedModules) {
-    if (extendedModules.hasOwnProperty(key)) {
-      const element = extendedModules[key];
-      external[key] = (typeof element === 'string') ? require(join(__dirname, '../../..', element)) : element;
-      global.mapModules[key] = external[key];
-    } 
-  }
-}
+
 
 /**
  * Define function
@@ -93,5 +87,5 @@ var defineFunction = (params, callback) => {
 
 module.exports = (config) => {
   extendedModules = config;
-  return { define: defineFunction, nsMockups: mapModules, updateModules: updateModules };
+  return { define: defineFunction, nsMockups: mapModules };
 }
