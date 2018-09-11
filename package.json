@@ -1,6 +1,6 @@
 {
   "name": "netsuite-suitescript-mocks",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Netsute mock",
   "main": "index.js",
   "engines": {
