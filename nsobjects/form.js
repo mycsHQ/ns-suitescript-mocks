@@ -1,12 +1,9 @@
-/**
- * Return a Netsuite form
- *
- * @classDescription form object
- * @constructor
- * @returns {nlobjForm}
- */
 
-module.exports = function (name) {
+/**
+  * Mock of NetSuite Form object
+  * @param {String} name
+  */
+function NsForm(name) {
   const field = {
     updateLayoutType: () => true,
     updateBreakType: () => true,
@@ -43,4 +40,6 @@ module.exports = function (name) {
     getButtons: () => this.buttons,
     getSubmitButtons: () => this.submitButtons,
   };
-};
+}
+
+module.exports = NsForm;

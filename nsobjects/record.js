@@ -7,7 +7,7 @@
  * @param {object} defaultValues
  * @returns {nlobjRecord}
  */
-module.exports = function (name, defaultValues = {}) {
+function NsRecord(name, defaultValues = {}) {
   const id = defaultValues.id || Math.ceil(Math.random() * 100);
   const selectedLine = {};
   this.values = defaultValues;
@@ -113,4 +113,5 @@ module.exports = function (name, defaultValues = {}) {
       this.values[newValue.fieldId] = newValue.text;
     },
   };
-};
+}
+module.exports = NsRecord;
