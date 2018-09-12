@@ -30,7 +30,7 @@ function createFilter(options) { // eslint-disable-line no-unused-vars
  * @returns {object} resultset
  */
 function ResultSet() {
-  const privateColumns = this.columns;
+  const privateColumns = this.columns || {};
   const times = this.type === 'customrecord_mycs_script_settings' ? 1 : Math.floor(Math.random() * 99) + 1;
   const mockupData = _.map(_.times(times), item => ({
     id: item + 1,
