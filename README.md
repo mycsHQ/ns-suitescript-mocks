@@ -52,7 +52,7 @@ Before pushing your code, make sure that the tests are passing (at the moment, w
 ## Authors 😎
 
 * **Damian Krolikowski** - *Initial work* - [damiankrolikowskimycs](https://github.com/damiankrolikowskimycs)
-* **Nicolas Ritouet** - *Cleanup, documentation* - [nicolasritouet](https://github.com/nicolasritouet)
+* **Nicolas Ritouet** - *Automation setup, cleanup, documentation* - [nicolasritouet](https://github.com/nicolasritouet)
 
 See also the list of [contributors](https://github.com/mycshq/ns-suitescript-mocks/contributors) who participated in this project.
 
@@ -63,6 +63,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Roadmap 🛣
 
 - add tests for the repo
+- add examples for jest
+- add example for other test frameworks
 - switch all eslint warning to errors and fix code
 - cleanup mycs occurences
 - remove global specific mocks (like `getGELlabel`) and give possibility to import them from config (with example)
