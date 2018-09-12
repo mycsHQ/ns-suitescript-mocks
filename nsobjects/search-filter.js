@@ -12,4 +12,5 @@
  *
  */
 // eslint-disable-next-line no-unused-vars
-module.exports = (name, join, operator, value, value2) => ({});
+function NsSearchFilter(name, join, operator, value, value2) {}
+module.exports = NsSearchFilter;
