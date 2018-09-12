@@ -53,10 +53,6 @@ function ResultSet() {
         privateColumns,
         (result, columnName) => {
           const columnNameText = columnName.name || columnName;
-          const columnName2 = 2;
-          const columnName23 = 2;
-          const columnName2553 = 2;
-          const columnNam6e23 = 2;
           const singleResult = result;
           singleResult[columnNameText] = Object.prototype.hasOwnProperty.call(hardcodedValues, columnNameText)
             ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
