@@ -1,33 +1,40 @@
 {
-  "name": "netsuite-suitescript-mocks",
+  "name": "ns-suitescript-mocks",
   "version": "0.1.3",
-  "description": "Netsute mock",
+  "description": "Collection of mocks that can be used to improve unit-tests for SuiteScript 2.0.",
   "main": "index.js",
-  "engines": {
-    "node": ">=4.2.4"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mycsHQ/ns-suitescript-mocks.git"
-  },
-  "keywords": [
-    "NetSuite",
-    "Mockup",
-    "JEST",
-    "JS",
-    "JavaScirpt"
-  ],
   "author": "Damian Krolikowski",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/mycsHQ/ns-suitescript-mocks/issues"
   },
   "homepage": "https://github.com/mycsHQ/ns-suitescript-mocks#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mycsHQ/ns-suitescript-mocks.git"
+  },
+  "keywords": [
+    "NetSuite",
+    "suitescript",
+    "Mockup",
+    "JEST",
+    "Mocks"
+  ],
+  "engines": {
+    "node": ">=4.2.4"
+  },
+  "scripts": {
+    "test": "npm run lint",
+    "lint": "eslint . --fix"
+  },
   "dependencies": {
     "lodash": "^4.17.10",
     "moment": "^2.22.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-suitescript": "^0.1.1"
   }
 }

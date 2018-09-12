@@ -9,18 +9,33 @@ const _ = require('lodash');
  */
 
 /**
+ * NetSuite new column
+ * @param {*} options
+ * @returns {string}
+ */
+function createColumn(options) {
+  return `${options.name}${options.join ? `__${options.join}` : ''}`;
+}
+
+/**
+ * NetSuite new filter
+ * @param {*} options
+ * @returns {string}
+ */
+function createFilter(options) { // eslint-disable-line no-unused-vars
+  return `${options.name}${options.join ? `__${options.join}` : ''}`;
+}
+/**
  * Return NetSuite ResultSet type.
  * @returns {object} resultset
  */
 function ResultSet() {
-  const _columns = this.columns;
+  const privateColumns = this.columns;
   const times = this.type === 'customrecord_mycs_script_settings' ? 1 : Math.floor(Math.random() * 99) + 1;
-  const mockupData = _.map(_.times(times), (item) => ({
+  const mockupData = _.map(_.times(times), item => ({
     id: item + 1,
     type: this.type,
-    columns: _columns.map(function (columnName) {
-      return { name: columnName };
-    }),
+    columns: privateColumns.map(columnName => ({ name: columnName })),
     getValue(column) {
       const hardcodedValues = {
         custrecord_mycs_ship_meth_is_assembly: false,
@@ -32,52 +47,55 @@ function ResultSet() {
         custrecord_mycs_ship_meth_max_order_val: random(1, 30),
         custrecord_mycs_ship_meth_max_order_wgh: random(1, 30),
         custrecord_mycs_ship_meth_max_colli_cnt: random(1, 30),
-        custrecord_mycs_url: ''
+        custrecord_mycs_url: '',
       };
-      const _data = _.reduce(
-        _columns,
+      const privateData = _.reduce(
+        privateColumns,
         (result, columnName) => {
-          let columnNameText = columnName.name || columnName;
-          result[columnNameText] = hardcodedValues.hasOwnProperty(columnNameText) ?
-            hardcodedValues[columnNameText] : `${columnNameText}_${ item + 1 }`;
-          result.internalid = random(1, 9000);
+          const columnNameText = columnName.name || columnName;
+          const singleResult = result;
+          const checkProperty = Object.prototype.hasOwnProperty;
+          singleResult[columnNameText] = checkProperty.call(hardcodedValues, columnNameText)
+            ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
+          singleResult.internalid = random(1, 9000);
           return result;
         },
-        {}
+        {},
       );
       if (typeof column === 'string') {
-        return _data[column];
-      } else if (typeof column === 'object') {
-        const _column = createColumn(column);
-        return _data[_column];
+        return privateData[column];
+      } if (typeof column === 'object') {
+        const privateColumn = createColumn(column);
+        return privateData[privateColumn];
       }
       return '';
     },
     getText(column) {
-      const _data = _.reduce(
-        _columns,
+      const privateData = _.reduce(
+        privateColumns,
         (result, columnName) => {
-          result[columnName] = `columnName_${ item + 1 }`;
-          result.internalid = random(1, 9000);
+          const singleResult = result;
+          singleResult[columnName] = `columnName_${item + 1}`;
+          singleResult.internalid = random(1, 9000);
           return result;
         },
-        {}
+        {},
       );
       if (typeof column === 'string') {
-        return _data[column];
-      } else if (typeof column === 'object') {
-        const _column = createColumn(column);
-        return _data[_column];
+        return privateData[column];
+      } if (typeof column === 'object') {
+        const privateColumn = createColumn(column);
+        return privateData[privateColumn];
       }
       return '';
     },
   }));
   const each = callback => _.each(mockupData, (item, index) => callback.call(null, item, index));
-  const getRange = options => {
-    const _options = {};
-    _options.start = options.start || 0;
-    _options.end = options.end || 0;
-    return mockupData.slice(_options.start, _options.end);
+  const getRange = (options) => {
+    const privateOptions = {};
+    privateOptions.start = options.start || 0;
+    privateOptions.end = options.end || 0;
+    return mockupData.slice(privateOptions.start, privateOptions.end);
   };
 
   return {
@@ -87,65 +105,49 @@ function ResultSet() {
 }
 
 /**
- * NetSuite new column
- * @param {*} options
- * @returns {string}
- */
-function createColumn(options) {
-  return `${ options.name }${ options.join ? '__' + options.join : '' }`;
-}
-
-/**
- * NetSuite new filter
- * @param {*} options
- * @returns {string}
- */
-function createFilter(options) { // eslint-disable-line no-unused-vars
-  return `${ options.name }${ options.join ? '__' + options.join : '' }`;
-}
-/**
  * NetSuite - constructor of search module.
  * @param {*} options_
  * @returns {*}
  */
 function create(options_) {
-  const _id = Math.ceil(Math.random() * 100);
-  const _options = {};
-  var options = options_ || {};
-  _options.type = options.type;
-  if (!_options.type) {
+  const privateId = Math.ceil(Math.random() * 100);
+  const privateOptions = {};
+  const options = options_ || {};
+  privateOptions.type = options.type;
+  if (!privateOptions.type) {
     throw new { message: 'SSS_MISSING_REQD_ARGUMENT: type' }();
   }
-  _options.filters = options.filters;
-  _options.filterExpression = options.filterExpression;
-  _options.columns = options.columns;
-  _options.title = options.title;
-  _options.id = options.id;
-  _options.isPublic = options.isPublic;
+  privateOptions.filters = options.filters;
+  privateOptions.filterExpression = options.filterExpression;
+  privateOptions.columns = options.columns;
+  privateOptions.title = options.title;
+  privateOptions.id = options.id;
+  privateOptions.isPublic = options.isPublic;
 
-  const save = () => _id;
-  const run = () => ResultSet.apply(_options);
+  const save = () => privateId;
+  const run = () => ResultSet.apply(privateOptions);
 
   return {
     save,
     run,
-    type: _options.type,
-    filters: _options.filters,
-    filterExpression: _options.filterExpression,
-    columns: _options.columns,
-    title: _options.title,
-    id: _options.id,
-    isPublic: _options.isPublic,
+    type: privateOptions.type,
+    filters: privateOptions.filters,
+    filterExpression: privateOptions.filterExpression,
+    columns: privateOptions.columns,
+    title: privateOptions.title,
+    id: privateOptions.id,
+    isPublic: privateOptions.isPublic,
   };
 }
 module.exports = {
 
   create: options => create(options),
   createColumn: options => createColumn(options),
-  lookupFields: options => {
+  lookupFields: (options) => {
     const result = {};
     options.columns.map((item, index) => {
-      result[item] = [ { value: index, text: item } ];
+      result[item] = [{ value: index, text: item }];
+      return true;
     });
     return result;
   },
@@ -369,14 +371,14 @@ module.exports = {
   },
   Operator: {
     IS: 'is',
-    ANYOF: 'anyof'
+    ANYOF: 'anyof',
   },
   Sort: {
     DESC: 'DESC',
     ASC: 'ASC',
   },
   Summary: {
-    GROUP: 'GROUP'
-  }
+    GROUP: 'GROUP',
+  },
 
 };

@@ -10,10 +10,10 @@ module.exports = {
   envType: 'Test',
   getCurrentUser: () => ({
     id: random(1000, 2000),
-    email: 'test@mycs.com'
+    email: 'test@test.com',
   }),
   getCurrentScript: () => ({
     getParameter: obj => obj.name,
-    getRemainingUsage: () => global.random(1, 9000)
-  })
+    getRemainingUsage: () => global.random(1, 9000),
+  }),
 };

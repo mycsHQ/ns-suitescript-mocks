@@ -7,9 +7,9 @@
  * @param {object} defaultValues
  * @returns {nlobjRecord}
  */
-module.exports = function (name, defaultValues = {}) {
+function NsRecord(name, defaultValues = {}) {
   const id = defaultValues.id || Math.ceil(Math.random() * 100);
-  const selectedLine = {};
+  const activeLine = {};
   this.values = defaultValues;
   this.values.item = this.values.item || [];
   this.type = 'nlobjRecord';
@@ -20,23 +20,28 @@ module.exports = function (name, defaultValues = {}) {
 
     // 2.0 methods
     // eslint-disable-next-line no-unused-vars
-    id: id,
+    id,
     commit: () => {},
-    commitLine: obj => selectedLine[obj.sublistId],
-    commitLineItem: sublist => selectedLine[sublist],
-    createCurrentLineItemSubrecord: (sublistId, subrecordName) => nlapiCreateRecord(subrecordName, { sublistId }),
+    commitLine: obj => activeLine[obj.sublistId],
+    commitLineItem: sublist => activeLine[sublist],
+    createCurrentLineItemSubrecord: (sublistId, type) => nlapiCreateRecord(type, { sublistId }),
 
     getAll: () => this.values, // Helper
-    getCurrentLineItemValue: (sublist, field) => this.values[sublist][selectedLine[sublist]][field],
-    getCurrentSublistValue: obj => this.values[obj.sublistId][selectedLine[obj.sublistId]][obj.fieldId],
+    getCurrentLineItemValue: (sublist, field) => this.values[sublist][activeLine[sublist]][field],
+    getCurrentSublistValue: (obj) => {
+      const sublist = obj.sublistId;
+      return this.values[sublist][activeLine[sublist]][obj.fieldId];
+    },
     getField: options => ({
-      getSelectOptions: () => [ { value: random(1, 100), text: options.fieldId } ]
+      getSelectOptions: () => [{ value: random(1, 100), text: options.fieldId }],
     }),
     getFieldText: valueName => this.values[valueName],
     getFieldValue: valueName => this.values[valueName],
-    getLineCount: options => (this.values[options.sublistId || options] ? this.values[options.sublistId || options].length : 0),
+    getLineCount: options => (this.values[options.sublistId || options]
+      ? this.values[options.sublistId || options].length
+      : 0),
     getLineItemCount: sublist => this.values[sublist].length,
-    getLineItemText: (sublist, field, index) => this.values[sublist][index - 1][`${ field }_display`],
+    getLineItemText: (sublist, field, index) => this.values[sublist][index - 1][`${field}_display`],
     getLineItemValue: (sublist, field, index) => this.values[sublist][index - 1][field],
     getSublistText: options => this.values[options.sublistId][options.line][options.fieldId],
     getSublistValue: options => this.values[options.sublistId][options.line][options.fieldId],
@@ -50,9 +55,9 @@ module.exports = function (name, defaultValues = {}) {
       const i = this.values[sublist].findIndex(line => line[field] === value);
       return i < 0 ? i : i + 1;
     },
-    findSublistLineWithValue: options => {
+    findSublistLineWithValue: (options) => {
       let index = -1;
-      this.values[options.sublistId].forEach( (line, i) => {
+      this.values[options.sublistId].forEach((line, i) => {
         if (line[options.fieldId] === options.value) {
           index = i;
         }
@@ -64,7 +69,7 @@ module.exports = function (name, defaultValues = {}) {
       this.values[sublist].splice(index - 1, 0, {});
     },
 
-    removeLine: obj => {
+    removeLine: (obj) => {
       this.values[obj.sublistId].splice(obj.line, 1);
     },
     removeLineItem: (sublist, index) => {
@@ -73,29 +78,32 @@ module.exports = function (name, defaultValues = {}) {
 
     save: () => id, // Helper
 
-    selectLine: obj => {
-      selectedLine[obj.sublistId] = obj.line;
+    selectLine: (obj) => {
+      activeLine[obj.sublistId] = obj.line;
       this.values[obj.sublistId][obj.line] = this.values[obj.sublistId][obj.line] || {};
     },
     selectLineItem: (sublist, index) => {
-      selectedLine[sublist] = index - 1;
+      activeLine[sublist] = index - 1;
       this.values[sublist][index - 1] = this.values[sublist][index - 1] || {};
     },
-    selectNewLine: obj => {
-      selectedLine[obj.sublistId] = this.values[obj.sublistId] ? this.values[obj.sublistId].length : 0;
-      this.values[obj.sublistId] = this.values[obj.sublistId] || [];
-      this.values[obj.sublistId][selectedLine[obj.sublistId]] = this.values[obj.sublistId][selectedLine[obj.sublistId]] || {};
+    selectNewLine: (obj) => {
+      let sublistValues = this.values[obj.sublistId];
+      activeLine[obj.sublistId] = sublistValues ? sublistValues.length : 0;
+      sublistValues = this.values[obj.sublistId] || [];
+      sublistValues[activeLine[obj.sublistId]] = sublistValues[activeLine[obj.sublistId]] || {};
     },
     selectNewLineItem: (sublistId) => {
-      selectedLine[sublistId] = this.values[sublistId] ? this.values[sublistId].length : 0;
-      this.values[sublistId] = this.values[sublistId] || [];
-      this.values[sublistId][selectedLine[sublistId]] = this.values[sublistId][selectedLine[sublistId]] || {};
+      this.values[sublistId] = this.values[sublistId] || {};
+      let sublistValues = this.values[sublistId];
+      activeLine[sublistId] = sublistValues ? sublistValues.length : 0;
+      sublistValues = sublistValues || [];
+      sublistValues[activeLine[sublistId]] = sublistValues[activeLine[sublistId]] || {};
     },
     setCurrentLineItemValue: (sublist, field, value) => {
-      this.values[sublist][selectedLine[sublist]][field] = value;
+      this.values[sublist][activeLine[sublist]][field] = value;
     },
-    setCurrentSublistValue: obj => {
-      this.values[obj.sublistId][selectedLine[obj.sublistId]][obj.fieldId] = obj.value;
+    setCurrentSublistValue: (obj) => {
+      this.values[obj.sublistId][activeLine[obj.sublistId]][obj.fieldId] = obj.value;
     },
     setFieldValue: (valueName, value) => {
       this.values[valueName] = value;
@@ -103,14 +111,15 @@ module.exports = function (name, defaultValues = {}) {
     setLineItemValue: (sublist, field, index, value) => {
       this.values[sublist][index - 1][field] = value;
     },
-    setSublistValue: options => {
+    setSublistValue: (options) => {
       this.values[options.sublistId][options.line][options.fieldId] = options.value;
     },
-    setValue: newValue => { // Helper
+    setValue: (newValue) => { // Helper
       this.values[newValue.fieldId] = newValue.value;
     },
-    setText: newValue => { // Helper
+    setText: (newValue) => { // Helper
       this.values[newValue.fieldId] = newValue.text;
-    }
+    },
   };
-};
+}
+module.exports = NsRecord;

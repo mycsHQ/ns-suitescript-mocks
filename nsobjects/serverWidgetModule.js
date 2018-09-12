@@ -1,4 +1,4 @@
-const Form = require('./form.jsx');
+const Form = require('./form');
 /**
  * Return a Netsuite server/widget Module
  *
@@ -7,7 +7,7 @@ const Form = require('./form.jsx');
  * @returns {N/server/widget}
  */
 
-module.exports = function (name) {
+module.exports = (name) => {
   const FieldType = { DATE: 'date' };
   const FieldLayoutType = { NORMAL: 'normal' };
   const FieldBreakType = { STARTCOL: 'startcol' };

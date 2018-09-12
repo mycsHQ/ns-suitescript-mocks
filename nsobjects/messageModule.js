@@ -8,20 +8,22 @@
 
 const _ = require('lodash');
 
-const Type = { CONFIRMATION: 'confirmation', INFORMATION: 'information', WARNING: 'warning', ERROR: 'error' };
-const create = obj => {
-  const newMessage = Message;
-  return _.assignIn(newMessage, obj);
-};
-const Message = {
+const message = {
   title: '',
   message: '',
   type: '',
   duriation: 0,
   hide: () => { },
-  show: options => {
+  show: (options) => {
     this.duration = options.duration;
   },
+};
+const Type = {
+  CONFIRMATION: 'confirmation', INFORMATION: 'information', WARNING: 'warning', ERROR: 'error',
+};
+const create = (obj) => {
+  const newMessage = message;
+  return _.assignIn(newMessage, obj);
 };
 
 module.exports = { Type, create };

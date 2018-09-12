@@ -9,4 +9,3 @@ module.exports = {
   trigger: () => true,
   initiate: () => true,
 };
-
