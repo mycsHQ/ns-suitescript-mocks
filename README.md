@@ -1,14 +1,26 @@
-# ns-suitescript-mocks
+<p align="center">
+    <h1 align="center">ns-suitescript-mocks</h1>
+</p>
 
-[![CircleCI branch](https://badgen.net/circleci/github/mycshq/ns-suitescript-mocks.js)](https://circleci.com/gh/mycsHQ/ns-suitescript-mocks)
-[![Eslint Codestyle](https://badgen.net/badge/code%20style/airbnb-base/green)](https://github.com/airbnb/javascript)
-[![License](https://badgen.net/badge/license/MIT/blue)](https://github.com/mycsHQ/ns-suitescript-mocks/blob/master/LICENSE)  
+<p align="center">
+    <a href="https://circleci.com/gh/mycsHQ/ns-suitescript-mocks"><img src="https://badgen.net/circleci/github/mycshq/ns-suitescript-mocks.js" /></a>
+    <a href="https://github.com/airbnb/javascript"><img src="https://badgen.net/badge/code%20style/airbnb-base/green" /></a>
+    <a href="LICENSE.md"><img src="https://badgen.net/github/license/mycshq/ns-suitescript-mocks" /></a>
+    <a href="http://makeapullrequest.com"><img src="https://badgen.net/badge/PRs/Welcome/green" /></a>
+</p>
+<p align="center">
+    <a href="https://nodei.co/npm/ns-suitescript-mocks/"><img src="https://nodei.co/npm/ns-suitescript-mocks.png" /></a>
+</p>
 
-[![NPM](https://nodei.co/npm/ns-suitescript-mocks.png)](https://nodei.co/npm/ns-suitescript-mocks/)
+<p align="center">This module contains a collection of mocks that can be used to improve unit-tests for SuiteScript 2.0.</p>
 
-> This module contains a collection of mocks that can be used to improve unit-tests for SuiteScript 2.0.
+## Disclaimer ⚠️
 
-## Getting started
+This module is in its early stage and is very opinionated to fit our own needs. We plan to make it more flexible to work with more codebases.  
+Suggestions are more than welcome 🎊  
+If you are looking for a way to test your suitescript codebase and this module doesn't fit your use-case, [let us know anyway](https://github.com/mycsHQ/ns-suitescript-mocks/issues/new), we'd love to have a setup that works for everyone.
+
+## Getting started 🚀
 
 1. Install this module as a dependency:  
 
@@ -28,61 +40,30 @@ global.mockups = netsuiteMocks.nsMockups;
 
 ```
 
-### Installing
+3. Write your code and use these mocks
 
-A step by step series of examples that tell you how to get a development env running
+## Contribute 💻
 
-Say what the step will be
+Any contribution is more than welcome 🎉
 
-```
-Give the example
-```
+Feel free to modify and [send us a PR](https://github.com/mycsHQ/ns-suitescript-mocks/compare?expand=1), we'll review and hopefully merge it.
+Before pushing your code, make sure that the tests are passing (at the moment, we only have `eslint`).
 
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Authors
+## Authors 😎
 
 * **Damian Krolikowski** - *Initial work* - [damiankrolikowskimycs](https://github.com/damiankrolikowskimycs)
+* **Nicolas Ritouet** - *Cleanup, documentation* - [nicolasritouet](https://github.com/nicolasritouet)
 
 See also the list of [contributors](https://github.com/mycshq/ns-suitescript-mocks/contributors) who participated in this project.
 
-## License
+## License 🔓
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## TODO
+## Roadmap 🛣
 
 - add tests for the repo
 - switch all eslint warning to errors and fix code
 - cleanup mycs occurences
 - remove global specific mocks (like `getGELlabel`) and give possibility to import them from config (with example)
+- automate release process
