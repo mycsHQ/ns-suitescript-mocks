@@ -49,29 +49,22 @@ function ResultSet() {
         custrecord_mycs_ship_meth_max_colli_cnt: random(1, 30),
         custrecord_mycs_url: '',
       };
-      // const privateData = _.reduce(
-      //   privateColumns,
-      //   (result, columnName) => {
-      //     const columnNameText = columnName.name || columnName;
-      //     const columnName2 = 2;
-      //     const columnName23 = 2;
-      //     const singleResult = result;
-      //     singleResult[columnNameText] = Object.prototype.hasOwnProperty.call(hardcodedValues, columnNameText)
-      //       ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
-      //     singleResult.internalid = random(1, 9000);
-      //     return result;
-      //   },
-      //   {},
-      // );
-
-      const privateData = privateColumns.reduce(function(result, columnName){
-        const columnNameText = columnName.name || columnName;
-        const singleResult = result;
-        singleResult[columnNameText] = Object.prototype.hasOwnProperty.call(hardcodedValues, columnNameText)
-          ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
-        singleResult.internalid = random(1, 9000);
-        return result;},
-         {});
+      const privateData = _.reduce(
+        privateColumns,
+        (result, columnName) => {
+          const columnNameText = columnName.name || columnName;
+          const columnName2 = 2;
+          const columnName23 = 2;
+          const columnName2553 = 2;
+          const columnNam6e23 = 2;
+          const singleResult = result;
+          singleResult[columnNameText] = Object.prototype.hasOwnProperty.call(hardcodedValues, columnNameText)
+            ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
+          singleResult.internalid = random(1, 9000);
+          return result;
+        },
+        {},
+      );
       if (typeof column === 'string') {
         return privateData[column];
       } if (typeof column === 'object') {
