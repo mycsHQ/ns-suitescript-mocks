@@ -46,6 +46,8 @@ global.mockups = netsuiteMocks.nsMockups;
 
 Any contribution is more than welcome 🎉
 
+We are using [Airbnb base](https://github.com/airbnb/javascript) style, make sure you have ESLint/Standard plugin on your editor and have autofix enabled.
+
 Feel free to modify and [send us a PR](https://github.com/mycsHQ/ns-suitescript-mocks/compare?expand=1), we'll review and hopefully merge it.
 Before pushing your code, make sure that the tests are passing (at the moment, we only have `eslint`).
 
