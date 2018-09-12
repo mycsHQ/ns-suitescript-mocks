@@ -18,7 +18,9 @@ module.exports = (config) => {
   window.confirm = msg => random(0, 1) + (msg || '');
   window.main_form = { submit: () => true };
   window.open = (url) => { window.location = { url }; return window; };
-  global.setWindowChanged = (window, isChanged) => { const currentWindow = window; currentWindow.isChanged = isChanged; };
+  global.setWindowChanged = (window, isChanged) => {
+    const currentWindow = window; currentWindow.isChanged = isChanged;
+  };
 
 
   const defineResult = def(config);

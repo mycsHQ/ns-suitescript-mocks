@@ -1,5 +1,6 @@
 /**
- * Return a new instance of nlobjSearchColumn used for column objects used to define search return columns.
+ * Return a new instance of nlobjSearchColumn
+ * used for column objects used to define search return columns.
  *
  * @classDescription search column.
  * @return {nlobjSearchColumn}
