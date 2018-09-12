@@ -3430,7 +3430,7 @@ exports.nlobjFile.prototype.getValue = function () { };
  *
  * @since 2007.0
  */
-exports.nlobjSearchFilter = function (name, join, operator, value, value2) { return require('./search-filter')(name, join, operator, value, value2); };
+exports.nlobjSearchFilter =  require('./search-filter');
 
 /**
  * Return the name of this search filter.

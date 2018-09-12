@@ -9,18 +9,12 @@
  * @param {string} summary
  *
  */
-// eslint-disable-next-line no-unused-vars
-module.exports = function (name, join, summary) {
-  /**
-   * @param {*} option
-   * @returns {*}
-   */
-  function setSort(option) {
-    return {
-      name, join, summary, option,
-    };
-  }
-  return {
-    name, join, summary, setSort,
-  };
-};
+
+module.exports = (name, join, summary) => ({
+  name,
+  join,
+  summary,
+  setSort: option => ({
+    name, join, summary, option,
+  }),
+});

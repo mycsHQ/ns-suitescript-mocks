@@ -1,12 +1,12 @@
 /**
- * Return a Netsuite Record
+ * Return a Netsuite Request Object
  *
- * @classDescription Record object
+ * @classDescription Request object
  * @constructor
  * @param {object} defaultValues
  * @returns {nlobjRecord}
  */
-module.exports = function (defaultValues = {}) {
+function NsRequest(defaultValues = {}) {
   this.values = defaultValues;
   return {
     getLineCount: options => (this.values[options.group] ? this.values[options.group].length : 0),
@@ -15,4 +15,5 @@ module.exports = function (defaultValues = {}) {
       return f;
     },
   };
-};
+}
+module.exports = NsRequest;

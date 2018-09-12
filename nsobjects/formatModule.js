@@ -8,7 +8,7 @@
 
 const moment = require('moment');
 
-module.exports = function () {
+function FormatModule() {
   /**
    *
    * @param {*} options
@@ -29,4 +29,5 @@ module.exports = function () {
       AMERICA_LOS_ANGELES: 'AMERICA_LOS_ANGELES',
     },
   };
-};
+}
+module.exports = FormatModule;

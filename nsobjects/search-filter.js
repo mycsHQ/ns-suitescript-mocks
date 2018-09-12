@@ -12,8 +12,4 @@
  *
  */
 // eslint-disable-next-line no-unused-vars
-module.exports = function (name, join, operator, value, value2) {
-  return {
-
-  };
-};
+module.exports = (name, join, operator, value, value2) => ({});

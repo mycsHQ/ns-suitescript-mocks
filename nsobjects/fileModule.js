@@ -5,17 +5,46 @@
  * @constructor
  * @returns {N/Module}
  */
-const _ = require('lodash');
 
-const create = (obj) => {
-  const newFile = File;
-  return _.assignIn(newFile, obj);
+const fileModule = {
+  name: '',
+  fileType: '',
+  contents: '',
+  description: '',
+  folder: 0,
+  encoding: '',
+  isIncative: false,
+  isOnline: false,
+  getNsObjectType: () => 'nlobjFile',
+  getDescription: () => fileModule.description,
+  getFolder: () => fileModule.folder,
+  getId: () => fileModule.id,
+  getName: () => fileModule.name,
+  getSize: () => fileModule.contents.length,
+  getType: () => fileModule.fileType,
+  getURL: () => `https://system.eu2.netsuite.com/app/common/media/mediaitem.nl?${fileModule.id}`,
+  getValue: () => fileModule.contents,
+  isInactive: () => fileModule.isInactive,
+  setDescription: (newDescription) => { fileModule.description = newDescription; },
+  setEncoding: (encodingType) => { fileModule.encoding = encodingType; },
+  getEncoding: () => fileModule.encoding,
+  getContents: () => fileModule.contents,
+  setFolder: (folderId) => {
+    fileModule.folder = folderId;
+  },
+  setIsInactive: (inactive) => {
+    fileModule.isInactive = inactive;
+  },
+  setIsOnline: (onlineValue) => {
+    fileModule.isOnline = onlineValue;
+  },
+  setName: (newName) => {
+    fileModule.name = newName;
+  },
+  save: () => global.random(1, 1000),
 };
+const create = obj => Object.assign(fileModule, obj);
 const fileDelete = obj => obj.id;
-const load = (obj) => {
-  const newFile = File;
-  return _.assignIn(newFile, obj);
-};
 const Type = { CSV: 'csv', PDF: 'pdf' };
 const Encoding = {
   UTF8: 'utf8',
@@ -28,44 +57,7 @@ const Encoding = {
   BIG5: 'big',
 };
 
-const File = {
-  name: '',
-  fileType: '',
-  contents: '',
-  description: '',
-  folder: 0,
-  encoding: '',
-  isIncative: false,
-  isOnline: false,
-  getNsObjectType: () => 'nlobjFile',
-  getDescription: () => File.description,
-  getFolder: () => File.folder,
-  getId: () => File.id,
-  getName: () => File.name,
-  getSize: () => File.contents.length,
-  getType: () => File.fileType,
-  getURL: () => `https://system.eu2.netsuite.com/app/common/media/mediaitem.nl?${File.id}`,
-  getValue: () => File.contents,
-  isInactive: () => File.isInactive,
-  setDescription: (newDescription) => { File.description = newDescription; },
-  setEncoding: (encodingType) => { File.encoding = encodingType; },
-  getEncoding: () => File.encoding,
-  getContents: () => File.contents,
-  setFolder: (folderId) => {
-    File.folder = folderId;
-  },
-  setIsInactive: (inactive) => {
-    File.isInactive = inactive;
-  },
-  setIsOnline: (onlineValue) => {
-    File.isOnline = onlineValue;
-  },
-  setName: (newName) => {
-    File.name = newName;
-  },
-  save: () => global.random(1, 1000),
-};
 
 module.exports = {
-  Type, Encoding, create, load, delete: fileDelete,
+  Type, Encoding, create, load: create, delete: fileDelete,
 };
