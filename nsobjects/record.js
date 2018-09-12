@@ -93,6 +93,7 @@ function NsRecord(name, defaultValues = {}) {
       sublistValues[activeLine[obj.sublistId]] = sublistValues[activeLine[obj.sublistId]] || {};
     },
     selectNewLineItem: (sublistId) => {
+      this.values[sublistId] = this.values[sublistId] || {};
       let sublistValues = this.values[sublistId];
       activeLine[sublistId] = sublistValues ? sublistValues.length : 0;
       sublistValues = sublistValues || [];
