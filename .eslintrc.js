@@ -9,13 +9,13 @@ module.exports = {
     "suitescript/suitescript1": true
   },
   "rules": {
-    "func-names": 1,
-    "no-underscore-dangle": 1,
-    "no-param-reassign": 1,
-    "global-require": 1,
-    "no-unused-vars": 1,
+    "func-names": 2,
+    "no-underscore-dangle": 2,
+    "no-param-reassign": 2,
+    "global-require": 2,
+    "no-unused-vars": 2,
     "max-len": ["error", { "code": 150 }],
-    "no-use-before-define": 1
+    "no-use-before-define": 2
   },
   "globals": {
     "random": true,

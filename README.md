@@ -53,7 +53,8 @@ Before pushing your code, make sure that the tests are passing (at the moment, w
 
 ## Authors 😎
 
-* **Damian Krolikowski** - *Initial work* - [damiankrolikowskimycs](https://github.com/damiankrolikowskimycs)
+* **Damian Królikowski** - *Mocks Creator* - [damiankrolikowskimycs](https://github.com/damiankrolikowskimycs)
+* **Łukasz Kubasiewicz** - *Mocks Creator* - [lukaszMycs](https://github.com/lukaszmycs)
 * **Nicolas Ritouet** - *Automation setup, cleanup, documentation* - [nicolasritouet](https://github.com/nicolasritouet)
 
 See also the list of [contributors](https://github.com/mycshq/ns-suitescript-mocks/contributors) who participated in this project.
