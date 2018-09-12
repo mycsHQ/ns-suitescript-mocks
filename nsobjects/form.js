@@ -11,7 +11,7 @@ module.exports = function (name) {
     updateLayoutType: () => true,
     updateBreakType: () => true,
     addSelectOption: () => true,
-    updateDisplayType: () => true
+    updateDisplayType: () => true,
   };
   this.name = name;
   this.values = {};
@@ -24,18 +24,18 @@ module.exports = function (name) {
     getAll: () => this.values,
     getName: () => this.name,
     addButton: obj => this.buttons.push(obj),
-    addSublist: obj => {
+    addSublist: (obj) => {
       this.sublist.push(obj);
       return {
-        addField: options => {
+        addField: (options) => {
           this.fields.push(options);
           return field;
         },
-        setSublistValue: () => ''
+        setSublistValue: () => '',
       };
     },
     addSubmitButton: obj => this.submitButtons.push(obj),
-    addField: obj => {
+    addField: (obj) => {
       this.fields.push(obj);
       return field;
     },

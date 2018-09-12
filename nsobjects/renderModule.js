@@ -1,4 +1,4 @@
-const file = require('./fileModule.jsx');
+const file = require('./fileModule');
 /**
  * Return a Netsuite Render Module
  *
@@ -40,9 +40,9 @@ module.exports = {
   xmlToPdf: () => file.create({ name: 'test.pdf', fileType: 'PDF', contents: Render.template }),
   transaction: () => file.create({ name: 'test.pdf', fileType: 'PDF', contents: Render.template }),
   DataSource: {
-    JSON: 'JSON'
+    JSON: 'JSON',
   },
   PrintMode: {
-    PDF: 'PDF'
-  }
+    PDF: 'PDF',
+  },
 };

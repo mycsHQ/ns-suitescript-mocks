@@ -7,6 +7,5 @@
  */
 
 module.exports = {
-  send: (obj) => nlapiLogExecution('Email', 'Sent', obj.toString())
+  send: obj => nlapiLogExecution('Email', 'Sent', obj.toString()),
 };
-

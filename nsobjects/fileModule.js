@@ -7,12 +7,12 @@
  */
 const _ = require('lodash');
 
-const create = obj => {
+const create = (obj) => {
   const newFile = File;
   return _.assignIn(newFile, obj);
 };
 const fileDelete = obj => obj.id;
-const load = obj => {
+const load = (obj) => {
   const newFile = File;
   return _.assignIn(newFile, obj);
 };
@@ -25,7 +25,8 @@ const Encoding = {
   SHIFT_JIS: 'japan',
   MAC_ROMAN: 'mac',
   GB2312: 'GB2312',
-  BIG5: 'big' };
+  BIG5: 'big',
+};
 
 const File = {
   name: '',
@@ -43,26 +44,28 @@ const File = {
   getName: () => File.name,
   getSize: () => File.contents.length,
   getType: () => File.fileType,
-  getURL: () => `https://system.eu2.netsuite.com/app/common/media/mediaitem.nl?${ File.id }`,
+  getURL: () => `https://system.eu2.netsuite.com/app/common/media/mediaitem.nl?${File.id}`,
   getValue: () => File.contents,
-  isInactive: () => File.isIncative,
-  setDescription: newDescription => (File.description = newDescription),
-  setEncoding: encodingType => (File.encoding = encodingType),
+  isInactive: () => File.isInactive,
+  setDescription: (newDescription) => { File.description = newDescription; },
+  setEncoding: (encodingType) => { File.encoding = encodingType; },
   getEncoding: () => File.encoding,
   getContents: () => File.contents,
-  setFolder: folderId => {
+  setFolder: (folderId) => {
     File.folder = folderId;
   },
-  setIsInactive: inactive => {
-    File.isIncative = inactive;
+  setIsInactive: (inactive) => {
+    File.isInactive = inactive;
   },
-  setIsOnline: onlineValue => {
+  setIsOnline: (onlineValue) => {
     File.isOnline = onlineValue;
   },
-  setName: newName => {
+  setName: (newName) => {
     File.name = newName;
   },
-  save: () => global.random(1, 1000)
+  save: () => global.random(1, 1000),
 };
 
-module.exports = { Type, Encoding, create, load, delete: fileDelete };
+module.exports = {
+  Type, Encoding, create, load, delete: fileDelete,
+};

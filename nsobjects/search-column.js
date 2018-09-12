@@ -16,9 +16,11 @@ module.exports = function (name, join, summary) {
    * @returns {*}
    */
   function setSort(option) {
-    return { name, join, summary, option };
+    return {
+      name, join, summary, option,
+    };
   }
   return {
-    name, join, summary, setSort
+    name, join, summary, setSort,
   };
 };

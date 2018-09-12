@@ -1,34 +1,30 @@
-# netsuite-mockups
-Mocks for Netsuite ERP.
+# ns-suitescript-mocks
 
-[NPM-Url](https://www.npmjs.com/package/netsuite-suitescript-mocks)
+[![CircleCI branch](https://badgen.net/circleci/github/mycshq/ns-suitescript-mocks.js)](https://circleci.com/gh/mycsHQ/ns-suitescript-mocks)
+[![Eslint Codestyle](https://badgen.net/badge/code%20style/airbnb-base/green)](https://github.com/airbnb/javascript)
+[![License](https://badgen.net/badge/license/MIT/blue)](https://github.com/mycsHQ/ns-suitescript-mocks/blob/master/LICENSE)  
 
-## Installation
+[![NPM](https://nodei.co/npm/ns-suitescript-mocks.png)](https://nodei.co/npm/ns-suitescript-mocks/)
 
-Using npm:
+> This module contains a collection of mocks that can be used to improve unit-tests for SuiteScript 2.0.
+
+## Getting started
+
+1. Install this module as a dependency:  
+
 ```shell
-$ npm i -g npm
-$ npm i netsuite-suitescript-mocks
+npm i ns-suitescript-mocks --save-dev
 ```
 
-# Project Title
+2. Import the module in your test framework init file (`jest.init` for example)
 
-Netsuite - suitescripts mocks for testing.
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-In Node.js:
-```js
-const netsuiteMockups = require('netsuite-suitescript-mocks')(
+```javascript
+const netsuiteMocks = require('ns-suitescript-mocks')(
   {
-    utils: ('external-libriaries-path'),
+    utils: ('external-librairies-path'),
   });
-global.define = netsuiteMockups.define;
-global.mockups = netsuiteMockups.nsMockups;
+global.define = netsuiteMocks.define;
+global.mockups = netsuiteMocks.nsMockups;
 
 ```
 
@@ -76,17 +72,17 @@ Add additional notes about how to deploy this on a live system
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Damian Krolikowski** - *Initial work* - [damiankrolikowskimycs](https://github.com/damiankrolikowskimycs)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/mycshq/ns-suitescript-mocks/contributors) who participated in this project.
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
+## TODO
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
+- add tests for the repo
+- switch all eslint warning to errors and fix code
+- cleanup mycs occurences
+- remove global specific mocks (like `getGELlabel`) and give possibility to import them from config (with example)

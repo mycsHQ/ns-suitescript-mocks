@@ -5,12 +5,13 @@
  * @constructor
  * @returns {N/Module}
  */
+let _;
 if (typeof module !== 'undefined' && module.exports) {
-  var _ = require('lodash');
+  _ = require('lodash');
 }
 
 module.exports = function () {
-  const create = obj => {
+  const create = (obj) => {
     const newError = Error;
     return _.assignIn(newError, obj);
   };

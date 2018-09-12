@@ -15,12 +15,10 @@ const _ = require('lodash');
 function ResultSet() {
   const _columns = this.columns;
   const times = this.type === 'customrecord_mycs_script_settings' ? 1 : Math.floor(Math.random() * 99) + 1;
-  const mockupData = _.map(_.times(times), (item) => ({
+  const mockupData = _.map(_.times(times), item => ({
     id: item + 1,
     type: this.type,
-    columns: _columns.map(function (columnName) {
-      return { name: columnName };
-    }),
+    columns: _columns.map(columnName => ({ name: columnName })),
     getValue(column) {
       const hardcodedValues = {
         custrecord_mycs_ship_meth_is_assembly: false,
@@ -32,22 +30,22 @@ function ResultSet() {
         custrecord_mycs_ship_meth_max_order_val: random(1, 30),
         custrecord_mycs_ship_meth_max_order_wgh: random(1, 30),
         custrecord_mycs_ship_meth_max_colli_cnt: random(1, 30),
-        custrecord_mycs_url: ''
+        custrecord_mycs_url: '',
       };
       const _data = _.reduce(
         _columns,
         (result, columnName) => {
-          let columnNameText = columnName.name || columnName;
-          result[columnNameText] = hardcodedValues.hasOwnProperty(columnNameText) ?
-            hardcodedValues[columnNameText] : `${columnNameText}_${ item + 1 }`;
+          const columnNameText = columnName.name || columnName;
+          result[columnNameText] = Object.prototype.hasOwnProperty.call(hardcodedValues, columnNameText)
+            ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
           result.internalid = random(1, 9000);
           return result;
         },
-        {}
+        {},
       );
       if (typeof column === 'string') {
         return _data[column];
-      } else if (typeof column === 'object') {
+      } if (typeof column === 'object') {
         const _column = createColumn(column);
         return _data[_column];
       }
@@ -57,15 +55,15 @@ function ResultSet() {
       const _data = _.reduce(
         _columns,
         (result, columnName) => {
-          result[columnName] = `columnName_${ item + 1 }`;
+          result[columnName] = `columnName_${item + 1}`;
           result.internalid = random(1, 9000);
           return result;
         },
-        {}
+        {},
       );
       if (typeof column === 'string') {
         return _data[column];
-      } else if (typeof column === 'object') {
+      } if (typeof column === 'object') {
         const _column = createColumn(column);
         return _data[_column];
       }
@@ -73,7 +71,7 @@ function ResultSet() {
     },
   }));
   const each = callback => _.each(mockupData, (item, index) => callback.call(null, item, index));
-  const getRange = options => {
+  const getRange = (options) => {
     const _options = {};
     _options.start = options.start || 0;
     _options.end = options.end || 0;
@@ -92,7 +90,7 @@ function ResultSet() {
  * @returns {string}
  */
 function createColumn(options) {
-  return `${ options.name }${ options.join ? '__' + options.join : '' }`;
+  return `${options.name}${options.join ? `__${options.join}` : ''}`;
 }
 
 /**
@@ -101,7 +99,7 @@ function createColumn(options) {
  * @returns {string}
  */
 function createFilter(options) { // eslint-disable-line no-unused-vars
-  return `${ options.name }${ options.join ? '__' + options.join : '' }`;
+  return `${options.name}${options.join ? `__${options.join}` : ''}`;
 }
 /**
  * NetSuite - constructor of search module.
@@ -111,7 +109,7 @@ function createFilter(options) { // eslint-disable-line no-unused-vars
 function create(options_) {
   const _id = Math.ceil(Math.random() * 100);
   const _options = {};
-  var options = options_ || {};
+  const options = options_ || {};
   _options.type = options.type;
   if (!_options.type) {
     throw new { message: 'SSS_MISSING_REQD_ARGUMENT: type' }();
@@ -142,10 +140,11 @@ module.exports = {
 
   create: options => create(options),
   createColumn: options => createColumn(options),
-  lookupFields: options => {
+  lookupFields: (options) => {
     const result = {};
     options.columns.map((item, index) => {
-      result[item] = [ { value: index, text: item } ];
+      result[item] = [{ value: index, text: item }];
+      return true;
     });
     return result;
   },
@@ -369,14 +368,14 @@ module.exports = {
   },
   Operator: {
     IS: 'is',
-    ANYOF: 'anyof'
+    ANYOF: 'anyof',
   },
   Sort: {
     DESC: 'DESC',
     ASC: 'ASC',
   },
   Summary: {
-    GROUP: 'GROUP'
-  }
+    GROUP: 'GROUP',
+  },
 
 };

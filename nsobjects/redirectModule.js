@@ -6,7 +6,5 @@
 
 module.exports = {
   toRecord: () => {},
-  toTaskLink: () => {}
+  toTaskLink: () => {},
 };
-
-

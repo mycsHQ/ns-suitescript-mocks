@@ -14,7 +14,7 @@ module.exports = {
   detach: options => nlapiCreateRecord(options.type, { id: options.id }),
   get: () => nlapiCreateRecord('test', { id: random(1, 10000) }),
   load: options => nlapiCreateRecord(options.type, { id: options.id }),
-  submitFields: options => {
+  submitFields: (options) => {
     nlapiCreateRecord(options.type, { id: options.id }); return options.id;
   },
   transform: options => nlapiCreateRecord(options.type, { id: options.id }),
