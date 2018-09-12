@@ -68,7 +68,13 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - add tests for the repo
 - add examples for jest
 - add example for other test frameworks
+<<<<<<< HEAD
 - switch all eslint warning to errors and fix code ✅
 - cleanup mycs occurences
 - remove global specific mocks (like `getGELlabel`) and give possibility to import them from config (with example) ✅
+=======
+- switch all eslint warning to errors and fix code :white_check_mark: 
+- cleanup mycs occurences
+- remove global specific mocks (like `getGELlabel`) and give possibility to import them from config (with example) :white_check_mark:
+>>>>>>> a40cb2fb2d0c71f21644f8d9bb83b37711e0ec7e
 - automate release process
