@@ -54,8 +54,8 @@ function ResultSet() {
         (result, columnName) => {
           const columnNameText = columnName.name || columnName;
           const singleResult = result;
-          const caller = Object.prototype.hasOwnProperty.call;
-          singleResult[columnNameText] = caller(hardcodedValues, columnNameText)
+          const calFn = Object.prototype.hasOwnProperty;
+          singleResult[columnNameText] = calFn.call(hardcodedValues, columnNameText)
             ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
           singleResult.internalid = random(1, 9000);
           return result;
