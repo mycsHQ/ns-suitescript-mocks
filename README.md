@@ -3,9 +3,9 @@
 </p>
 
 <p align="center">
-    <a href="https://circleci.com/gh/mycsHQ/ns-suitescript-mocks"><img src="https://badgen.net/circleci/github/mycshq/ns-suitescript-mocks.js" /></a>
+    <a href="https://circleci.com/gh/mycsHQ/ns-suitescript-mocks"><img src="https://badgen.net/circleci/github/mycsHQ/ns-suitescript-mocks" /></a>
     <a href="https://github.com/airbnb/javascript"><img src="https://badgen.net/badge/code%20style/airbnb-base/green" /></a>
-    <a href="LICENSE.md"><img src="https://badgen.net/github/license/mycshq/ns-suitescript-mocks" /></a>
+    <a href="LICENSE"><img src="https://badgen.net/github/license/mycshq/ns-suitescript-mocks" /></a>
     <a href="http://makeapullrequest.com"><img src="https://badgen.net/badge/PRs/Welcome/green" /></a>
 </p>
 <p align="center">
@@ -42,6 +42,8 @@ global.mockups = netsuiteMocks.nsMockups;
 
 3. Write your code and use these mocks
 
+`Examples will come soon`
+
 ## Contribute 💻
 
 Any contribution is more than welcome 🎉
@@ -61,14 +63,14 @@ See also the list of [contributors](https://github.com/mycshq/ns-suitescript-moc
 
 ## License 🔓
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## Roadmap 🛣
 
-- add tests for the repo
 - add examples for jest
-- add example for other test frameworks
-- switch all eslint warning to errors and fix code :white_check_mark: 
 - cleanup mycs occurences
-- remove global specific mocks (like `getGELlabel`) and give possibility to import them from config (with example) :white_check_mark:
+- add tests for the repo
 - automate release process
+- add example for other test frameworks
+
+If you want to contribute and don't know where to start, we label our issues with [`help wanted`](https://github.com/mycsHQ/ns-suitescript-mocks/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) or [`good first issue`](https://github.com/mycsHQ/ns-suitescript-mocks/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22), feel free to browse the issues and ask for more information.
