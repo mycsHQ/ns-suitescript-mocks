@@ -1,4 +1,4 @@
-const file = require('./fileModule');
+const file = require('./file');
 /**
  * Return a Netsuite Render Module
  *

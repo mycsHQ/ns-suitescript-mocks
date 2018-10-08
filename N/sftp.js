@@ -1,5 +1,5 @@
-const file = require('../SuiteScriptMockup2.0/fileModule');
-const log = require('../SuiteScriptMockup2.0/logModule');
+const file = require('../N/file');
+const log = require('../N/log');
 
 module.exports = {
   createConnection: (option) => {

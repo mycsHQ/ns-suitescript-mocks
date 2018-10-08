@@ -6,26 +6,6 @@ const lodash = require('lodash');
 const moment = require('moment');
 const fs = require('fs');
 
-// NetSuite Modules
-
-// const error = require('../SuiteScriptMockup2.0/errorModule');
-// const file = require('../SuiteScriptMockup2.0/fileModule');
-// const format = require('../SuiteScriptMockup2.0/formatModule');
-// const http = require('../SuiteScriptMockup2.0/httpModule');
-// const message = require('../SuiteScriptMockup2.0/messageModule');
-// const url = require('../SuiteScriptMockup2.0/urlModule');
-// const record = require('../SuiteScriptMockup2.0/recordModule');
-// const redirect = require('../SuiteScriptMockup2.0/redirectModule');
-// const render = require('../SuiteScriptMockup2.0/renderModule');
-// const request = require('../Utils/request');
-// const runtime = require('../SuiteScriptMockup2.0/runtimeModule');
-// const search = require('../SuiteScriptMockup2.0/searchModule');
-// const serverWidget = require('../SuiteScriptMockup2.0/serverWidgetModule');
-// const sftp = require('../SuiteScriptMockup2.0/sftpModule');
-// const task = require('../SuiteScriptMockup2.0/taskModule');
-// const workflow = require('../SuiteScriptMockup2.0/workflowModule');
-// const xml = require('../SuiteScriptMockup2.0/xmlModule');
-
 // Utils
 const rawRecord = require('../Utils/record');
 

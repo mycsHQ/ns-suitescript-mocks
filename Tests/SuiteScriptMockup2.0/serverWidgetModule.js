@@ -1,4 +1,4 @@
-const Form = require('../Utils/form');
+const Form = require('../../Utils/form');
 /**
  * Return a Netsuite server/widget Module
  *
