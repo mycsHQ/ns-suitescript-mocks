@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 const record = require('../Utils/record');
-const file = require('../SuiteScriptMockup2.0/fileModule');
+const file = require('../N/file');
 
 const showLogs = false;
 /**
