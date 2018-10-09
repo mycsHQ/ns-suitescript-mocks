@@ -8,7 +8,8 @@ const fs = require('fs');
 
 // Utils
 const rawRecord = require('../Utils/record');
-
+const logModule = require('../N/log');
+const Request = require('../Utils/request');
 const external = {};
 let extendedModules = {};
 
@@ -18,6 +19,8 @@ global.mapModules = {
   moment,
   // Utils
   rawRecord,
+  logModule,
+  Request
 };
 
 /**
@@ -25,7 +28,7 @@ global.mapModules = {
  * @param {*} moduleName
  */
 const getNetSuiteModule = (moduleName) => {
-  const path = `../${moduleName}`;
+  const path = join(__dirname, `../${moduleName}.js`);
   // eslint-disable-next-line global-require, import/no-dynamic-require
   return fs.existsSync(path) ? require(path) : '';
 };
