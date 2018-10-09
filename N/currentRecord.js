@@ -1,7 +1,7 @@
 /**
- * Return a Netsuite Record Module
+ * Return a Netsuite Current Record Module
  *
- * @classDescription Record object
+ * @classDescription Current Record object
  * @constructor
  * @returns {N/Module}
  */

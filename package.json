@@ -28,6 +28,7 @@
     "lint": "eslint . --fix"
   },
   "dependencies": {
+    "codecov": "^3.1.0",
     "lodash": "^4.17.10",
     "moment": "^2.22.2"
   },
@@ -41,6 +42,8 @@
   },
   "jest": {
     "verbose": true,
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "testURL": "http://localhost"
   }
 }

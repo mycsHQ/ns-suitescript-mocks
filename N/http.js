@@ -1,9 +1,6 @@
 /**
  * Return a Netsuite HTTP Module
  *
- * @classDescription HTTP object
- * @constructor
- * @returns {N/http}
  */
 
 module.exports = {
