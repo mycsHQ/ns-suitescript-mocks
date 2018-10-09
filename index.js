@@ -1,9 +1,9 @@
 
 
 const lodash = require('lodash');
-const def = require('./nsobjects/define');
-const nsMocksV1 = require('./nsobjects/nsmockup-1.0');
-const logModule = require('./nsobjects/logModule');
+const def = require('./Utils/define');
+const nsMocksV1 = require('./SuiteScriptMockup1.0/nsmockup-1.0');
+const logModule = require('./N/log');
 
 
 module.exports = (config) => {

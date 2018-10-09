@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const moment = require('moment');
-const record = require('./record');
-const file = require('./fileModule');
+const record = require('../Utils/record');
+const file = require('../N/file');
 
 const showLogs = false;
 /**
@@ -3430,7 +3430,7 @@ exports.nlobjFile.prototype.getValue = function () { };
  *
  * @since 2007.0
  */
-exports.nlobjSearchFilter =  require('./search-filter');
+exports.nlobjSearchFilter =  require('../Utils/search-filter');
 
 /**
  * Return the name of this search filter.
@@ -3525,7 +3525,7 @@ exports.nlobjSearchFilter.prototype.setSummaryType = function (type) { };
  *
  * @since 2007.0
  */
-exports.nlobjSearchColumn = function (name, join, summary) { return require('./search-column')(name, join, summary); };
+exports.nlobjSearchColumn = function (name, join, summary) { return require('../Utils/search-column')(name, join, summary); };
 
 /**
  * return the name of this search column.
