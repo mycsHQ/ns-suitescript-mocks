@@ -7,6 +7,8 @@
     <a href="https://github.com/airbnb/javascript"><img src="https://badgen.net/badge/code%20style/airbnb-base/green" /></a>
     <a href="LICENSE"><img src="https://badgen.net/github/license/mycshq/ns-suitescript-mocks" /></a>
     <a href="http://makeapullrequest.com"><img src="https://badgen.net/badge/PRs/Welcome/green" /></a>
+    <a href='https://coveralls.io/github/mycsHQ/ns-suitescript-mocks?branch=master'><img src='https://coveralls.io/repos/github/mycsHQ/ns-suitescript-mocks/badge.svg?branch=master' alt='Coverage Status' /></a>
+
 </p>
 <p align="center">
     <a href="https://nodei.co/npm/ns-suitescript-mocks/"><img src="https://nodei.co/npm/ns-suitescript-mocks.png" /></a>
