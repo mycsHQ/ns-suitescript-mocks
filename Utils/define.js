@@ -10,6 +10,7 @@ const fs = require('fs');
 const rawRecord = require('../Utils/record');
 const logModule = require('../N/log');
 const Request = require('../Utils/request');
+
 const external = {};
 let extendedModules = {};
 
@@ -20,7 +21,7 @@ global.mapModules = {
   // Utils
   rawRecord,
   logModule,
-  Request
+  Request,
 };
 
 /**

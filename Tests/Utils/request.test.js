@@ -1,5 +1,3 @@
-
-
 /**
  * Tests for a request function
  *

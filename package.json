@@ -41,6 +41,8 @@
   },
   "jest": {
     "verbose": true,
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
     "testURL": "http://localhost"
   }
 }
