@@ -21,6 +21,17 @@ describe('Testing nsmockup-1.0 library', () => {
       expect(fileUnderTest.nlapiGetContext()).toMatchObject(expected);
     });
   });
+  describe('nlapiSearchRecord', () => {
+    it('Should return an array', () => {
+      expect(fileUnderTest.nlapiSearchRecord()).toEqual(expect.any(Array));
+    });
+  });
+  describe('nlapiLookupField', () => {
+    it('Should return a string', () => {
+      expect(fileUnderTest.nlapiLookupField()).toEqual(expect.any(String));
+    });
+  });
+
   describe('nlobjError', () => {
     it('Should create nlobjError object', () => {
       // eslint-disable-next-line new-cap

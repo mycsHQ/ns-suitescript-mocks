@@ -4,7 +4,7 @@ const lodash = require('lodash');
 const def = require('./Utils/define');
 const nsMocksV1 = require('./SuiteScriptMockup1.0/nsmockup-1.0');
 const logModule = require('./N/log');
-
+const { random } = require('./Utils/utils');
 
 module.exports = (config) => {
   Object.keys(nsMocksV1).forEach((key) => {
@@ -12,7 +12,7 @@ module.exports = (config) => {
   });
   global._ = lodash;
   global.log = logModule;
-  global.random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  global.random = random;
 
   window.alert = () => { };
   window.confirm = msg => random(0, 1) + (msg || '');
@@ -28,5 +28,6 @@ module.exports = (config) => {
     define: defineResult.define,
     nsMockups: defineResult.nsMockups,
     updateModules: defineResult.updateModules,
+    random: global.random,
   };
 };
