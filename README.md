@@ -43,7 +43,7 @@ global.mockups = netsuiteMocks.nsMockups;
 
 3. Write your code and use these mocks
 
-`Examples will come soon`
+`Examples can be found in 'Examples folder in repo!'`
 
 ## Contribute 💻
 
@@ -68,9 +68,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Roadmap 🛣
 
-- add examples for jest
+- ~~add examples for jest~~
 - cleanup mycs occurences
-- add tests for the repo
+- ~~add tests for the repo~~
 - automate release process
 - add example for other test frameworks
 
