@@ -6,4 +6,4 @@ jobs:
     steps:
       - checkout
       - run: npm ci
-      - run: npm test
+      - run: npm test && npx codecov
