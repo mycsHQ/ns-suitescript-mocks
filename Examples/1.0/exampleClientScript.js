@@ -17,7 +17,7 @@ function saveRecord() {
       return true;
     }
     const confirmMessage = "Do you want to auto approve this order?\nIf yes click on 'Ok' button.\nIf not please click on 'Cancel' button";
-    // eslint-disable-next-line no-alert
+    // eslint-disable-next-line no-restricted-globals, no-alert
     if (confirm(confirmMessage)) {
       nlapiSetFieldValue('custbody_mycs_auto_approva_manual_ord', 'T');
     }

@@ -23,7 +23,7 @@
     "node": ">=4.2.4"
   },
   "scripts": {
-    "jest": "jest -w 1 --coverage --collectCoverageFrom=N/**/*.* --collectCoverageFrom=Utils/**/*.* --collectCoverageFrom=SuiteScriptMockup1.0/**/*.* --collectCoverageFrom=!SuiteScriptMockup1.0/**/*.spec.*",
+    "jest": "jest -w 1 --coverage --collectCoverageFrom=N/**/*.* --collectCoverageFrom=Utils/**/*.* --collectCoverageFrom=SuiteScriptMockup1.0/**/*.* --collectCoverageFrom=!/**/*.test.*",
     "test": "npm run lint && npm run jest",
     "lint": "eslint . --fix"
   },
@@ -36,6 +36,7 @@
     "eslint": "^5.5.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.24.1",
     "eslint-plugin-suitescript": "^0.1.1",
     "jest": "^23.6.0",
     "jest-cli": "^22.4.0"

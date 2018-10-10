@@ -47,6 +47,7 @@ describe('salesorder_CL', () => {
     });
     it('should display alert in case of NetSuite error', () => {
       spyOn(global, 'nlapiGetFieldValue').and.callFake(() => {
+        // eslint-disable-next-line new-cap
         throw new nlobjError('Test');
       });
       const spyRecordType = spyOn(global, 'nlapiGetRecordType').and.returnValue('salesorder');

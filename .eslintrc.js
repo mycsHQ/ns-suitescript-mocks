@@ -1,10 +1,12 @@
 module.exports = {
   "plugins": [
-    "suitescript"
+    "suitescript", "jest"
   ],
   "extends": "airbnb-base",
   "env": {
+    browser: true,
     "jest": true,
+    "jasmine": true,
     "suitescript/suitescript2": true,
     "suitescript/suitescript1": true
   },
