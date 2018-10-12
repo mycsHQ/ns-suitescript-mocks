@@ -23,7 +23,7 @@
     "node": ">=4.2.4"
   },
   "scripts": {
-    "jest": "jest -w 1 --coverage --collectCoverageFrom=N/**/*.* --collectCoverageFrom=Utils/**/*.* --collectCoverageFrom=SuiteScriptMockup1.0/**/*.* --collectCoverageFrom=!/**/*.test.*",
+    "jest": "jest -w 1 --coverage",
     "test": "npm run lint && npm run jest",
     "lint": "eslint . --fix"
   },
