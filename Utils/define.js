@@ -40,7 +40,7 @@ const getNetSuiteModule = (moduleName) => {
  * @param {Array} name
  * @param {function} defaultValues
  */
-const defineFunction = (params, callback) => {
+const defineFunction = (params, callback, moduleObject) => {
   // Convert the dependencies to modules. Add module mapping below for new modules.
   Object.keys(extendedModules).forEach((key) => {
     const element = extendedModules[key];
@@ -62,7 +62,15 @@ const defineFunction = (params, callback) => {
     }
     return amdModule;
   });
-  return callback ? callback(...defineParams) : {};
+
+  const returnValue = callback ? callback(...defineParams) : {};
+
+  if (typeof moduleObject !== 'undefined' && moduleObject.exports) {
+    // eslint-disable-next-line no-param-reassign
+    moduleObject.exports = returnValue;
+  }
+
+  return returnValue;
 };
 
 

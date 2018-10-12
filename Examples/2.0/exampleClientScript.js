@@ -40,14 +40,9 @@ define(['N/ui/message'], (msg) => {
 
     return true;
   }
-  // required for node
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-      pageInit,
-      message: msg,
-    };
-  }
+
   return {
     pageInit,
+    message: msg,
   };
-});
+}, typeof module !== 'undefined' && module);
