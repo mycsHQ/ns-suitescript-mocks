@@ -25,7 +25,9 @@
   "scripts": {
     "jest": "jest -w 1 --coverage",
     "test": "npm run lint && npm run jest",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "jestOnly": "jest Examples/Jest/ --coverage  --collectCoverageFrom=Examples/Jest/**/*.*",
+    "mochaOnly": "mocha  './Examples/Mocha/**/*.test.*'"
   },
   "dependencies": {
     "codecov": "^3.1.0",
