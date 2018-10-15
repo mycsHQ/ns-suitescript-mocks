@@ -27,7 +27,7 @@
     "test": "npm run lint && npm run jest",
     "lint": "eslint . --fix",
     "jestOnly": "jest Examples/Jest/ --coverage  --collectCoverageFrom=Examples/Jest/**/*.*",
-    "mochaOnly": "mocha  './Examples/Mocha/**/*.test.*'"
+    "mochaOnly": "mocha './Examples/Mocha/**/*.test.*'"
   },
   "dependencies": {
     "codecov": "^3.1.0",
@@ -42,7 +42,8 @@
     "eslint-plugin-suitescript": "^0.1.1",
     "jest": "^23.6.0",
     "jest-cli": "^22.4.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "sinon": "^7.0.0"
   },
   "jest": {
     "verbose": true,
