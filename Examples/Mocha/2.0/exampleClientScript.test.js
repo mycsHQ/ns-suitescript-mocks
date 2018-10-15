@@ -29,12 +29,12 @@ describe('exampleClientScript.js', () => {
       const message = fileUnderTest.message;
       const spyMessage = sinon.stub(message, 'create');
       fileUnderTest.pageInit(context);
-      assert(spyMessage.called, true);
-      assert(spyMessage.calledWithExactly, {
+      assert(spyMessage.called);
+      assert(spyMessage.calledWithExactly({
         title: 'Checkbox was checked',
         message: 'Checkbox was checked!',
         type: 'confirmation',
-      });
+      }));
       message.create.restore();
     });
 
