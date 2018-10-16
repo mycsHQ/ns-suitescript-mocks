@@ -68,7 +68,9 @@ function NsRecord(name, defaultValues = {}) {
     insertLineItem: (sublist, index) => {
       this.values[sublist].splice(index - 1, 0, {});
     },
-
+    insertLine: options => {
+      this.values[options.sublistId].splice(options.line, 0, {});
+    },
     removeLine: (obj) => {
       this.values[obj.sublistId].splice(obj.line, 1);
     },
