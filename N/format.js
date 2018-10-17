@@ -9,8 +9,8 @@
 const moment = require('moment');
 
 module.exports = {
-  format: options => moment(options.value).format('D.M.YYYY H:m').toDate(),
-  parse: options => moment(options.value).format('D.M.YYYY H:m').toDate(),
+  format: options => moment(options.value).format(options.format || 'D.M.YYYY H:m'),
+  parse: options => moment(options.value, options.format || 'D.M.YYYY H:m').toDate(),
   Type: {
     DATETIME: 'DATETIME',
     DATETIMEZ: 'DATETIMEZ',
