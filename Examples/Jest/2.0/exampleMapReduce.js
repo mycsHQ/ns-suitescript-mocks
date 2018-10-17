@@ -12,7 +12,7 @@
 
 // Line below is required only becasue we are in the same repository as the library,
 // normally define is added to globally once you import our library and follow setup instructions
-const { define } = require('../../index')({});
+const { define } = require('../../..')({});
 
 // eslint-disable-next-line import/no-amd
 define(['N/record', 'N/log', 'N/https', 'N/runtime', 'lodash'],
@@ -27,7 +27,7 @@ define(['N/record', 'N/log', 'N/https', 'N/runtime', 'lodash'],
         url: `${baseUrl}api/v2/tickets.json`,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Basic 1234567980',
+          Authorization: 'Basic 1234567890',
         },
       };
       const result = https.get(requestData);
@@ -58,8 +58,9 @@ define(['N/record', 'N/log', 'N/https', 'N/runtime', 'lodash'],
           },
         };
         const result = https.get(requestData);
-        if (result && JSON.parse(result.body) && JSON.parse(result.body).tickets) {
-          const { tickets } = JSON.parse(result.body).tickets;
+        const parsedBody = JSON.parse(result.body);
+        if (result && parsedBody && parsedBody.tickets) {
+          const { tickets } = parsedBody;
           tickets.forEach((ticket) => {
             if (ticket.external_id) {
               record.submitFields({
@@ -76,7 +77,13 @@ define(['N/record', 'N/log', 'N/https', 'N/runtime', 'lodash'],
         log.error('Error in map', error);
       }
     }
-
+    // required for node
+    if (typeof module !== 'undefined' && module.exports) {
+      module.exports = {
+        getInputData,
+        map,
+      };
+    }
     return {
       getInputData,
       map,
