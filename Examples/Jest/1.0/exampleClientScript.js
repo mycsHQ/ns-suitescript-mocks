@@ -1,4 +1,4 @@
-require('../../index')({});
+require('../../../index')({});
 
 /**
    * Save Record Function

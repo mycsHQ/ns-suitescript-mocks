@@ -13,7 +13,7 @@ module.exports = (config) => {
   global._ = lodash;
   global.log = logModule;
   global.random = random;
-
+  global.window = {};
   window.alert = () => { };
   window.confirm = msg => random(0, 1) + (msg || '');
   window.main_form = { submit: () => true };
