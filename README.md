@@ -56,7 +56,7 @@ Before pushing your code, make sure that the tests are passing (at the moment, w
 
 ## Authors 😎
 
-* **Damian Królikowski** - *Mocks Creator* - [damiankrolikowskimycs](https://github.com/damiankrolikowskimycs)
+* **Damian Królikowski** - *Mocks Creator* - [krolikowskidamian](https://github.com/krolikowskidamian)
 * **Łukasz Kubasiewicz** - *Mocks Creator* - [lukaszMycs](https://github.com/lukaszmycs)
 * **Nicolas Ritouet** - *Automation setup, cleanup, documentation* - [nicolasritouet](https://github.com/nicolasritouet)
 
