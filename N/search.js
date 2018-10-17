@@ -25,6 +25,7 @@ function createColumn(options) {
 function createFilter(options) { // eslint-disable-line no-unused-vars
   return `${options.name}${options.join ? `__${options.join}` : ''}`;
 }
+
 /**
  * Return NetSuite ResultSet type.
  * @returns {object} resultset
@@ -104,23 +105,7 @@ function ResultSet() {
   };
 }
 
-/**
- * NetSuite new column
- * @param {*} options
- * @returns {string}
- */
-function createColumn(options) {
-  return `${ options.name }${ options.join ? '__' + options.join : '' }`;
-}
 
-/**
- * NetSuite new filter
- * @param {*} options
- * @returns {string}
- */
-function createFilter(options) { // eslint-disable-line no-unused-vars
-  return `${ options.name }${ options.join ? '__' + options.join : '' }`;
-}
 /**
  * NetSuite - constructor of search module.
  * @param {*} options_
@@ -163,11 +148,11 @@ module.exports = {
   lookupFields: (options) => {
     const result = {};
     if (Array.isArray(options.columns)) {
-      options.columns.map((item, index) => {
-        result[item] = [ { value: index, text: item } ];
+      options.columns.forEach((item, index) => {
+        result[item] = [{ value: index, text: item }];
       });
     } else if (typeof options.column === 'string') {
-      result[options.column] = [ { value: Math.floor(Math.random() * 10000), text: options.column } ];
+      result[options.column] = [{ value: Math.floor(Math.random() * 10000), text: options.column }];
     }
     return result;
   },

@@ -1,3 +1,5 @@
+const sublistObj = require('./sublistObjectMembers.jsx');
+
 /**
  * Return a Netsuite Record
  *
@@ -45,6 +47,7 @@ function NsRecord(name, defaultValues = {}) {
     getLineItemValue: (sublist, field, index) => this.values[sublist][index - 1][field],
     getSublistText: options => this.values[options.sublistId][options.line][options.fieldId],
     getSublistValue: options => this.values[options.sublistId][options.line][options.fieldId],
+    getSublists: sublistObj,
     getSubrecord: options => nlapiCreateRecord(options),
     getText: options => this.values[options.fieldId || options],
     getValue: options => this.values[options.fieldId || options],
@@ -68,7 +71,7 @@ function NsRecord(name, defaultValues = {}) {
     insertLineItem: (sublist, index) => {
       this.values[sublist].splice(index - 1, 0, {});
     },
-    insertLine: options => {
+    insertLine: (options) => {
       this.values[options.sublistId].splice(options.line, 0, {});
     },
     removeLine: (obj) => {
