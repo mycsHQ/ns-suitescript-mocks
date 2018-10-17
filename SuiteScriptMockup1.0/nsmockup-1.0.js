@@ -538,8 +538,6 @@ exports.nlapiGetLineItemMatrixField = function (type, fldnam, linenum, column) {
  */
 exports.nlapiGetFieldValue = function (fldnam) {
   switch (fldnam) {
-    case 'custbody_mycs_pick_ticket_printed':
-      return 'T';
     case 'subsidiary':
       return random(1, 9);
     default:
