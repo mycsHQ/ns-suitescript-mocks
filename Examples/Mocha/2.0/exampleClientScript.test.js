@@ -13,11 +13,6 @@ const context = {
   currentRecord: fulfillmentRecord,
 };
 
-describe('firstMochatest', () => {
-  it('should return true', () => {
-    assert.equal(defaultValues.tranid, '12121');
-  });
-});
 describe('exampleClientScript.js', () => {
   describe('pageInit', () => {
     it('should return true', () => {
