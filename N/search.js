@@ -25,12 +25,13 @@ function createColumn(options) {
 function createFilter(options) { // eslint-disable-line no-unused-vars
   return `${options.name}${options.join ? `__${options.join}` : ''}`;
 }
+
 /**
  * Return NetSuite ResultSet type.
  * @returns {object} resultset
  */
 function ResultSet() {
-  const privateColumns = this.columns || {};
+  const privateColumns = this.columns || [];
   const times = this.type === 'customrecord_mycs_script_settings' ? 1 : Math.floor(Math.random() * 99) + 1;
   const mockupData = _.map(_.times(times), item => ({
     id: item + 1,
@@ -145,10 +146,13 @@ module.exports = {
   createColumn: options => createColumn(options),
   lookupFields: (options) => {
     const result = {};
-    options.columns.map((item, index) => {
-      result[item] = [{ value: index, text: item }];
-      return true;
-    });
+    if (Array.isArray(options.columns)) {
+      options.columns.forEach((item, index) => {
+        result[item] = [{ value: index, text: item }];
+      });
+    } else if (typeof options.column === 'string') {
+      result[options.column] = [{ value: Math.floor(Math.random() * 10000), text: options.column }];
+    }
     return result;
   },
   Type: {
