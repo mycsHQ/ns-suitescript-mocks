@@ -105,7 +105,6 @@ function ResultSet() {
   };
 }
 
-
 /**
  * NetSuite - constructor of search module.
  * @param {*} options_
