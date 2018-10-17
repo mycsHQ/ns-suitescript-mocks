@@ -19,7 +19,7 @@ function saveRecord() {
     const confirmMessage = "Do you want to auto approve this order?\nIf yes click on 'Ok' button.\nIf not please click on 'Cancel' button";
     // eslint-disable-next-line no-restricted-globals, no-alert
     if (confirm(confirmMessage)) {
-      nlapiSetFieldValue('custbody_auto_approva_manual_ord', 'T');
+      nlapiSetFieldValue('custbody_auto_approve_order', 'T');
     }
 
     return true;

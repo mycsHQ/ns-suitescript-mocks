@@ -4,9 +4,10 @@
  */
 
 /**
-  * This is an example of client script file.
+  * This is an example of client script file written in SuiteScript 2.0
   * In corresponding .test.js file you can find a way how to test it
-  * of course with our ns-suitescript-mocks
+  * of course with our ns-suitescript-mocks. This file needs to run through babel compilation
+  * in order to be used in NEtSuite as it is using ES6
   */
 
 // Line below is required only becasue we are in the same repository as the library,
