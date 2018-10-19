@@ -36,7 +36,7 @@ describe('Testing nsmockup-1.0 library', () => {
       const xml = '<?xml version="1.0" encoding="UTF-8"?>';
       const escappedXml = '\\<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?\\>';
       const result = fileUnderTest.nlapiEscapeXML(xml);
-      expect(result).toEqual(escappedXml);
+      expect(result).toBe(escappedXml);
     });
   });
   describe('nlobjError', () => {
