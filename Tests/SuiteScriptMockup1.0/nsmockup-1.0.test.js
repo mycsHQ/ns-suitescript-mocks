@@ -31,7 +31,14 @@ describe('Testing nsmockup-1.0 library', () => {
       expect(fileUnderTest.nlapiLookupField()).toEqual(expect.any(String));
     });
   });
-
+  describe('nlapiEscapeXML', () => {
+    it('Should return a string', () => {
+      const xml = '<?xml version="1.0" encoding="UTF-8"?>';
+      const escappedXml = '\\<?xml version=\\"1.0\\" encoding=\\"UTF-8\\"?\\>';
+      const result = fileUnderTest.nlapiEscapeXML(xml);
+      expect(result).toEqual(escappedXml);
+    });
+  });
   describe('nlobjError', () => {
     it('Should create nlobjError object', () => {
       // eslint-disable-next-line new-cap
