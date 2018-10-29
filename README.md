@@ -69,9 +69,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Roadmap 🛣
 
 - ~~add examples for jest~~
-- cleanup mycs occurences
+- ~~cleanup mycs occurences~~
 - ~~add tests for the repo~~
 - automate release process
-- add example for other test frameworks
+- ~~add example for other test frameworks~~
 
 If you want to contribute and don't know where to start, we label our issues with [`help wanted`](https://github.com/mycsHQ/ns-suitescript-mocks/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) or [`good first issue`](https://github.com/mycsHQ/ns-suitescript-mocks/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22), feel free to browse the issues and ask for more information.
