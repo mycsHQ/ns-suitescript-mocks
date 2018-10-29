@@ -12,6 +12,7 @@
 
 // Line below is required only becasue we are in the same repository as the library,
 // normally define is added to globally once you import our library and follow setup instructions
+
 const { define } = require('../../../index')({});
 
 // eslint-disable-next-line import/no-amd

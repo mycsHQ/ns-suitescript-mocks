@@ -538,8 +538,6 @@ exports.nlapiGetLineItemMatrixField = function (type, fldnam, linenum, column) {
  */
 exports.nlapiGetFieldValue = function (fldnam) {
   switch (fldnam) {
-    case 'custbody_mycs_pick_ticket_printed':
-      return 'T';
     case 'subsidiary':
       return random(1, 9);
     default:
@@ -1379,7 +1377,13 @@ exports.nlapiEncrypt = function (s) { };
  *
  * @since 2008.1
  */
-exports.nlapiEscapeXML = function (text) { encodeURI(text); };
+exports.nlapiEscapeXML = function (input) {
+  return input.replace(/&/g, '\\&')
+    .replace(/</g, '\\<')
+    .replace(/>/g, '\\>')
+    .replace(/"/g, '\\"')
+    .replace(/'/g, "\\'");
+};
 
 /**
  * Convert a String into an XML document. Note that in Server SuiteScript XML is supported natively by the JS runtime using the e4x standard (http://en.wikipedia.org/wiki/E4X)
@@ -3431,7 +3435,7 @@ exports.nlobjFile.prototype.getValue = function () { };
  *
  * @since 2007.0
  */
-exports.nlobjSearchFilter =  require('../Utils/search-filter');
+exports.nlobjSearchFilter = require('../Utils/search-filter');
 
 /**
  * Return the name of this search filter.

@@ -4,7 +4,7 @@ const fileUnderTest = require('./exampleClientScript');
 
 const defaultValues = {
   tranid: '12121',
-  custbody_mycs_ship_method: 23,
+  custbody_ship_method: 23,
   shipstatus: 'B',
   custbodysps_packagedetails: 'test',
 };

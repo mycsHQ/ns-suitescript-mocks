@@ -32,32 +32,18 @@ function createFilter(options) { // eslint-disable-line no-unused-vars
  */
 function ResultSet() {
   const privateColumns = this.columns || [];
-  const times = this.type === 'customrecord_mycs_script_settings' ? 1 : Math.floor(Math.random() * 99) + 1;
+  const times = Math.floor(Math.random() * 99) + 1;
   const mockupData = _.map(_.times(times), item => ({
     id: item + 1,
     type: this.type,
     columns: privateColumns.map(columnName => ({ name: columnName })),
     getValue(column) {
-      const hardcodedValues = {
-        custrecord_mycs_ship_meth_is_assembly: false,
-        custrecord_mycs_ship_meth_sel_method: 10,
-        custrecord_mycs_ship_meth_config_coll_wg: random(1, 30),
-        custrecord_mycs_ship_meth_max_colli_l: random(1, 30),
-        custrecord_mycs_ship_meth_max_colli_w: random(1, 30),
-        custrecord_mycs_ship_meth_max_colli_h: random(1, 30),
-        custrecord_mycs_ship_meth_max_order_val: random(1, 30),
-        custrecord_mycs_ship_meth_max_order_wgh: random(1, 30),
-        custrecord_mycs_ship_meth_max_colli_cnt: random(1, 30),
-        custrecord_mycs_url: '',
-      };
       const privateData = _.reduce(
         privateColumns,
         (result, columnName) => {
           const columnNameText = columnName.name || columnName;
           const singleResult = result;
-          const calFn = Object.prototype.hasOwnProperty;
-          singleResult[columnNameText] = calFn.call(hardcodedValues, columnNameText)
-            ? hardcodedValues[columnNameText] : `${columnNameText}_${item + 1}`;
+          singleResult[columnNameText] = `${columnNameText}_${item + 1}`;
           singleResult.internalid = random(1, 9000);
           return result;
         },
