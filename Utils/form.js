@@ -22,14 +22,19 @@ function NsForm(name) {
     getName: () => this.name,
     addButton: obj => this.buttons.push(obj),
     addSublist: (obj) => {
-      this.sublist.push(obj);
-      return {
+      const list = {
+        ...obj,
         addField: (options) => {
           this.fields.push(options);
           return field;
         },
+        addButton: (options) => {
+          this.buttons.push(options);
+        },
         setSublistValue: () => '',
       };
+      this.sublist.push(list);
+      return list;
     },
     addSubmitButton: obj => this.submitButtons.push(obj),
     addField: (obj) => {
