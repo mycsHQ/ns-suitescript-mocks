@@ -38,6 +38,7 @@ function NsForm(name) {
     },
     getFields: () => this.fields,
     getButtons: () => this.buttons,
+    getSublist: ({ id }) => this.sublist.find(list => list.id === id),
     getSubmitButtons: () => this.submitButtons,
   };
 }
