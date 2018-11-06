@@ -14,6 +14,7 @@ function NsRecord(name, defaultValues = {}) {
   const activeLine = {};
   this.values = defaultValues;
   this.values.item = this.values.item || [];
+  this.values.links = this.values.links || [];
   this.type = 'nlobjRecord';
   return {
     // 1.0 methods
