@@ -114,6 +114,9 @@ function NsRecord(name, defaultValues = {}) {
     setFieldValue: (valueName, value) => {
       this.values[valueName] = value;
     },
+    setFieldValues: (fieldName, values) => {
+      this.values[fieldName] = values
+    }
     setLineItemValue: (sublist, field, index, value) => {
       this.values[sublist][index - 1][field] = value;
     },
