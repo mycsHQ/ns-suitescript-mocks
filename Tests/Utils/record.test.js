@@ -3,10 +3,23 @@
  *
  */
 
-const fileUnderTest = require('../../Utils/record');
+const FileUnderTest = require('../../Utils/record');
 
-describe('Testing record', () => {
-  it('Should return a function ', () => {
-    expect(fileUnderTest).toEqual(expect.any(Function));
+describe('testing record', () => {
+  it('should return a function ', () => {
+    expect(FileUnderTest).toEqual(expect.any(Function));
+  });
+});
+
+describe('setFieldValues', () => {
+  it('should check whether method exists', () => {
+    const result = new FileUnderTest('');
+    expect(Object.prototype.hasOwnProperty.call(result, 'setFieldValues')).toBeTruthy();
+  });
+  it('should assign values to fieldName', () => {
+    const result = new FileUnderTest();
+    const values = ['123456', '654321'];
+    result.setFieldValues('selectField', values);
+    expect(result.getFieldValue('selectField')).toEqual(['123456', '654321']);
   });
 });
