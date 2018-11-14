@@ -40,6 +40,7 @@ function NsRecord(name, defaultValues = {}) {
     }),
     getFieldText: valueName => this.values[valueName],
     getFieldValue: valueName => this.values[valueName],
+    getFieldValues: valueSet => this.values[valueSet],
     getLineCount: options => (this.values[options.sublistId || options]
       ? this.values[options.sublistId || options].length
       : 0),
@@ -115,7 +116,7 @@ function NsRecord(name, defaultValues = {}) {
       this.values[valueName] = value;
     },
     setFieldValues: (fieldName, values) => {
-      this.values[fieldName] = values
+      this.values[fieldName] = values;
     },
     setLineItemValue: (sublist, field, index, value) => {
       this.values[sublist][index - 1][field] = value;

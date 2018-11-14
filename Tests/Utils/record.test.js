@@ -23,3 +23,12 @@ describe('setFieldValues', () => {
     expect(result.getFieldValue('selectField')).toEqual(['123456', '654321']);
   });
 });
+
+describe('getFieldValues', () => {
+  it('should return values for id specified', () => {
+    const result = new FileUnderTest();
+    result.setFieldValues('selectField', ['123', '123']);
+    const myValues = result.getFieldValues('selectField');
+    expect(myValues).toEqual(['123', '123']);
+  });
+});
