@@ -32,3 +32,11 @@ describe('getFieldValues', () => {
     expect(myValues).toEqual(['123', '123']);
   });
 });
+
+describe('getRecordType', () => {
+  it('should return record type', () => {
+    const result = new FileUnderTest();
+    const recordType = result.getRecordType();
+    expect(recordType).toEqual('nlobjRecord');
+  });
+});
