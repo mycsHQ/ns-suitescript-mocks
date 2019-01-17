@@ -41,3 +41,23 @@ describe('getRecordType', () => {
     expect(recordType).toEqual(type);
   });
 });
+
+describe('getLineItemCount', () => {
+  it('should return number representing the length of a given sublist', () => {
+    const sublistId = 'item';
+    const itemsSublistData = [{
+      item_display: '101.173.00',
+      quantity: '3',
+    },
+    {
+      item_display: '101.174.00',
+      quantity: '1',
+    }];
+    const salesOrder = new Record('salesorder', {
+      item: itemsSublistData,
+    });
+    const mockedItemsLength = itemsSublistData.length;
+    const itemSublistLength = salesOrder.getLineItemCount(sublistId);
+    expect(itemSublistLength).toEqual(mockedItemsLength);
+  });
+});
