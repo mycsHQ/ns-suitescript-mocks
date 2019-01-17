@@ -27,8 +27,8 @@ function NsRecord(type, defaultValues = {}) {
     commit: () => {},
     commitLine: obj => activeLine[obj.sublistId],
     commitLineItem: sublist => activeLine[sublist],
-    createCurrentLineItemSubrecord: (sublistId, type) => nlapiCreateRecord(type, { sublistId }),
-
+    createCurrentLineItemSubrecord:
+      (sublistId, subRecordFieldId) => nlapiCreateRecord(subRecordFieldId, { sublistId }),
     getAll: () => this.values, // Helper
     getCurrentLineItemValue: (sublist, field) => this.values[sublist][activeLine[sublist]][field],
     getCurrentSublistValue: (obj) => {
