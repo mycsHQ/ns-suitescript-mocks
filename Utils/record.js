@@ -47,6 +47,7 @@ function NsRecord(name, defaultValues = {}) {
     getLineItemCount: sublist => this.values[sublist].length,
     getLineItemText: (sublist, field, index) => this.values[sublist][index - 1][`${field}_display`],
     getLineItemValue: (sublist, field, index) => this.values[sublist][index - 1][field],
+    getRecordType: () => this.type,
     getSublistText: options => this.values[options.sublistId][options.line][options.fieldId],
     getSublistValue: options => this.values[options.sublistId][options.line][options.fieldId],
     getSublists: sublistObj,
