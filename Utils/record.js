@@ -5,21 +5,21 @@ const sublistObj = require('./sublistObjectMembers.jsx');
  *
  * @classDescription Record object
  * @constructor
- * @param {string} name
+ * @param {string} type
  * @param {object} defaultValues
  * @returns {nlobjRecord}
  */
-function NsRecord(name, defaultValues = {}) {
+function NsRecord(type, defaultValues = {}) {
   const id = defaultValues.id || Math.ceil(Math.random() * 100);
   const activeLine = {};
   this.values = defaultValues;
   this.values.item = this.values.item || [];
   this.values.links = this.values.links || [];
-  this.type = 'nlobjRecord';
+  this.type = type || 'nlobjRecord';
   return {
     // 1.0 methods
     getId: () => id,
-    getName: () => name,
+    getRecordType: () => this.type, // same method for both 1.0 and 2.0
 
     // 2.0 methods
     // eslint-disable-next-line no-unused-vars
@@ -27,8 +27,8 @@ function NsRecord(name, defaultValues = {}) {
     commit: () => {},
     commitLine: obj => activeLine[obj.sublistId],
     commitLineItem: sublist => activeLine[sublist],
-    createCurrentLineItemSubrecord: (sublistId, type) => nlapiCreateRecord(type, { sublistId }),
-
+    createCurrentLineItemSubrecord:
+      (sublistId, subRecordFieldId) => nlapiCreateRecord(subRecordFieldId, { sublistId }),
     getAll: () => this.values, // Helper
     getCurrentLineItemValue: (sublist, field) => this.values[sublist][activeLine[sublist]][field],
     getCurrentSublistValue: (obj) => {
