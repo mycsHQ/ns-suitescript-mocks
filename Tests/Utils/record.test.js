@@ -32,3 +32,19 @@ describe('getFieldValues', () => {
     expect(myValues).toEqual(['123', '123']);
   });
 });
+
+describe('setCurrentSublistText(options)', () => {
+  it('should set values for the specified sublist in the selected line', () => {
+    const result = new FileUnderTest();
+    result.selectLine({
+      sublistId: 'item',
+      line: 0,
+    });
+    result.setCurrentSublistText({
+      sublistId: 'item',
+      fieldId: 'item',
+      text: 'test',
+    });
+    expect(result.getCurrentSublistValue({sublistId: 'item', fieldId: 'item'})).toEqual('test');
+  });
+});

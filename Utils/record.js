@@ -109,6 +109,9 @@ function NsRecord(name, defaultValues = {}) {
     setCurrentLineItemValue: (sublist, field, value) => {
       this.values[sublist][activeLine[sublist]][field] = value;
     },
+    setCurrentSublistText: (obj) => {
+      this.values[obj.sublistId][activeLine[obj.sublistId]][obj.fieldId] = obj.text;
+    },
     setCurrentSublistValue: (obj) => {
       this.values[obj.sublistId][activeLine[obj.sublistId]][obj.fieldId] = obj.value;
     },
