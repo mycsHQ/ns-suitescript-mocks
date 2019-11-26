@@ -32,6 +32,7 @@ function NsForm(name) {
           this.buttons.push(options);
         },
         setSublistValue: () => '',
+        addMarkAllButtons: () => '',
       };
       this.sublist.push(list);
       return list;
